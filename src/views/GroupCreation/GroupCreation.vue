@@ -79,7 +79,13 @@
 
       <v-flex xs6 pa-3>
         <v-form ref="form" v-model="formValid" lazy-validation>
-          <v-text-field v-model="name" :counter="20" :rules="nameRules" label="그룹 제목" required></v-text-field>
+          <v-text-field
+            v-model="groupName"
+            :counter="20"
+            :rules="groupNameRules"
+            label="그룹 제목"
+            required
+          ></v-text-field>
 
           <v-text-field v-model="linkUrl" :rules="linkUrlRules" label="Link URL" required></v-text-field>
 

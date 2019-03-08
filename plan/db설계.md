@@ -29,7 +29,8 @@ clothes: {
 clothesGroups: {
     clothesGroup1: {
         id: string (clothesGroup1),
-        clothes: string[] (['clothId1', 'clothId2', ...])
+        clothIds: Cloth[] (['clothId1', 'clothId2', ...]),
+        image: string ('storageLinkImageUrl'),
     }
 }
 

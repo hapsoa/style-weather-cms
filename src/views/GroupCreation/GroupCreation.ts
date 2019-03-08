@@ -11,8 +11,8 @@ export default class GroupCreation extends Vue {
 
   private formValid: boolean = true;
 
-  private name: string = '';
-  private nameRules = [
+  private groupName: string = '';
+  private groupNameRules = [
     (v: string) => !!v || 'Name is required',
     (v: string) =>
       (v && v.length <= 20) || 'Name must be less than 20 characters'
@@ -140,7 +140,7 @@ export default class GroupCreation extends Vue {
   public validate() {
     if (this.$refs.form.validate()) {
       // this.snackbar = true;
-      console.log('name', this.name, 'linkUrl', this.linkUrl);
+      console.log('name', this.groupName, 'linkUrl', this.linkUrl);
     }
   }
   public reset() {
