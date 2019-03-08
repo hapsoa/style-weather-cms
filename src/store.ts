@@ -6,9 +6,13 @@ import { User } from '@/api/class';
 Vue.use(Vuex);
 
 const initState: {
-  user: User | null;
+  isLogin: boolean;
+  isMainPage: boolean;
+  isFullProgress: boolean;
 } = {
-  user: null
+  isLogin: false,
+  isMainPage: false,
+  isFullProgress: true
 };
 
 export default new Vuex.Store({

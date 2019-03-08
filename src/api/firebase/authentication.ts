@@ -33,7 +33,7 @@ class Authentication {
           .get()
           .then(doc => {
             if (doc.exists) {
-              console.log('Document data(userData):', doc.data());
+              // console.log('Document data(userData):', doc.data());
               resolve(doc.data() as UserData);
             } else {
               // doc.data() will be undefined in this case
@@ -56,7 +56,7 @@ class Authentication {
           .update({
             updatedAt: new Date().getTime()
           })
-          .then(() => {
+          .then(response => {
             console.log('Document(userData) successfully updated!');
             resolve();
           })
@@ -84,8 +84,15 @@ class Authentication {
       });
     }
   };
+  private accessibleUsers: {
+    [index: string]: boolean;
+  } = {
+    'hapsoa@gmail.com': true
+  };
 
-  private authOnListener: null | (() => void) = null;
+  private userData: UserData | null = null;
+
+  private authOnListener: null | ((user: firebase.User) => void) = null;
   private authOffListener: null | (() => void) = null;
   private logoutListener: null | (() => void) = null;
 
@@ -96,12 +103,11 @@ class Authentication {
         // User is signed in.
         // this.router.push('/');
         if (!_.isNil(this.authOnListener)) {
-          this.authOnListener();
+          this.authOnListener(user);
         }
       } else {
         // No user is signed in.
         // this.router.push('/login');
-        // eslint-disable-next-line no-lonely-if
         if (!_.isNil(this.authOffListener)) {
           this.authOffListener();
         }
@@ -109,10 +115,9 @@ class Authentication {
     });
   }
 
-  public setAuthOnListener(listener: () => void) {
+  public setAuthOnListener(listener: (user: firebase.User) => void) {
     this.authOnListener = listener;
   }
-
   public setAuthOffListener(listener: () => void) {
     this.authOffListener = listener;
   }
@@ -121,10 +126,13 @@ class Authentication {
     try {
       const result = await firebase.auth().signInWithPopup(provider);
       console.log('google login');
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      // const token = result.credential.accessToken;
-      // The signed-in user info.
+
       if (!_.isNil(result.user)) {
+        if (!this.accessibleUsers[result.user.email as string]) {
+          this.logout();
+          throw new Error('접근 가능한 email이 아닙니다');
+        }
+
         try {
           // update를 시도하고, 실패하면 create 한다.
           // uid에 해당하는 녀석에 updatedAt만 바꾼다.
@@ -144,9 +152,6 @@ class Authentication {
       } else {
         throw new Error('googleLogin() result.user is null');
       }
-
-      // this.db.loginUser(user);
-      // this.db.update(result.user);
     } catch (error) {
       // Handle Errors here.
       const errorCode = error.code;

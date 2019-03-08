@@ -18,6 +18,16 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: () => import('./views/Login/Login.vue')
+    },
+    {
+      path: '/group-creation',
+      name: 'group-creation',
+      component: () => import('./views/GroupCreation/GroupCreation.vue')
+    },
+    {
+      path: '/group/:id',
+      name: 'group-view',
+      component: () => import('./views/Login/Login.vue')
     }
   ]
 });
