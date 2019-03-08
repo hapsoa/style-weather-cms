@@ -1,7 +1,10 @@
 <template>
   <v-app>
     <v-toolbar app flat v-if="$store.state.isLogin && !$store.state.isFullProgress">
-      <v-toolbar-title>Style Weather CMS</v-toolbar-title>
+      <v-toolbar-title
+        @click="$router.push({name: 'main'})"
+        class="cursor-pointer"
+      >Style Weather CMS</v-toolbar-title>
       <div class="margin-20"></div>
 
       <v-flex xs6 d-flex align-center v-if="$store.state.isMainPage">
@@ -56,6 +59,10 @@
 }
 .margin-20 {
   width: 20px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 // vuetify customizing

@@ -1,55 +1,80 @@
 <template>
   <v-container fluid pa-0>
     <v-layout>
-      <v-flex xs6 pa-3>
-        <v-container fluid pa-0 grid-list-md>
-          <v-layout row>
-            <v-flex>
-              <div class="cloth-zone">q</div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">머리</div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">q</div>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex>
-              <div class="cloth-zone">아우터</div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">
-                <img :src="imageUrl" class="cloth-zone" v-if="imageUrl">
-              </div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">상의2</div>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex>
-              <div class="cloth-zone">q</div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">바지</div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">q</div>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex>
-              <div class="cloth-zone">q</div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">신발</div>
-            </v-flex>
-            <v-flex>
-              <div class="cloth-zone">q</div>
-            </v-flex>
-          </v-layout>
-        </v-container>
+      <v-flex xs6 pa-3 class="clothes-zone">
+        <v-item-group active-class="cloth-selected">
+          <v-container fluid pa-0 grid-list-md>
+            <v-layout row>
+              <v-flex xs6 style="cursor:default"></v-flex>
+              <v-flex>
+                <v-item>
+                  <v-card slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">q</v-card>
+                </v-item>
+              </v-flex>
+              <v-flex>
+                <v-item>
+                  <v-card slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">머리</v-card>
+                </v-item>
+              </v-flex>
+              <v-flex>
+                <v-item>
+                  <div slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">q</div>
+                </v-item>
+              </v-flex>
+              <v-flex xs6 style="cursor:default"></v-flex>
+            </v-layout>
+            <v-layout row>
+              <v-flex xs6 style="cursor:default"></v-flex>
+              <v-flex>
+                <div class="cloth-zone">아우터</div>
+              </v-flex>
+              <v-flex text-xs-center>
+                <v-item>
+                  <div slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">
+                    <div class="cloth-guide-text" v-if="!imageUrl">상의</div>
+                    <v-img :src="imageUrl" v-else contain style="height: 100%"></v-img>
+                  </div>
+                </v-item>
+                <!-- <v-item>
+                  <v-card slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">
+                    <div class="cloth-guide-text" v-if="!imageUrl">상의</div>
+                    <v-img :src="imageUrl" v-else contain style="height: 100%"></v-img>
+                  </v-card>
+                </v-item>-->
+              </v-flex>
+              <v-flex>
+                <div class="cloth-zone">상의2</div>
+              </v-flex>
+              <v-flex xs6 style="cursor:default"></v-flex>
+            </v-layout>
+            <v-layout row>
+              <v-flex xs6></v-flex>
+              <v-flex>
+                <div class="cloth-zone">q</div>
+              </v-flex>
+              <v-flex>
+                <div class="cloth-zone">바지</div>
+              </v-flex>
+              <v-flex>
+                <div class="cloth-zone">q</div>
+              </v-flex>
+              <v-flex xs6 style="cursor:default"></v-flex>
+            </v-layout>
+            <v-layout row>
+              <v-flex xs6 style="cursor:default"></v-flex>
+              <v-flex>
+                <div class="cloth-zone">q</div>
+              </v-flex>
+              <v-flex>
+                <div class="cloth-zone">신발</div>
+              </v-flex>
+              <v-flex>
+                <div class="cloth-zone">q</div>
+              </v-flex>
+              <v-flex xs6 style="cursor:default"></v-flex>
+            </v-layout>
+          </v-container>
+        </v-item-group>
       </v-flex>
 
       <v-flex xs6 pa-3>
@@ -58,8 +83,6 @@
 
           <v-text-field v-model="linkUrl" :rules="linkUrlRules" label="Link URL" required></v-text-field>
 
-          <!-- <input type="file" ref="image" accept="image/*" required @change="onFilePicked"> -->
-          <!-- <v-text-field :rules="fileRules" style="display: none" required></v-text-field> -->
           <v-text-field
             label="Select Image"
             @click="pickFile"
@@ -77,26 +100,90 @@
             @change="onFilePicked"
           >
 
+          <v-flex d-flex class="checkboxes" px-3>
+            <v-checkbox
+              v-model="genderSelected"
+              label="성별"
+              value="성별"
+              :rules="genderRule"
+              disabled
+              off-icon="accessibility"
+            ></v-checkbox>
+            <v-checkbox v-model="genderSelected" label="남성" value="남성"></v-checkbox>
+            <v-checkbox v-model="genderSelected" label="여성" value="여성"></v-checkbox>
+            <v-checkbox v-model="genderSelected" label="공용" value="공용"></v-checkbox>
+            <v-flex></v-flex>
+          </v-flex>
+
           <!-- <v-select
             v-model="select"
             :items="items"
             :rules="[v => !!v || 'Item is required']"
             label="Item"
             required
+          ></v-select>-->
+          <v-select
+            @change="changeMajorSelect"
+            :items="majorClassItems"
+            label="대분류 카테고리"
+            :rules="[v => !!v || 'Major class is required']"
+            height="40"
+          ></v-select>
+          <v-select
+            :items="minorSelect"
+            label="소분류 카테고리"
+            :rules="[v => !!v || 'Minor class is required']"
+            height="40"
           ></v-select>
 
-          <v-checkbox
-            v-model="checkbox"
-            :rules="[v => !!v || 'You must agree to continue!']"
-            label="Do you agree?"
+          <v-select
+            v-model="weatherSelect"
+            :items="weatherItems"
+            :rules="[v => !!v || 'Weather is required']"
+            label="날씨"
             required
-          ></v-checkbox>-->
+          ></v-select>
+          <v-select
+            v-model="temperatureSelect"
+            :items="temperatureItems"
+            :rules="[v => !!v || 'Temperature is required']"
+            label="온도"
+            required
+          ></v-select>
+
+          <v-flex d-flex class="checkboxes" px-3>
+            <v-checkbox
+              v-model="thicknessSelected"
+              label="두께감"
+              value="두께감"
+              :rules="thicknessRule"
+              disabled
+              off-icon="accessibility"
+            ></v-checkbox>
+            <v-checkbox v-model="thicknessSelected" label="두꺼움" value="두꺼움"></v-checkbox>
+            <v-checkbox v-model="thicknessSelected" label="적당함" value="적당함"></v-checkbox>
+            <v-checkbox v-model="thicknessSelected" label="얇음" value="얇음"></v-checkbox>
+            <v-flex></v-flex>
+          </v-flex>
+
+          <v-select
+            v-model="colorSelect"
+            :items="colorItems"
+            :rules="[v => !!v || 'Color is required']"
+            label="색상"
+            required
+          ></v-select>
+
           <v-btn :disabled="!formValid" color="success" @click="validate">Validate</v-btn>
-
           <v-btn color="error" @click="reset">Reset Form</v-btn>
-
           <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
         </v-form>
+        <div style="height: 400px"></div>
+        <v-layout row justify-end>
+          <v-btn>저장</v-btn>
+          <v-btn>초기화</v-btn>
+          <v-btn>취소</v-btn>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-container>
@@ -105,14 +192,29 @@
 <script lang='ts' src='./GroupCreation.ts' />
 
 <style scoped lang='scss'>
+.clothes-zone {
+  width: 500px;
+}
+
 .cloth-zone {
   width: 150px;
   height: 150px;
-  border: 1px solid black;
+  border: 1px solid #aaa;
+  line-height: 150px;
+  &[selected] {
+    border: 3px solid skyblue;
+  }
+}
+.cloth-selected {
+  border: 3px solid skyblue;
 }
 
-img {
-  width: 100%;
-  height: 100%;
+.checkboxes {
+  border-bottom: 1px solid #aaa;
+}
+
+.selected-image {
+  width: calc(150px - 6px);
+  height: calc(150px - 6px);
 }
 </style>
