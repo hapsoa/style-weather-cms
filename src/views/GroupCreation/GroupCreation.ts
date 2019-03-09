@@ -1,5 +1,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import _ from 'lodash';
+import { Cloth, ClothesGroup } from '@/api/class';
+import { MajorClass } from '@/api/class/Cloth';
 
 @Component({})
 export default class GroupCreation extends Vue {
@@ -136,6 +138,12 @@ export default class GroupCreation extends Vue {
 
   private colorSelect: string | null = null;
   private colorItems: string[] = ['무채', '유채'];
+
+  private clothesGroup: ClothesGroup | null = null;
+  private curruentCloth: Cloth | null = null;
+  public selectCloth(majorClass: string) {
+    // this.curruentCloth = (this.clothesGroup as ClothesGroup).clothes[majorClass];
+  }
 
   public validate() {
     if (this.$refs.form.validate()) {

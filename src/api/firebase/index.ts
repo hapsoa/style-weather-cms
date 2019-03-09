@@ -1,4 +1,6 @@
 import firebase from './initializingFirebase';
-import firebaseAuth from './authentication';
+import firebaseAuth from './Authentication';
+import fbClothApi from './ClothApi';
+import fbClothesGroupApi from './ClothesGroupApi';
 
-export { firebase, firebaseAuth };
+export { firebase, firebaseAuth, fbClothApi, fbClothesGroupApi };

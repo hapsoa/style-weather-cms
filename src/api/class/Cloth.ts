@@ -28,11 +28,6 @@ export default class Cloth implements ClothData {
 
   public groupName: string = '';
   public linkUrl: string = '';
-
-  public imageName: string = '';
-  public imageUrl: string | ArrayBuffer | null = null;
-  public imageFile: File | null = null;
-
   public genderSelected: string[] = [];
   public majorClass: MajorClass | null = null;
   public minorSelect: string | null = null;
@@ -41,11 +36,19 @@ export default class Cloth implements ClothData {
   public thicknessSelected: string[] = [];
   public colorSelect: string | null = null;
 
+  public imageName: string = '';
+  public imageUrl: string | ArrayBuffer | null = null;
+  public imageFile: File | null = null;
+
+  // 모든 데이터가 다 있는지 체크하는 기능
+  public canSave: boolean = false;
+
   public constructor(majorClass: MajorClass) {
     this.majorClass = majorClass;
   }
 
-  // 모든 데이터가 다 있는지 체크하는 기능
   // db c r u d
   // storage(해당 부위 이미지) c r u d
+
+  // load(ClothId) - 상세보기에서 불러오기
 }
