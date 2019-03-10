@@ -143,6 +143,7 @@ export default class GroupCreation extends Vue {
   private curruentCloth: Cloth | null = null;
   public selectCloth(majorClass: string) {
     // this.curruentCloth = (this.clothesGroup as ClothesGroup).clothes[majorClass];
+    console.log('selectCloth', majorClass);
   }
 
   public validate() {
