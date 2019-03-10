@@ -18,7 +18,11 @@
               </v-flex>
               <v-flex>
                 <v-item>
-                  <div slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">q</div>
+                  <div
+                    slot-scope="{ active, toggle }"
+                    @click="toggle(); selectCloth();"
+                    class="cloth-zone"
+                  >q</div>
                 </v-item>
               </v-flex>
               <v-flex xs6 style="cursor:default"></v-flex>

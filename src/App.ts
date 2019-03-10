@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import uuidv4 from 'uuid/v4';
 import { Component, Vue } from 'vue-property-decorator';
 import { User } from '@/api/class';
 
@@ -92,6 +93,14 @@ export default class App extends Vue {
     } else {
       throw new Error('로그인이 안됐는데, 로그아웃하네?');
     }
+  }
+
+  public createGroup() {
+    this.$router.push({
+      name: 'group-creation',
+      params: { clothesGroupId: uuidv4() }
+    });
+    // this.$router.push({ name: 'group-creation' });
   }
 
   get minorSelect(): string[] {

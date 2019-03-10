@@ -225,5 +225,22 @@ export default class GroupCreation extends Vue {
 
   private created() {
     this.$store.state.isMainPage = false;
+
+    // clothesGroup instance 가져오기
+    // if (
+    //   this.$store.state.selectedClothesGroup.id ===
+    //   this.$route.params.clothesGroupId
+    // ) {
+    //   this.clothesGroup = this.$store.state.selectedClothesGroup;
+    // } else {
+    //   this.clothesGroup = ClothesGroup.load(this.$route.params.clothesGroupId);
+    // }
+    // this.clothesGroup.loadClothes();
+
+    // if (!_.isNil(this.$store.state.selectedClothesGroup)) {
+    //   // load clothesGroup
+    // } else {
+    //   // new clothesGroup
+    // }
   }
 }
