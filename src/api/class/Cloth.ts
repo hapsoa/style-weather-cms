@@ -1,40 +1,67 @@
-export interface ClothData {
-  id: string;
-  groupName: string;
-  linkUrl: string;
-  genderSelected: string[];
-  majorClass: MajorClass | null;
-  minorSelect: string | null;
-  weatherSelect: string | null;
-  temperatureSelect: string | null;
-  thicknessSelected: string[];
-  colorSelect: string | null;
-}
+import uuidv4 from 'uuid/v4';
 
 export enum MajorClass {
-  Top = '상의',
-  Bottoms = '하의',
-  Outer = '아우터',
-  Accessory = '액세서리',
-  Shoes = '신발',
-  bag = '가방',
-  glasses = '안경',
-  hat = '모자',
-  dress = '원피스'
+  Top = 'top',
+  Bottoms = 'bottoms',
+  Outer = 'outer',
+  Accessory = 'accessory',
+  Shoes = 'shoes',
+  Bag = 'bag',
+  Glasses = 'glasses',
+  Hat = 'hat',
+  OnePiece = 'onePiece',
+  Etc = 'etc',
+}
+
+export enum TopMinorClass {
+  ShortSleeve = 'shortSleeve',
+  ManToMan = 'manToMan',
+  LongSleeve = 'longSleeve',
+  Sleeveless = 'sleeveless',
+  Hood = 'hood',
+  ShirtBlouse = 'shirt/blouse',
+  KnitSweaterCardigan = 'knit/sweater/cardigan',
+  Etc = 'etc',
+}
+
+export enum OnePieceMinorClass {
+  OnePiece = 'onePiece',
+  Etc = 'etc'
+}
+
+export interface ClothData {
+  id: string;
+  linkUrl: string;
+  gender: string[];
+  majorClass: MajorClass | null;
+  minorClass: string | null;
+  weather: string | null;
+  temperature: string | null;
+  thickness: string[];
+  color: string | null;
 }
 
 export default class Cloth implements ClothData {
-  public id: string = '';
+  public static create(majorClass: MajorClass): Cloth {
+    const newCloth = new Cloth(majorClass);
+    newCloth.id = uuidv4();
+    return newCloth;
+  }
 
-  public groupName: string = '';
-  public linkUrl: string = '';
-  public genderSelected: string[] = [];
+  public static load() {
+    //
+  }
+
+  public id: string = '';
   public majorClass: MajorClass | null = null;
-  public minorSelect: string | null = null;
-  public weatherSelect: string | null = null;
-  public temperatureSelect: string | null = null;
-  public thicknessSelected: string[] = [];
-  public colorSelect: string | null = null;
+
+  public linkUrl: string = '';
+  public gender: string[] = [];
+  public minorClass: string | null = null;
+  public weather: string | null = null;
+  public temperature: string | null = null;
+  public thickness: string[] = [];
+  public color: string | null = null;
 
   public imageName: string = '';
   public imageUrl: string | ArrayBuffer | null = null;
@@ -43,7 +70,7 @@ export default class Cloth implements ClothData {
   // 모든 데이터가 다 있는지 체크하는 기능
   public canSave: boolean = false;
 
-  public constructor(majorClass: MajorClass) {
+  private constructor(majorClass: MajorClass) {
     this.majorClass = majorClass;
   }
 

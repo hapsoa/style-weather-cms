@@ -22,15 +22,18 @@ clothes: {
         thickness: string ('두꺼움', '적당함', '얇음'),
         season: string ('봄', '여름', '가을', '겨울', '4계절가능'),
         color: string ('무채', '유채')
+        timeStamp
     },
     cloth2...
 }
 
 clothesGroups: {
-    clothesGroup1: {
+    clothesGroup1(id): {
         id: string (clothesGroup1),
         clothIds: Cloth[] (['clothId1', 'clothId2', ...]),
         image: string ('storageLinkImageUrl'),
+        timeStamp: number,
+        tags: string[],
     }
 }
 

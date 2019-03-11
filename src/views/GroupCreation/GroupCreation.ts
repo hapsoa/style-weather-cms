@@ -1,7 +1,12 @@
 import { Component, Vue } from 'vue-property-decorator';
 import _ from 'lodash';
 import { Cloth, ClothesGroup } from '@/api/class';
-import { MajorClass } from '@/api/class/Cloth';
+import {
+  MajorClass,
+  TopMinorClass,
+  OnePieceMinorClass,
+} from '@/api/class/Cloth';
+import { ClothesHash } from '@/api/class/ClothesGroup';
 
 @Component({})
 export default class GroupCreation extends Vue {
@@ -17,12 +22,12 @@ export default class GroupCreation extends Vue {
   private groupNameRules = [
     (v: string) => !!v || 'Name is required',
     (v: string) =>
-      (v && v.length <= 20) || 'Name must be less than 20 characters'
+      (v && v.length <= 20) || 'Name must be less than 20 characters',
   ];
 
   private linkUrl: string = '';
   private linkUrlRules = [
-    (v: string) => !!v || 'Link is required'
+    (v: string) => !!v || 'Link is required',
     // (v: string) => /.+@.+/.test(v) || 'E-mail must be valid',
   ];
   // private select = null;
@@ -38,34 +43,25 @@ export default class GroupCreation extends Vue {
   private genderRule = [
     (v: string[]) => {
       return !_.isEmpty(v) || 'Gender is required';
-    }
+    },
   ];
 
-  private majorSelect: string | null = null;
-  private majorClassItems: string[] = [
-    '상의', // top
-    '아우터',
-    '원피스',
-    '하의', // bottoms
-    '가방',
-    '신발',
-    '모자',
-    '안경',
-    '액세서리',
-    '기타'
-  ];
+  // private majorSelect: string | null = null;
+  // private majorClassItems: string[] = [
+  //   MajorClass.Top, // top
+  //   MajorClass.Outer,
+  //   MajorClass.OnePiece,
+  //   MajorClass.Bottoms, // bottoms
+  //   MajorClass.Bag,
+  //   MajorClass.Shoes,
+  //   MajorClass.Hat,
+  //   MajorClass.Glasses,
+  //   MajorClass.Accessory,
+  //   MajorClass.Etc,
+  // ];
 
-  private topMinorClassItems: string[] = [
-    '반팔',
-    '맨투맨',
-    '긴팔',
-    '민소매',
-    '후드',
-    '셔츠/블라우스',
-    '니트/스웨터/가디건',
-    '기타'
-  ];
-  private dressMinorClassItems: string[] = ['원피스', '기타'];
+  private topMinorClassItems: string[] = [];
+  private dressMinorClassItems: string[] = [];
   private bottomsMinorClassItems: string[] = [
     '데님',
     '반바지',
@@ -74,7 +70,7 @@ export default class GroupCreation extends Vue {
     '레깅스',
     '슬랙스',
     '트레이닝바지',
-    '기타'
+    '기타',
   ];
   private outerMinorClassItems: string[] = [
     '코트',
@@ -85,13 +81,13 @@ export default class GroupCreation extends Vue {
     '후리스',
     '후드집업',
     '가디건',
-    '기타'
+    '기타',
   ];
   private accessoryMinorClassItems: string[] = [
     '마스크',
     '머플러',
     '장갑',
-    '기타'
+    '기타',
   ];
   private shoesMinorClassItems: string[] = [
     '구두',
@@ -101,7 +97,7 @@ export default class GroupCreation extends Vue {
     '샌들/슬리퍼',
     '운동화',
     '스니커즈',
-    '기타'
+    '기타',
   ];
   private bagMinorClassItems: string[] = ['백팩', '핸드백', '기타'];
   private glassesMinorClassItems: string[] = ['썬글라스', '안경', '기타'];
@@ -113,7 +109,7 @@ export default class GroupCreation extends Vue {
     '버킷',
     '썬캡',
     '밀짚모자',
-    '기타'
+    '기타',
   ];
 
   private weatherSelect: string | null = null;
@@ -126,24 +122,25 @@ export default class GroupCreation extends Vue {
     '17 ~ 19도',
     '20 ~ 22도',
     '23 ~ 27도',
-    '28도 이상'
+    '28도 이상',
   ];
 
   private thicknessSelected: string[] = [];
   private thicknessRule = [
     (v: string[]) => {
       return !_.isEmpty(v) || 'Gender is required';
-    }
+    },
   ];
 
   private colorSelect: string | null = null;
   private colorItems: string[] = ['무채', '유채'];
 
   private clothesGroup: ClothesGroup | null = null;
-  private curruentCloth: Cloth | null = null;
-  public selectCloth(majorClass: string) {
-    // this.curruentCloth = (this.clothesGroup as ClothesGroup).clothes[majorClass];
-    console.log('selectCloth', majorClass);
+  private currentCloth: Cloth | null = null;
+  public selectCloth(majorClass: MajorClass) {
+    this.currentCloth = ((this.clothesGroup as ClothesGroup)
+      .clothes as ClothesHash)[majorClass];
+    console.log('selectCloth', majorClass, this.currentCloth);
   }
 
   public validate() {
@@ -165,56 +162,64 @@ export default class GroupCreation extends Vue {
 
   public onFilePicked(e: any) {
     const files = e.target.files;
-    if (files[0] !== undefined) {
-      this.imageName = files[0].name;
-      if (this.imageName.lastIndexOf('.') <= 0) {
-        return;
+    if (!_.isNil(this.currentCloth)) {
+      if (files[0] !== undefined) {
+        this.currentCloth.imageName = files[0].name;
+        if (this.currentCloth.imageName.lastIndexOf('.') <= 0) {
+          return;
+        }
+        const fr = new FileReader();
+        fr.readAsDataURL(files[0]);
+        fr.addEventListener('load', () => {
+          (this.currentCloth as Cloth).imageUrl = fr.result;
+          (this.currentCloth as Cloth).imageFile = files[0]; // this is an image file that can be sent to server...
+          // console.log('imageFile', this.imageFile);
+        });
+      } else {
+        this.currentCloth.imageName = '';
+        this.currentCloth.imageFile = null;
+        this.currentCloth.imageUrl = '';
       }
-      const fr = new FileReader();
-      fr.readAsDataURL(files[0]);
-      fr.addEventListener('load', () => {
-        this.imageUrl = fr.result;
-        this.imageFile = files[0]; // this is an image file that can be sent to server...
-        // console.log('imageFile', this.imageFile);
-      });
     } else {
-      this.imageName = '';
-      this.imageFile = null;
-      this.imageUrl = '';
+      throw new Error('currentCloth가 null이뜨네');
     }
   }
 
-  public changeMajorSelect(majorSelect: string) {
-    this.majorSelect = majorSelect;
+  public changeMajorSelect(majorSelect: MajorClass) {
+    (this.currentCloth as Cloth).majorClass = majorSelect;
+  }
+  public changeMinorSelect(minorSelect: string) {
+    (this.currentCloth as Cloth).minorClass = minorSelect;
   }
 
-  get minorSelect(): string[] {
-    switch (this.majorSelect) {
-      case '상의': {
+  get minorClassItems(): string[] {
+    console.log('minorClassItems?', (this.currentCloth as Cloth).majorClass);
+    switch ((this.currentCloth as Cloth).majorClass) {
+      case MajorClass.Top: {
         return this.topMinorClassItems;
       }
-      case '원피스': {
+      case MajorClass.OnePiece: {
         return this.dressMinorClassItems;
       }
-      case '하의': {
+      case MajorClass.Bottoms: {
         return this.bottomsMinorClassItems;
       }
-      case '아우터': {
+      case MajorClass.Outer: {
         return this.outerMinorClassItems;
       }
-      case '액세서리': {
+      case MajorClass.Accessory: {
         return this.accessoryMinorClassItems;
       }
-      case '신발': {
+      case MajorClass.Shoes: {
         return this.shoesMinorClassItems;
       }
-      case '가방': {
+      case MajorClass.Bag: {
         return this.bagMinorClassItems;
       }
-      case '모자': {
+      case MajorClass.Hat: {
         return this.hatMinorClassItems;
       }
-      case '안경': {
+      case MajorClass.Glasses: {
         return this.glassesMinorClassItems;
       }
       default: {
@@ -225,6 +230,11 @@ export default class GroupCreation extends Vue {
 
   private created() {
     this.$store.state.isMainPage = false;
+
+    this.topMinorClassItems = Object.keys(TopMinorClass);
+    this.dressMinorClassItems = Object.keys(OnePieceMinorClass);
+
+    this.clothesGroup = ClothesGroup.create();
 
     // clothesGroup instance 가져오기
     // if (
