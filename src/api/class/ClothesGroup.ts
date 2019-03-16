@@ -12,16 +12,16 @@ export interface ClothesGroupData {
 }
 
 export interface ClothesHash {
-  [MajorClass.Outer]: Cloth;
-  [MajorClass.Top]: Cloth;
-  [MajorClass.OnePiece]: Cloth;
-  [MajorClass.Bottoms]: Cloth;
-  [MajorClass.Bag]: Cloth;
-  [MajorClass.Shoes]: Cloth;
-  [MajorClass.Hat]: Cloth;
-  [MajorClass.Glasses]: Cloth;
-  [MajorClass.Accessory]: Cloth;
-  [MajorClass.Etc]: Cloth;
+  [MajorClass.Outer]: Cloth | null;
+  [MajorClass.Top]: Cloth | null;
+  [MajorClass.OnePiece]: Cloth | null;
+  [MajorClass.Bottoms]: Cloth | null;
+  [MajorClass.Bag]: Cloth | null;
+  [MajorClass.Shoes]: Cloth | null;
+  [MajorClass.Hat]: Cloth | null;
+  [MajorClass.Glasses]: Cloth | null;
+  [MajorClass.Accessory]: Cloth | null;
+  [MajorClass.Etc]: Cloth | null;
   // [index: string]: Cloth;
 }
 
@@ -30,16 +30,26 @@ export default class ClothesGroup implements ClothesGroupData {
     const newClothesGroup = new ClothesGroup();
 
     newClothesGroup.clothes = {
-      outer: Cloth.create(MajorClass.Outer),
-      top: Cloth.create(MajorClass.Top),
-      onePiece: Cloth.create(MajorClass.OnePiece),
-      bottoms: Cloth.create(MajorClass.Bottoms),
-      bag: Cloth.create(MajorClass.Bag),
-      shoes: Cloth.create(MajorClass.Shoes),
-      hat: Cloth.create(MajorClass.Hat),
-      glasses: Cloth.create(MajorClass.Glasses),
-      accessory: Cloth.create(MajorClass.Accessory),
-      etc: Cloth.create(MajorClass.Etc)
+      // outer: Cloth.create(MajorClass.Outer),
+      // top: Cloth.create(MajorClass.Top),
+      // onePiece: Cloth.create(MajorClass.OnePiece),
+      // bottoms: Cloth.create(MajorClass.Bottoms),
+      // bag: Cloth.create(MajorClass.Bag),
+      // shoes: Cloth.create(MajorClass.Shoes),
+      // hat: Cloth.create(MajorClass.Hat),
+      // glasses: Cloth.create(MajorClass.Glasses),
+      // accessory: Cloth.create(MajorClass.Accessory),
+      // etc: Cloth.create(MajorClass.Etc)
+      outer: null,
+      top: null,
+      onePiece: null,
+      bottoms: null,
+      bag: null,
+      shoes: null,
+      hat: null,
+      glasses: null,
+      accessory: null,
+      etc: null
     };
 
     return newClothesGroup;
@@ -70,7 +80,7 @@ export default class ClothesGroup implements ClothesGroupData {
   public checkCanSave(): boolean {
     let canSave: boolean = false;
     _.forEach(this.clothes, cloth => {
-      if (!cloth.canSave) {
+      if (!_.isNil(cloth) && !cloth.canSave) {
         canSave = false;
         return false; // break;
       }

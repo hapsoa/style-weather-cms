@@ -4,7 +4,12 @@ import { Cloth, ClothesGroup } from '@/api/class';
 import {
   MajorClass,
   TopMinorClass,
-  OnePieceMinorClass
+  OnePieceMinorClass,
+  BottomsMinorClass,
+  OuterMinorClass,
+  AccessoryMinorClass,
+  ShoesMinorClass,
+  BagMinorClass
 } from '@/api/class/Cloth';
 import { ClothesHash } from '@/api/class/ClothesGroup';
 
@@ -57,46 +62,13 @@ export default class GroupCreation extends Vue {
   //   MajorClass.Etc,
   // ];
 
-  private topMinorClassItems: string[] = [];
-  private dressMinorClassItems: string[] = [];
-  private bottomsMinorClassItems: string[] = [
-    '데님',
-    '반바지',
-    '면바지',
-    '스커트',
-    '레깅스',
-    '슬랙스',
-    '트레이닝바지',
-    '기타'
-  ];
-  private outerMinorClassItems: string[] = [
-    '코트',
-    '자켓',
-    '패딩',
-    '점퍼',
-    '베스트',
-    '후리스',
-    '후드집업',
-    '가디건',
-    '기타'
-  ];
-  private accessoryMinorClassItems: string[] = [
-    '마스크',
-    '머플러',
-    '장갑',
-    '기타'
-  ];
-  private shoesMinorClassItems: string[] = [
-    '구두',
-    '부츠',
-    '플랫',
-    '힐',
-    '샌들/슬리퍼',
-    '운동화',
-    '스니커즈',
-    '기타'
-  ];
-  private bagMinorClassItems: string[] = ['백팩', '핸드백', '기타'];
+  private topMinorClassItems!: string[];
+  private dressMinorClassItems!: string[];
+  private bottomsMinorClassItems!: string[];
+  private outerMinorClassItems!: string[];
+  private accessoryMinorClassItems!: string[];
+  private shoesMinorClassItems!: string[];
+  private bagMinorClassItems!: string[];
   private glassesMinorClassItems: string[] = ['썬글라스', '안경', '기타'];
   private hatMinorClassItems: string[] = [
     '캡모자',
@@ -108,7 +80,6 @@ export default class GroupCreation extends Vue {
     '밀짚모자',
     '기타'
   ];
-
   private weatherSelect: string | null = null;
   private weatherItems: string[] = ['눈', '비', '미세먼지', '폭염'];
   private temperatureSelect: string | null = null;
@@ -141,8 +112,7 @@ export default class GroupCreation extends Vue {
       this.currentCloth.canSave = this.$refs.form.validate();
     }
 
-    this.currentCloth = ((this.clothesGroup as ClothesGroup)
-      .clothes as ClothesHash)[majorClass];
+    this.currentCloth = (this.clothesGroup.clothes as ClothesHash)[majorClass];
 
     this.resetValidation();
 
@@ -256,6 +226,11 @@ export default class GroupCreation extends Vue {
 
     this.topMinorClassItems = Object.keys(TopMinorClass);
     this.dressMinorClassItems = Object.keys(OnePieceMinorClass);
+    this.bottomsMinorClassItems = Object.keys(BottomsMinorClass);
+    this.outerMinorClassItems = Object.keys(OuterMinorClass);
+    this.accessoryMinorClassItems = Object.keys(AccessoryMinorClass);
+    this.shoesMinorClassItems = Object.keys(ShoesMinorClass);
+    this.bagMinorClassItems = Object.keys(BagMinorClass);
 
     this.clothesGroup = ClothesGroup.create();
 

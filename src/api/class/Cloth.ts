@@ -10,7 +10,7 @@ export enum MajorClass {
   Glasses = 'glasses',
   Hat = 'hat',
   OnePiece = 'onePiece',
-  Etc = 'etc',
+  Etc = 'etc'
 }
 
 export enum TopMinorClass {
@@ -21,11 +21,58 @@ export enum TopMinorClass {
   Hood = 'hood',
   ShirtBlouse = 'shirt/blouse',
   KnitSweaterCardigan = 'knit/sweater/cardigan',
-  Etc = 'etc',
+  Etc = 'etc'
 }
 
 export enum OnePieceMinorClass {
   OnePiece = 'onePiece',
+  Etc = 'etc'
+}
+
+export enum BottomsMinorClass {
+  Denim = 'denim',
+  ShortPants = 'shortPants',
+  CottonPants = 'cottonPants',
+  Skirt = 'skirt',
+  Leggings = 'leggings',
+  Slacks = 'slacks',
+  TrainingPants = 'trainingPants',
+  Etc = 'etc'
+}
+
+export enum OuterMinorClass {
+  Coat = 'coat',
+  Jacket = 'jacket',
+  Padding = 'padding',
+  Jumper = 'jumper',
+  Vest = 'vest',
+  Fleece = 'fleece',
+  HoodZipUp = 'hoodZipUp',
+  Cardigan = 'cardigan',
+  Etc = 'etc'
+}
+
+export enum AccessoryMinorClass {
+  Mask = 'mask',
+  Muffler = 'muffler',
+  Gloves = 'gloves',
+  Etc = 'etc'
+}
+
+export enum ShoesMinorClass {
+  Gudu = 'gudu',
+  Boots = 'boots',
+  Flat = 'flat',
+  Heel = 'heel',
+  SandalOrSlipper = 'sandalOrSlipper',
+  RunningShoes = 'runningShoes',
+  Sneakers = 'sneakers',
+  Etc = 'etc'
+}
+
+export enum BagMinorClass {
+  Backpack = 'backpack',
+  Handbag = 'handbag',
   Etc = 'etc'
 }
 

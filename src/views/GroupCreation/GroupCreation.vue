@@ -160,6 +160,7 @@
       </v-flex>
 
       <v-flex xs6 pa-3>
+        <v-btn v-if color="primary">의류 생성</v-btn>
         <v-form ref="form" v-model="formValid" lazy-validation>
           <v-text-field
             v-model="clothesGroup.name"
