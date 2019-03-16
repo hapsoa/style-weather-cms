@@ -1,9 +1,9 @@
 <template>
   <v-container fluid pa-0>
     <v-layout>
-      <v-flex xs6 pa-3 class="clothes-zone">
+      <v-flex xs6 pa-3 id="clothes-zone">
         <v-item-group active-class="cloth-selected">
-          <v-container fluid pa-0 grid-list-md>
+          <v-container id="clothes-zone-container" fluid pa-0 grid-list-md>
             <v-layout row>
               <v-flex xs6 style="cursor:default"></v-flex>
               <v-flex>
@@ -20,7 +20,7 @@
                   >
                     <div
                       class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.hat.imageUrl"
+                      v-if="!clothesGroup.clothes.hat || !clothesGroup.clothes.hat.imageUrl"
                     >hat</div>
                     <v-img
                       :src="clothesGroup.clothes.hat.imageUrl"
@@ -53,7 +53,7 @@
                   >
                     <div
                       class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.outer.imageUrl"
+                      v-if="!currentCloth || !clothesGroup.clothes.outer || !clothesGroup.clothes.outer.imageUrl"
                     >outer</div>
                     <v-img
                       :src="clothesGroup.clothes.outer.imageUrl"
@@ -73,7 +73,7 @@
                   >
                     <div
                       class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.top.imageUrl"
+                      v-if="!currentCloth || !clothesGroup.clothes.top || !clothesGroup.clothes.top.imageUrl"
                     >top</div>
                     <v-img
                       :src="clothesGroup.clothes.top.imageUrl"
@@ -109,7 +109,7 @@
                   >
                     <div
                       class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.bottoms.imageUrl"
+                      v-if="!currentCloth || !clothesGroup.clothes.bottoms || !clothesGroup.clothes.bottoms.imageUrl"
                     >bottoms</div>
                     <v-img
                       :src="clothesGroup.clothes.bottoms.imageUrl"
@@ -139,7 +139,7 @@
                   >
                     <div
                       class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.shoes.imageUrl"
+                      v-if="!currentCloth || !clothesGroup.clothes.shoes || !clothesGroup.clothes.shoes.imageUrl"
                     >shoes</div>
                     <v-img
                       :src="clothesGroup.clothes.shoes.imageUrl"
@@ -160,8 +160,8 @@
       </v-flex>
 
       <v-flex xs6 pa-3>
-        <v-btn v-if color="primary">의류 생성</v-btn>
-        <v-form ref="form" v-model="formValid" lazy-validation>
+        <v-btn v-if="!currentCloth" @click="createCloth" color="primary">의류 생성</v-btn>
+        <v-form v-else ref="form" v-model="formValid" lazy-validation>
           <v-text-field
             v-model="clothesGroup.name"
             :counter="20"
@@ -228,6 +228,7 @@
           ></v-select>-->
           <v-select
             v-if="currentCloth"
+            v-model="currentCloth.minorClass"
             @change="changeMinorSelect"
             :items="minorClassItems"
             label="소분류 카테고리"
@@ -290,7 +291,7 @@
 <script lang='ts' src='./GroupCreation.ts' />
 
 <style scoped lang='scss'>
-.clothes-zone {
+#clothes-zone {
   width: 500px;
 }
 

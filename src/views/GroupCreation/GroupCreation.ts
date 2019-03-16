@@ -1,5 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import _ from 'lodash';
+import html2canvas from 'html2canvas';
 import { Cloth, ClothesGroup } from '@/api/class';
 import {
   MajorClass,
@@ -9,7 +10,9 @@ import {
   OuterMinorClass,
   AccessoryMinorClass,
   ShoesMinorClass,
-  BagMinorClass
+  BagMinorClass,
+  GlassesMinorClass,
+  HatMinorClass,
 } from '@/api/class/Cloth';
 import { ClothesHash } from '@/api/class/ClothesGroup';
 
@@ -26,10 +29,10 @@ export default class GroupCreation extends Vue {
   private groupNameRules = [
     (v: string) => !!v || 'Name is required',
     (v: string) =>
-      (v && v.length <= 20) || 'Name must be less than 20 characters'
+      (v && v.length <= 20) || 'Name must be less than 20 characters',
   ];
   private linkUrlRules = [
-    (v: string) => !!v || 'Link is required'
+    (v: string) => !!v || 'Link is required',
     // (v: string) => /.+@.+/.test(v) || 'E-mail must be valid',
   ];
   // private select = null;
@@ -37,18 +40,18 @@ export default class GroupCreation extends Vue {
   // private checkbox: boolean = false;
 
   private imageName: string = '';
-  private imageUrl: string | ArrayBuffer | null = null;
-  private imageFile: File | null = null;
+  // private imageUrl: string | ArrayBuffer | null = null;
+  // private imageFile: File | null = null;
   private imageRules = [(v: string) => !!v || 'Image is required'];
 
   private genderSelected: string[] = [];
   private genderRule = [
     (v: string[]) => {
       return !_.isEmpty(v) || 'Gender is required';
-    }
+    },
   ];
 
-  // private majorSelect: string | null = null;
+  private selectedMajorClass: MajorClass | null = null;
   // private majorClassItems: string[] = [
   //   MajorClass.Top, // top
   //   MajorClass.Outer,
@@ -69,17 +72,8 @@ export default class GroupCreation extends Vue {
   private accessoryMinorClassItems!: string[];
   private shoesMinorClassItems!: string[];
   private bagMinorClassItems!: string[];
-  private glassesMinorClassItems: string[] = ['썬글라스', '안경', '기타'];
-  private hatMinorClassItems: string[] = [
-    '캡모자',
-    '비니',
-    '테도라',
-    '베레모',
-    '버킷',
-    '썬캡',
-    '밀짚모자',
-    '기타'
-  ];
+  private glassesMinorClassItems!: string[];
+  private hatMinorClassItems!: string[];
   private weatherSelect: string | null = null;
   private weatherItems: string[] = ['눈', '비', '미세먼지', '폭염'];
   private temperatureSelect: string | null = null;
@@ -90,14 +84,14 @@ export default class GroupCreation extends Vue {
     '17 ~ 19도',
     '20 ~ 22도',
     '23 ~ 27도',
-    '28도 이상'
+    '28도 이상',
   ];
 
   private thicknessSelected: string[] = [];
   private thicknessRule = [
     (v: string[]) => {
       return !_.isEmpty(v) || 'Gender is required';
-    }
+    },
   ];
 
   private colorSelect: string | null = null;
@@ -113,12 +107,29 @@ export default class GroupCreation extends Vue {
     }
 
     this.currentCloth = (this.clothesGroup.clothes as ClothesHash)[majorClass];
+    this.selectedMajorClass = majorClass;
 
-    this.resetValidation();
+    // if (!_.isNil(this.currentCloth)) {
+    //   this.resetValidation();
+    // }
 
     this.canSave = this.clothesGroup.checkCanSave();
 
     console.log('selectCloth', majorClass, this.currentCloth);
+  }
+  public createCloth() {
+    if (!_.isNil(this.selectedMajorClass)) {
+      this.clothesGroup.clothes[this.selectedMajorClass] = Cloth.create(
+        this.selectedMajorClass,
+      );
+
+      this.currentCloth = this.clothesGroup.clothes[this.selectedMajorClass];
+      this.clothesGroup.clothIds.push((this.currentCloth as Cloth).id);
+    } else {
+      throw Error(
+        'createCloth() 버튼이 있으면 안되는데, 눌러서 createCloth()가 됨',
+      );
+    }
   }
 
   public validate() {
@@ -177,7 +188,16 @@ export default class GroupCreation extends Vue {
 
   public async saveClothesGroup() {
     try {
-      await this.clothesGroup.save();
+      const canvas: HTMLCanvasElement = await html2canvas(
+        document.getElementById('clothes-zone-container') as HTMLElement,
+      );
+
+      canvas.toBlob(async blob => {
+        // console.log('blob', blob);
+
+        await this.clothesGroup.save(blob as Blob);
+      });
+
       //  this.$router.push({name: 'main'});
     } catch (error) {
       console.error(error);
@@ -231,8 +251,11 @@ export default class GroupCreation extends Vue {
     this.accessoryMinorClassItems = Object.keys(AccessoryMinorClass);
     this.shoesMinorClassItems = Object.keys(ShoesMinorClass);
     this.bagMinorClassItems = Object.keys(BagMinorClass);
+    this.glassesMinorClassItems = Object.keys(GlassesMinorClass);
+    this.hatMinorClassItems = Object.keys(HatMinorClass);
 
     this.clothesGroup = ClothesGroup.create();
+    console.log('this.clothesGroup.id', this.clothesGroup.id);
 
     // clothesGroup instance 가져오기
     // if (

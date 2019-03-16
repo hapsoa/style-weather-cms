@@ -12,27 +12,32 @@ export default new Router({
     {
       path: '/',
       name: 'main',
-      component: Main
+      component: Main,
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('./views/Login/Login.vue')
+      component: () => import('./views/Login/Login.vue'),
     },
+    // {
+    //   path: '/group-creation/:clothesGroupId',
+    //   name: 'group-creation',
+    //   component: () => import('./views/GroupCreation/GroupCreation.vue')
+    // },
     {
-      path: '/group-creation/:clothesGroupId',
+      path: '/group-creation',
       name: 'group-creation',
-      component: () => import('./views/GroupCreation/GroupCreation.vue')
+      component: () => import('./views/GroupCreation/GroupCreation.vue'),
     },
     {
       path: '/group/:id',
       name: 'group-view',
-      component: () => import('./views/Login/Login.vue')
+      component: () => import('./views/Login/Login.vue'),
     },
     {
       path: '/upload-file-test',
       name: 'upload-file-test',
-      component: () => import('./views/test/UploadFile/UploadFileTest.vue')
-    }
-  ]
+      component: () => import('./views/test/UploadFile/UploadFileTest.vue'),
+    },
+  ],
 });

@@ -15,7 +15,7 @@ class ClothesGroupApi {
     create(clothesGroupData: ClothesGroupData): Promise<void> {
       return new Promise((resolve, reject) => {
         database
-          .collection('clothes')
+          .collection('clothesGroup')
           .doc(clothesGroupData.id as string)
           .set(clothesGroupData)
           .then(() => {
@@ -31,7 +31,7 @@ class ClothesGroupApi {
     read(clothesGroupId: string): Promise<ClothesGroupData> {
       return new Promise((resolve, reject) => {
         database
-          .collection('clothes')
+          .collection('clothesGroup')
           .doc(clothesGroupId)
           .get()
           .then(doc => {
@@ -54,7 +54,7 @@ class ClothesGroupApi {
     delete(clothesGroupId: string): Promise<void> {
       return new Promise((resolve, reject) => {
         database
-          .collection('clothes')
+          .collection('clothesGroup')
           .doc(clothesGroupId)
           .delete()
           .then(() => {
@@ -66,18 +66,20 @@ class ClothesGroupApi {
             reject(error);
           });
       });
-    }
+    },
   };
   // firebaseCloth.storage.read();
   public storage = {
     // crud
-    create(clothesGroupId: string, file: File): Promise<void> {
+    create(clothesGroupId: string, file: File | Blob): Promise<void> {
       return new Promise((resolve, reject) => {
         clothesGroupRef
           .child(clothesGroupId)
           .put(file)
           .then(snapshot => {
             console.log('Uploaded a blob or file!');
+            console.log('snapshot.downloadURL', snapshot);
+
             resolve();
           })
           .catch(error => {
@@ -123,7 +125,7 @@ class ClothesGroupApi {
             reject();
           });
       });
-    }
+    },
   };
 }
 

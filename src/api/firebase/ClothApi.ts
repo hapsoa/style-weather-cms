@@ -71,7 +71,7 @@ class ClothApi {
   // firebaseCloth.storage.read();
   public storage = {
     // crud
-    create(clothId: string, file: File): Promise<void> {
+    create(clothId: string, file: File | Blob): Promise<void> {
       return new Promise((resolve, reject) => {
         clothRef
           .child(clothId)

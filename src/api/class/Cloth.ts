@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import uuidv4 from 'uuid/v4';
+import { fbClothApi } from '@/api/firebase';
 
 export enum MajorClass {
   Top = 'top',
@@ -10,7 +12,7 @@ export enum MajorClass {
   Glasses = 'glasses',
   Hat = 'hat',
   OnePiece = 'onePiece',
-  Etc = 'etc'
+  Etc = 'etc',
 }
 
 export enum TopMinorClass {
@@ -21,12 +23,12 @@ export enum TopMinorClass {
   Hood = 'hood',
   ShirtBlouse = 'shirt/blouse',
   KnitSweaterCardigan = 'knit/sweater/cardigan',
-  Etc = 'etc'
+  Etc = 'etc',
 }
 
 export enum OnePieceMinorClass {
   OnePiece = 'onePiece',
-  Etc = 'etc'
+  Etc = 'etc',
 }
 
 export enum BottomsMinorClass {
@@ -37,7 +39,7 @@ export enum BottomsMinorClass {
   Leggings = 'leggings',
   Slacks = 'slacks',
   TrainingPants = 'trainingPants',
-  Etc = 'etc'
+  Etc = 'etc',
 }
 
 export enum OuterMinorClass {
@@ -49,14 +51,14 @@ export enum OuterMinorClass {
   Fleece = 'fleece',
   HoodZipUp = 'hoodZipUp',
   Cardigan = 'cardigan',
-  Etc = 'etc'
+  Etc = 'etc',
 }
 
 export enum AccessoryMinorClass {
   Mask = 'mask',
   Muffler = 'muffler',
   Gloves = 'gloves',
-  Etc = 'etc'
+  Etc = 'etc',
 }
 
 export enum ShoesMinorClass {
@@ -67,13 +69,30 @@ export enum ShoesMinorClass {
   SandalOrSlipper = 'sandalOrSlipper',
   RunningShoes = 'runningShoes',
   Sneakers = 'sneakers',
-  Etc = 'etc'
+  Etc = 'etc',
 }
 
 export enum BagMinorClass {
   Backpack = 'backpack',
   Handbag = 'handbag',
-  Etc = 'etc'
+  Etc = 'etc',
+}
+
+export enum GlassesMinorClass {
+  Sunglass = 'sunglass',
+  Glasses = 'glasses',
+  Etc = 'etc',
+}
+
+export enum HatMinorClass {
+  Cap = 'cap',
+  Beanie = 'beanie',
+  Fedora = 'fedora',
+  Beret = 'beret',
+  BucketHat = 'bucketHat',
+  SunCap = 'sunCap',
+  StrawHat = 'strawHat',
+  Etc = 'etc',
 }
 
 export interface ClothData {
@@ -86,6 +105,7 @@ export interface ClothData {
   temperature: string | null;
   thickness: string[];
   color: string | null;
+  imageUrl: string | ArrayBuffer | null;
 }
 
 export default class Cloth implements ClothData {
@@ -125,4 +145,28 @@ export default class Cloth implements ClothData {
   // storage(해당 부위 이미지) c r u d
 
   // load(ClothId) - 상세보기에서 불러오기
+
+  public async save(): Promise<void> {
+    if (!_.isNil(this.imageFile)) {
+      // storage에 저장하고, url을 가져온다.
+      await fbClothApi.storage.create(this.id, this.imageFile);
+      this.imageUrl = await fbClothApi.storage.read(this.id);
+
+      // db에 저장한다.
+      await fbClothApi.db.create({
+        id: this.id,
+        linkUrl: this.linkUrl,
+        gender: this.gender,
+        majorClass: this.majorClass,
+        minorClass: this.minorClass,
+        weather: this.weather,
+        temperature: this.temperature,
+        thickness: this.thickness,
+        color: this.color,
+        imageUrl: this.imageUrl,
+      });
+    } else {
+      throw new Error('이미지 파일이 없는데 cloth.save() 시도하고 있다.');
+    }
+  }
 }

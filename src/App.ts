@@ -18,7 +18,7 @@ export default class App extends Vue {
     '모자',
     '안경',
     '액세서리',
-    '기타'
+    '기타',
   ];
   private topMinorClassItems: string[] = [
     '반팔',
@@ -28,7 +28,7 @@ export default class App extends Vue {
     '후드',
     '셔츠/블라우스',
     '니트/스웨터/가디건',
-    '기타'
+    '기타',
   ];
   private dressMinorClassItems: string[] = ['원피스', '기타'];
   private bottomsMinorClassItems: string[] = [
@@ -39,7 +39,7 @@ export default class App extends Vue {
     '레깅스',
     '슬랙스',
     '트레이닝바지',
-    '기타'
+    '기타',
   ];
   private outerMinorClassItems: string[] = [
     '코트',
@@ -50,13 +50,13 @@ export default class App extends Vue {
     '후리스',
     '후드집업',
     '가디건',
-    '기타'
+    '기타',
   ];
   private accessoryMinorClassItems: string[] = [
     '마스크',
     '머플러',
     '장갑',
-    '기타'
+    '기타',
   ];
   private shoesMinorClassItems: string[] = [
     '구두',
@@ -66,7 +66,7 @@ export default class App extends Vue {
     '샌들/슬리퍼',
     '운동화',
     '스니커즈',
-    '기타'
+    '기타',
   ];
   private bagMinorClassItems: string[] = ['백팩', '핸드백', '기타'];
   private glassesMinorClassItems: string[] = ['썬글라스', '안경', '기타'];
@@ -78,7 +78,7 @@ export default class App extends Vue {
     '버킷',
     '썬캡',
     '밀짚모자',
-    '기타'
+    '기타',
   ];
 
   public changeMajorSelect(majorSelect: string) {
@@ -98,7 +98,7 @@ export default class App extends Vue {
   public createGroup() {
     this.$router.push({
       name: 'group-creation',
-      params: { clothesGroupId: uuidv4() }
+      // params: { clothesGroupId: uuidv4() }
     });
     // this.$router.push({ name: 'group-creation' });
   }

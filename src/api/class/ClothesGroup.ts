@@ -8,7 +8,7 @@ export interface ClothesGroupData {
   id: string;
   name: string;
   clothIds: string[];
-  image: string;
+  imageUrl: string; // firebase storage url
 }
 
 export interface ClothesHash {
@@ -29,29 +29,6 @@ export default class ClothesGroup implements ClothesGroupData {
   public static create(): ClothesGroup {
     const newClothesGroup = new ClothesGroup();
 
-    newClothesGroup.clothes = {
-      // outer: Cloth.create(MajorClass.Outer),
-      // top: Cloth.create(MajorClass.Top),
-      // onePiece: Cloth.create(MajorClass.OnePiece),
-      // bottoms: Cloth.create(MajorClass.Bottoms),
-      // bag: Cloth.create(MajorClass.Bag),
-      // shoes: Cloth.create(MajorClass.Shoes),
-      // hat: Cloth.create(MajorClass.Hat),
-      // glasses: Cloth.create(MajorClass.Glasses),
-      // accessory: Cloth.create(MajorClass.Accessory),
-      // etc: Cloth.create(MajorClass.Etc)
-      outer: null,
-      top: null,
-      onePiece: null,
-      bottoms: null,
-      bag: null,
-      shoes: null,
-      hat: null,
-      glasses: null,
-      accessory: null,
-      etc: null
-    };
-
     return newClothesGroup;
   }
 
@@ -62,9 +39,20 @@ export default class ClothesGroup implements ClothesGroupData {
   public id: string = '';
   public name: string = '';
   public clothIds: string[] = [];
-  public image: string = '';
+  public imageUrl: string = '';
 
-  public clothes: ClothesHash | null = null;
+  public clothes: ClothesHash = {
+    outer: null,
+    top: null,
+    onePiece: null,
+    bottoms: null,
+    bag: null,
+    shoes: null,
+    hat: null,
+    glasses: null,
+    accessory: null,
+    etc: null,
+  };
 
   public constructor() {
     this.id = uuidv4();
@@ -90,9 +78,27 @@ export default class ClothesGroup implements ClothesGroupData {
   }
 
   // save()
-  public async save() {
-    // fbClothesGroupApi.db.create();
+  public async save(outlineImage: Blob) {
     // 전체 스크린샷 이미지 저장
-    // fbClothesGroupApi.storage.create();
+    await fbClothesGroupApi.storage.create(this.id, outlineImage);
+    // 전체 스크린샷 가져오기
+    this.imageUrl = await fbClothesGroupApi.storage.read(this.id);
+
+    // db 저장
+    await fbClothesGroupApi.db.create({
+      id: this.id,
+      name: this.name,
+      clothIds: this.clothIds,
+      imageUrl: this.imageUrl,
+    });
+
+    // clothes 중 null이 아닌 cloth들을 모두 저장.
+    const clothPromises: Array<Promise<void>> = [];
+    _.forEach(this.clothes, cloth => {
+      if (!_.isNil(cloth)) {
+        clothPromises.push(cloth.save());
+      }
+    });
+    await Promise.all(clothPromises);
   }
 }
