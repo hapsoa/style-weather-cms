@@ -4,7 +4,7 @@ import { Cloth, ClothesGroup } from '@/api/class';
 import {
   MajorClass,
   TopMinorClass,
-  OnePieceMinorClass,
+  OnePieceMinorClass
 } from '@/api/class/Cloth';
 import { ClothesHash } from '@/api/class/ClothesGroup';
 
@@ -16,18 +16,15 @@ export default class GroupCreation extends Vue {
     image: any;
   };
 
-  private formValid: boolean = true;
+  private formValid: boolean = false;
 
-  private groupName: string = '';
   private groupNameRules = [
     (v: string) => !!v || 'Name is required',
     (v: string) =>
-      (v && v.length <= 20) || 'Name must be less than 20 characters',
+      (v && v.length <= 20) || 'Name must be less than 20 characters'
   ];
-
-  private linkUrl: string = '';
   private linkUrlRules = [
-    (v: string) => !!v || 'Link is required',
+    (v: string) => !!v || 'Link is required'
     // (v: string) => /.+@.+/.test(v) || 'E-mail must be valid',
   ];
   // private select = null;
@@ -43,7 +40,7 @@ export default class GroupCreation extends Vue {
   private genderRule = [
     (v: string[]) => {
       return !_.isEmpty(v) || 'Gender is required';
-    },
+    }
   ];
 
   // private majorSelect: string | null = null;
@@ -70,7 +67,7 @@ export default class GroupCreation extends Vue {
     '레깅스',
     '슬랙스',
     '트레이닝바지',
-    '기타',
+    '기타'
   ];
   private outerMinorClassItems: string[] = [
     '코트',
@@ -81,13 +78,13 @@ export default class GroupCreation extends Vue {
     '후리스',
     '후드집업',
     '가디건',
-    '기타',
+    '기타'
   ];
   private accessoryMinorClassItems: string[] = [
     '마스크',
     '머플러',
     '장갑',
-    '기타',
+    '기타'
   ];
   private shoesMinorClassItems: string[] = [
     '구두',
@@ -97,7 +94,7 @@ export default class GroupCreation extends Vue {
     '샌들/슬리퍼',
     '운동화',
     '스니커즈',
-    '기타',
+    '기타'
   ];
   private bagMinorClassItems: string[] = ['백팩', '핸드백', '기타'];
   private glassesMinorClassItems: string[] = ['썬글라스', '안경', '기타'];
@@ -109,7 +106,7 @@ export default class GroupCreation extends Vue {
     '버킷',
     '썬캡',
     '밀짚모자',
-    '기타',
+    '기타'
   ];
 
   private weatherSelect: string | null = null;
@@ -122,31 +119,47 @@ export default class GroupCreation extends Vue {
     '17 ~ 19도',
     '20 ~ 22도',
     '23 ~ 27도',
-    '28도 이상',
+    '28도 이상'
   ];
 
   private thicknessSelected: string[] = [];
   private thicknessRule = [
     (v: string[]) => {
       return !_.isEmpty(v) || 'Gender is required';
-    },
+    }
   ];
 
   private colorSelect: string | null = null;
   private colorItems: string[] = ['무채', '유채'];
 
-  private clothesGroup: ClothesGroup | null = null;
+  private canSave: boolean = false;
+
+  private clothesGroup!: ClothesGroup;
   private currentCloth: Cloth | null = null;
   public selectCloth(majorClass: MajorClass) {
+    if (!_.isNil(this.currentCloth)) {
+      this.currentCloth.canSave = this.$refs.form.validate();
+    }
+
     this.currentCloth = ((this.clothesGroup as ClothesGroup)
       .clothes as ClothesHash)[majorClass];
+
+    this.resetValidation();
+
+    this.canSave = this.clothesGroup.checkCanSave();
+
     console.log('selectCloth', majorClass, this.currentCloth);
   }
 
   public validate() {
+    // form tag validate성공 시 this.formValid를 true. return값도 true
     if (this.$refs.form.validate()) {
       // this.snackbar = true;
-      console.log('name', this.groupName, 'linkUrl', this.linkUrl);
+      console.log('name', this.clothesGroup.name);
+      if (!_.isNil(this.currentCloth)) {
+        this.currentCloth.canSave = true;
+      }
+      this.canSave = this.clothesGroup.checkCanSave();
     }
   }
   public reset() {
@@ -190,6 +203,16 @@ export default class GroupCreation extends Vue {
   }
   public changeMinorSelect(minorSelect: string) {
     (this.currentCloth as Cloth).minorClass = minorSelect;
+  }
+
+  public async saveClothesGroup() {
+    try {
+      await this.clothesGroup.save();
+      //  this.$router.push({name: 'main'});
+    } catch (error) {
+      console.error(error);
+      alert('저장 실패');
+    }
   }
 
   get minorClassItems(): string[] {

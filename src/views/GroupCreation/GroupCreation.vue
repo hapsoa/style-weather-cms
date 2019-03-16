@@ -277,7 +277,7 @@
         </v-form>
         <div style="height: 400px"></div>
         <v-layout row justify-end>
-          <v-btn>저장</v-btn>
+          <v-btn :disabled="!canSave" @click="saveClothesGroup">저장</v-btn>
           <v-btn>초기화</v-btn>
           <v-btn>취소</v-btn>
         </v-layout>

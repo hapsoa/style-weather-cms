@@ -2,6 +2,7 @@ import _ from 'lodash';
 import uuidv4 from 'uuid/v4';
 import { Cloth } from '@/api/class';
 import { MajorClass } from '@/api/class/Cloth';
+import { fbClothesGroupApi } from '@/api/firebase';
 
 export interface ClothesGroupData {
   id: string;
@@ -38,7 +39,7 @@ export default class ClothesGroup implements ClothesGroupData {
       hat: Cloth.create(MajorClass.Hat),
       glasses: Cloth.create(MajorClass.Glasses),
       accessory: Cloth.create(MajorClass.Accessory),
-      etc: Cloth.create(MajorClass.Etc),
+      etc: Cloth.create(MajorClass.Etc)
     };
 
     return newClothesGroup;
@@ -55,9 +56,6 @@ export default class ClothesGroup implements ClothesGroupData {
 
   public clothes: ClothesHash | null = null;
 
-  // Cloth 9개가 모든 데이터가 온전히 다있는지 체크하는 기능
-  public canSave: boolean = false;
-
   public constructor() {
     this.id = uuidv4();
   }
@@ -67,4 +65,24 @@ export default class ClothesGroup implements ClothesGroupData {
 
   // load(clothesGroupId: string) - 메인화면에서 불러오기
   // loadClothes() - Cloth[]에 9개 instance 생성
+
+  // Cloth 9개가 모든 데이터가 온전히 다있는지 체크하는 기능
+  public checkCanSave(): boolean {
+    let canSave: boolean = false;
+    _.forEach(this.clothes, cloth => {
+      if (!cloth.canSave) {
+        canSave = false;
+        return false; // break;
+      }
+      canSave = true;
+    });
+    return canSave;
+  }
+
+  // save()
+  public async save() {
+    // fbClothesGroupApi.db.create();
+    // 전체 스크린샷 이미지 저장
+    // fbClothesGroupApi.storage.create();
+  }
 }
