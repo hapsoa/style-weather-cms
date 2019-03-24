@@ -1,9 +1,14 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { User } from '@/api/class';
 
-@Component({})
+import BricksComponent from '@/components/Bricks/BricksComponent.vue';
+
+@Component({
+  components: {
+    BricksComponent,
+  },
+})
 export default class Main extends Vue {
-  // private beforeCreate() {}
   private created() {
     this.$store.state.isMainPage = true;
   }

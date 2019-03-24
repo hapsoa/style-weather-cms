@@ -1,165 +1,18 @@
 <template>
   <v-container fluid pa-0>
     <v-layout>
-      <v-flex xs6 pa-3 id="clothes-zone">
-        <v-item-group active-class="cloth-selected">
-          <v-container id="clothes-zone-container" fluid pa-0 grid-list-md>
-            <v-layout row>
-              <v-flex xs6 style="cursor:default"></v-flex>
-              <v-flex>
-                <v-item>
-                  <v-card slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">q</v-card>
-                </v-item>
-              </v-flex>
-              <v-flex text-xs-center>
-                <v-item>
-                  <div
-                    slot-scope="{ active, toggle }"
-                    @click="toggle(); selectCloth('hat')"
-                    class="cloth-zone"
-                  >
-                    <div
-                      class="cloth-guide-text"
-                      v-if="!clothesGroup.clothes.hat || !clothesGroup.clothes.hat.imageUrl"
-                    >hat</div>
-                    <v-img
-                      :src="clothesGroup.clothes.hat.imageUrl"
-                      v-else
-                      contain
-                      style="height: 100%"
-                    ></v-img>
-                  </div>
-                </v-item>
-              </v-flex>
-              <v-flex>
-                <v-item>
-                  <div
-                    slot-scope="{ active, toggle }"
-                    @click="toggle(); selectCloth('accessory');"
-                    class="cloth-zone"
-                  >accessory</div>
-                </v-item>
-              </v-flex>
-              <v-flex xs6 style="cursor:default"></v-flex>
-            </v-layout>
-            <v-layout row>
-              <v-flex xs6 style="cursor:default"></v-flex>
-              <v-flex text-xs-center>
-                <v-item>
-                  <div
-                    slot-scope="{ active, toggle }"
-                    @click="toggle(); selectCloth('outer')"
-                    class="cloth-zone"
-                  >
-                    <div
-                      class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.outer || !clothesGroup.clothes.outer.imageUrl"
-                    >outer</div>
-                    <v-img
-                      :src="clothesGroup.clothes.outer.imageUrl"
-                      v-else
-                      contain
-                      style="height: 100%"
-                    ></v-img>
-                  </div>
-                </v-item>
-              </v-flex>
-              <v-flex text-xs-center>
-                <v-item>
-                  <div
-                    slot-scope="{ active, toggle }"
-                    @click="toggle(); selectCloth('top')"
-                    class="cloth-zone"
-                  >
-                    <div
-                      class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.top || !clothesGroup.clothes.top.imageUrl"
-                    >top</div>
-                    <v-img
-                      :src="clothesGroup.clothes.top.imageUrl"
-                      v-else
-                      contain
-                      style="height: 100%"
-                    ></v-img>
-                  </div>
-                </v-item>
-                <!-- <v-item>
-                  <v-card slot-scope="{ active, toggle }" @click="toggle" class="cloth-zone">
-                    <div class="cloth-guide-text" v-if="!imageUrl">상의</div>
-                    <v-img :src="imageUrl" v-else contain style="height: 100%"></v-img>
-                  </v-card>
-                </v-item>-->
-              </v-flex>
-              <v-flex text-xs-center>
-                <div class="cloth-zone">상의2</div>
-              </v-flex>
-              <v-flex xs6 style="cursor:default"></v-flex>
-            </v-layout>
-            <v-layout row>
-              <v-flex xs6></v-flex>
-              <v-flex>
-                <div class="cloth-zone">q</div>
-              </v-flex>
-              <v-flex text-xs-center>
-                <v-item>
-                  <div
-                    slot-scope="{ active, toggle }"
-                    @click="toggle(); selectCloth('bottoms')"
-                    class="cloth-zone"
-                  >
-                    <div
-                      class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.bottoms || !clothesGroup.clothes.bottoms.imageUrl"
-                    >bottoms</div>
-                    <v-img
-                      :src="clothesGroup.clothes.bottoms.imageUrl"
-                      v-else
-                      contain
-                      style="height: 100%"
-                    ></v-img>
-                  </div>
-                </v-item>
-              </v-flex>
-              <v-flex>
-                <div class="cloth-zone">q</div>
-              </v-flex>
-              <v-flex xs6 style="cursor:default"></v-flex>
-            </v-layout>
-            <v-layout row>
-              <v-flex xs6 style="cursor:default"></v-flex>
-              <v-flex>
-                <div class="cloth-zone">q</div>
-              </v-flex>
-              <v-flex text-xs-center>
-                <v-item>
-                  <div
-                    slot-scope="{ active, toggle }"
-                    @click="toggle(); selectCloth('shoes')"
-                    class="cloth-zone"
-                  >
-                    <div
-                      class="cloth-guide-text"
-                      v-if="!currentCloth || !clothesGroup.clothes.shoes || !clothesGroup.clothes.shoes.imageUrl"
-                    >shoes</div>
-                    <v-img
-                      :src="clothesGroup.clothes.shoes.imageUrl"
-                      v-else
-                      contain
-                      style="height: 100%"
-                    ></v-img>
-                  </div>
-                </v-item>
-              </v-flex>
-              <v-flex>
-                <div class="cloth-zone">q</div>
-              </v-flex>
-              <v-flex xs6 style="cursor:default"></v-flex>
-            </v-layout>
-          </v-container>
-        </v-item-group>
+      <v-flex xs6 pa-3 pl-5 id="clothes-zone">
+        <ClothesCanvas ref="clothesCanvas"></ClothesCanvas>
       </v-flex>
 
       <v-flex xs6 pa-3>
+        <v-select
+          @change="changeMajorSelect"
+          :items="majorClassItems"
+          label="대분류 카테고리"
+          :rules="[v => !!v || 'Major class is required']"
+          height="40"
+        ></v-select>
         <v-btn v-if="!currentCloth" @click="createCloth" color="primary">의류 생성</v-btn>
         <v-form v-else ref="form" v-model="formValid" lazy-validation>
           <v-text-field
@@ -293,6 +146,7 @@
 <style scoped lang='scss'>
 #clothes-zone {
   width: 500px;
+  // border: 1px solid #aaa;
 }
 
 .cloth-zone {

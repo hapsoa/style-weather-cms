@@ -10,6 +10,8 @@
   "dependencies": {
     "@types/html2canvas": "0.0.35",
     "@types/lodash": "^4.14.122",
+    "bricks.js": "^1.8.0",
+    "fabric": "^2.7.0",
     "firebase": "^5.8.5",
     "html2canvas": "^1.0.0-alpha.12",
     "register-service-worker": "^1.5.2",
@@ -23,11 +25,13 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/bricks.js": "^1.8.0",
+    "@types/fabric": "^2.6.4",
     "@types/uuid": "^3.4.4",
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-pwa": "^3.4.0",
     "@vue/cli-plugin-typescript": "^3.4.0",
-    "@vue/cli-service": "^3.4.0",
+    "@vue/cli-service": "^3.5.1",
     "fibers": "^3.1.1",
     "lint-staged": "^8.1.0",
     "sass": "^1.16.0",

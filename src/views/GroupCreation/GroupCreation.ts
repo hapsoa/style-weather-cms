@@ -15,13 +15,20 @@ import {
   HatMinorClass,
 } from '@/api/class/Cloth';
 import { ClothesHash } from '@/api/class/ClothesGroup';
+import ClothesCanvas from '@/components/ClothesCanvas/ClothesCanvas.vue';
+import ClothesCanvasTs from '@/components/ClothesCanvas/ClothesCanvas.ts';
 
-@Component({})
+@Component({
+  components: {
+    ClothesCanvas,
+  },
+})
 export default class GroupCreation extends Vue {
   // @ts-ignore-nextline
   public $refs: Vue['$refs'] & {
     form: any;
     image: any;
+    clothesCanvas: ClothesCanvasTs;
   };
 
   private formValid: boolean = false;
@@ -52,18 +59,18 @@ export default class GroupCreation extends Vue {
   ];
 
   private selectedMajorClass: MajorClass | null = null;
-  // private majorClassItems: string[] = [
-  //   MajorClass.Top, // top
-  //   MajorClass.Outer,
-  //   MajorClass.OnePiece,
-  //   MajorClass.Bottoms, // bottoms
-  //   MajorClass.Bag,
-  //   MajorClass.Shoes,
-  //   MajorClass.Hat,
-  //   MajorClass.Glasses,
-  //   MajorClass.Accessory,
-  //   MajorClass.Etc,
-  // ];
+  private majorClassItems: string[] = [
+    MajorClass.Top, // top
+    MajorClass.Outer,
+    MajorClass.OnePiece,
+    MajorClass.Bottoms, // bottoms
+    MajorClass.Bag,
+    MajorClass.Shoes,
+    MajorClass.Hat,
+    MajorClass.Glasses,
+    MajorClass.Accessory,
+    MajorClass.Etc,
+  ];
 
   private topMinorClassItems!: string[];
   private dressMinorClassItems!: string[];
@@ -165,9 +172,15 @@ export default class GroupCreation extends Vue {
         const fr = new FileReader();
         fr.readAsDataURL(files[0]);
         fr.addEventListener('load', () => {
-          (this.currentCloth as Cloth).imageUrl = fr.result;
-          (this.currentCloth as Cloth).imageFile = files[0]; // this is an image file that can be sent to server...
-          // console.log('imageFile', this.imageFile);
+          if (!_.isNil(this.currentCloth)) {
+            (this.currentCloth as Cloth).imageUrl = fr.result;
+            (this.currentCloth as Cloth).imageFile = files[0]; // this is an image file that can be sent to server...
+            // console.log('imageFile', this.imageFile);
+            this.$refs.clothesCanvas.addImage(
+              fr.result as string,
+              this.currentCloth.majorClass as MajorClass,
+            );
+          }
         });
       } else {
         this.currentCloth.imageName = '';
@@ -180,23 +193,34 @@ export default class GroupCreation extends Vue {
   }
 
   public changeMajorSelect(majorSelect: MajorClass) {
-    (this.currentCloth as Cloth).majorClass = majorSelect;
+    // 해당 clothesGroup['top']을 선택하도록 한다.
+    this.selectedMajorClass = majorSelect;
+    this.currentCloth = this.clothesGroup.clothes[majorSelect];
   }
   public changeMinorSelect(minorSelect: string) {
     (this.currentCloth as Cloth).minorClass = minorSelect;
   }
 
-  public async saveClothesGroup() {
+  public saveClothesGroup() {
     try {
-      const canvas: HTMLCanvasElement = await html2canvas(
-        document.getElementById('clothes-zone-container') as HTMLElement,
-      );
+      // const canvas: HTMLCanvasElement = await html2canvas(
+      //   document.getElementById('clothes-zone-container') as HTMLElement,
+      // );
 
-      canvas.toBlob(async blob => {
-        // console.log('blob', blob);
+      // canvas.toBlob(async blob => {
+      //   // console.log('blob', blob);
 
-        await this.clothesGroup.save(blob as Blob);
-      });
+      //   await this.clothesGroup.save(blob as Blob);
+      // });
+
+      this.$refs.clothesCanvas.discardActiveObject();
+      this.$refs.clothesCanvas.canSave = true;
+
+      setTimeout(() => {
+        this.$refs.clothesCanvas.getCanvasHTMLElement().toBlob(async blob => {
+          await this.clothesGroup.save(blob as Blob);
+        });
+      }, 100);
 
       //  this.$router.push({name: 'main'});
     } catch (error) {
@@ -274,4 +298,14 @@ export default class GroupCreation extends Vue {
     //   // new clothesGroup
     // }
   }
+
+  // private updated() {
+  //   console.log('!!');
+  //   if (this.$refs.clothesCanvas.canSave) {
+  //     this.$refs.clothesCanvas.getCanvasHTMLElement().toBlob(async blob => {
+  //       await this.clothesGroup.save(blob as Blob);
+  //     });
+  //     this.$refs.clothesCanvas.canSave = false;
+  //   }
+  // }
 }
