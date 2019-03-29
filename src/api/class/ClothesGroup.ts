@@ -9,6 +9,7 @@ export interface ClothesGroupData {
   name: string;
   clothIds: string[];
   imageUrl: string; // firebase storage url
+  createdAt: number;
 }
 
 export interface ClothesHash {
@@ -28,6 +29,7 @@ export interface ClothesHash {
 export default class ClothesGroup implements ClothesGroupData {
   public static create(): ClothesGroup {
     const newClothesGroup = new ClothesGroup();
+    newClothesGroup.id = uuidv4();
 
     return newClothesGroup;
   }
@@ -35,11 +37,27 @@ export default class ClothesGroup implements ClothesGroupData {
   public static load() {
     //
   }
+  public static async loadMultipleByRecent(
+    numOfGroups: number,
+  ): Promise<ClothesGroup[]> {
+    const clothesGroupDatas: ClothesGroupData[] = await fbClothesGroupApi.db.readDocumentsByRecent(
+      numOfGroups,
+    );
+    const clothesGroups: ClothesGroup[] = [];
+
+    _.forEach(clothesGroupDatas, clothesGroupData => {
+      clothesGroups.push(new ClothesGroup(clothesGroupData));
+    });
+
+    console.log('loadMultipleByRecent() clothesGroups', clothesGroups);
+    return clothesGroups;
+  }
 
   public id: string = '';
   public name: string = '';
   public clothIds: string[] = [];
   public imageUrl: string = '';
+  public createdAt: number = 0;
 
   public clothes: ClothesHash = {
     outer: null,
@@ -54,8 +72,14 @@ export default class ClothesGroup implements ClothesGroupData {
     etc: null,
   };
 
-  public constructor() {
-    this.id = uuidv4();
+  private constructor(clothesGroupData?: ClothesGroupData) {
+    if (!_.isNil(clothesGroupData)) {
+      this.id = clothesGroupData.id;
+      this.name = clothesGroupData.name;
+      this.clothIds = clothesGroupData.clothIds;
+      this.imageUrl = clothesGroupData.imageUrl;
+      this.createdAt = clothesGroupData.createdAt;
+    }
   }
 
   // db c r u d
@@ -90,6 +114,7 @@ export default class ClothesGroup implements ClothesGroupData {
       name: this.name,
       clothIds: this.clothIds,
       imageUrl: this.imageUrl,
+      createdAt: new Date().getTime(),
     });
 
     // clothes 중 null이 아닌 cloth들을 모두 저장.

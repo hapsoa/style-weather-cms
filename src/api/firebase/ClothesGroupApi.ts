@@ -8,6 +8,7 @@ const storage = firebase.storage();
 const storageRef = firebase.storage().ref();
 const clothesGroupRef = storageRef.child('clothesGroup');
 // var spaceRef = imagesRef.child(fileName);
+let nextDocuments: firebase.firestore.Query | null = null;
 
 class ClothesGroupApi {
   public db = {
@@ -65,6 +66,59 @@ class ClothesGroupApi {
             console.error('Error removing document(clothesGroupData): ', error);
             reject(error);
           });
+      });
+    },
+    readDocumentsByRecent(numOfDocuments: number): Promise<ClothesGroupData[]> {
+      return new Promise((resolve, reject) => {
+        if (_.isNil(nextDocuments)) {
+          database
+            .collection('clothesGroup')
+            .orderBy('createdAt')
+            .limit(numOfDocuments)
+            .get()
+            .then(documentSnapshots => {
+              if (documentSnapshots.docs.length !== 0) {
+                // Get the last visible document
+                const lastDocument =
+                  documentSnapshots.docs[documentSnapshots.docs.length - 1];
+                // console.log('last', lastVisible);
+
+                nextDocuments = database
+                  .collection('clothesGroup')
+                  .orderBy('createdAt')
+                  .startAfter(lastDocument)
+                  .limit(numOfDocuments);
+              }
+
+              const clothesGroupDatas: ClothesGroupData[] = [];
+              documentSnapshots.forEach(doc => {
+                // console.log(doc.id, ' => ', doc.data());
+                clothesGroupDatas.push(doc.data() as ClothesGroupData);
+              });
+
+              resolve(clothesGroupDatas);
+            })
+            .catch(error => {
+              console.error('readDocumentsByRecent()');
+              reject(error);
+            });
+        } else {
+          nextDocuments
+            .get()
+            .then(documentSnapshots => {
+              const clothesGroupDatas: ClothesGroupData[] = [];
+              documentSnapshots.forEach(doc => {
+                clothesGroupDatas.push(doc.data() as ClothesGroupData);
+              });
+              // TODO 문제있음. nextDocuments가 갱신되어야 함
+
+              resolve(clothesGroupDatas);
+            })
+            .catch(error => {
+              console.error('readDocumentsByRecent()');
+              reject(error);
+            });
+        }
       });
     },
   };

@@ -8,6 +8,7 @@ const storage = firebase.storage();
 const storageRef = firebase.storage().ref();
 const clothRef = storageRef.child('cloth');
 // var spaceRef = imagesRef.child(fileName);
+let nextDocuments: firebase.firestore.Query | null = null;
 
 class ClothApi {
   public db = {
@@ -66,7 +67,60 @@ class ClothApi {
             reject(error);
           });
       });
-    }
+    },
+    readDocumentsByRecent(numOfDocuments: number): Promise<ClothData[]> {
+      return new Promise((resolve, reject) => {
+        if (_.isNil(nextDocuments)) {
+          database
+            .collection('clothes')
+            .orderBy('createdAt')
+            .limit(numOfDocuments)
+            .get()
+            .then(documentSnapshots => {
+              if (documentSnapshots.docs.length !== 0) {
+                // Get the last visible document
+                const lastDocument =
+                  documentSnapshots.docs[documentSnapshots.docs.length - 1];
+                // console.log('last', lastVisible);
+
+                nextDocuments = database
+                  .collection('clothes')
+                  .orderBy('createdAt')
+                  .startAfter(lastDocument)
+                  .limit(numOfDocuments);
+              }
+
+              const clothDatas: ClothData[] = [];
+              documentSnapshots.forEach(doc => {
+                // console.log(doc.id, ' => ', doc.data());
+                clothDatas.push(doc.data() as ClothData);
+              });
+
+              resolve(clothDatas);
+            })
+            .catch(error => {
+              console.error('readDocumentsByRecent()');
+              reject(error);
+            });
+        } else {
+          nextDocuments
+            .get()
+            .then(documentSnapshots => {
+              const clothDatas: ClothData[] = [];
+              documentSnapshots.forEach(doc => {
+                clothDatas.push(doc.data() as ClothData);
+              });
+              // TODO 문제있음. nextDocuments가 갱신되어야 함
+
+              resolve(clothDatas);
+            })
+            .catch(error => {
+              console.error('readDocumentsByRecent()');
+              reject(error);
+            });
+        }
+      });
+    },
   };
   // firebaseCloth.storage.read();
   public storage = {
@@ -123,7 +177,7 @@ class ClothApi {
             reject();
           });
       });
-    }
+    },
   };
 }
 

@@ -1,14 +1,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Bricks, { BricksInstance } from 'bricks.js';
+import { ClothesGroup } from '@/api/class';
 
 @Component({})
 export default class Home extends Vue {
   public bricksInstance!: BricksInstance;
-  public brickArray: string[] = ['aa', 'b', 'c', 'd'];
+  public brickArray: ClothesGroup[] = [];
 
-  public addBrick() {
-    this.brickArray.push(`추가 ${this.brickArray.length + 1}`);
-  }
+  // public addBrick() {
+  //   this.brickArray.push(`추가 ${this.brickArray.length + 1}`);
+  // }
 
   private mounted() {
     const sizes = [

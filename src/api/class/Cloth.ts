@@ -110,13 +110,29 @@ export interface ClothData {
 
 export default class Cloth implements ClothData {
   public static create(majorClass: MajorClass): Cloth {
-    const newCloth = new Cloth(majorClass);
+    const newCloth = new Cloth();
     newCloth.id = uuidv4();
+    newCloth.majorClass = majorClass;
     return newCloth;
   }
 
   public static load() {
     //
+  }
+  public static async loadMultipleByRecent(
+    numOfClothes: number,
+  ): Promise<Cloth[]> {
+    const clothDatas: ClothData[] = await fbClothApi.db.readDocumentsByRecent(
+      numOfClothes,
+    );
+    const clothes: Cloth[] = [];
+
+    _.forEach(clothDatas, clothData => {
+      clothes.push(new Cloth(clothData));
+    });
+
+    console.log('loadMultipleByRecent() clothes', clothes);
+    return clothes;
   }
 
   public id: string = '';
@@ -137,8 +153,23 @@ export default class Cloth implements ClothData {
   // 모든 데이터가 다 있는지 체크하는 기능
   public canSave: boolean = false;
 
-  private constructor(majorClass: MajorClass) {
-    this.majorClass = majorClass;
+  // private constructor(majorClass: MajorClass) {
+  //   this.majorClass = majorClass;
+  // }
+
+  private constructor(clothData?: ClothData) {
+    if (!_.isNil(clothData)) {
+      this.id = clothData.id;
+      this.linkUrl = clothData.linkUrl;
+      this.gender = clothData.gender;
+      this.majorClass = clothData.majorClass;
+      this.minorClass = clothData.minorClass;
+      this.weather = clothData.weather;
+      this.temperature = clothData.temperature;
+      this.thickness = clothData.thickness;
+      this.color = clothData.color;
+      this.imageUrl = clothData.imageUrl;
+    }
   }
 
   // db c r u d

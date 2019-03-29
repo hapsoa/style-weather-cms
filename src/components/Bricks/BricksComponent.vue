@@ -1,6 +1,11 @@
 <template>
   <div class="selector">
-    <div v-for="(brick, i) in brickArray" :key="i" class="box">{{brick}}</div>
+    <div
+      v-for="(clothesGroup, i) in brickArray"
+      :key="i"
+      class="box"
+      :style="`background-image: url('${clothesGroup.imageUrl}')`"
+    ></div>
   </div>
 </template>
 
@@ -10,6 +15,8 @@
 .box {
   width: 200px;
   height: 200px;
-  background-color: green;
+  // background-color: green;
+  background-size: contain;
+  border: 1px solid #aaa;
 }
 </style>

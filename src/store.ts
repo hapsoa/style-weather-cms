@@ -10,15 +10,26 @@ const initState: {
   isMainPage: boolean; // 상단 toolbar 옵션창들 On/Off
   isFullProgress: boolean; // full-screen loading On/Off
   selectedClothesGroup: ClothesGroup | null;
+  groupOrItem: string;
 } = {
   isLogin: false,
   isMainPage: false,
   isFullProgress: true,
-  selectedClothesGroup: null
+  selectedClothesGroup: null,
+  groupOrItem: 'group',
 };
 
 export default new Vuex.Store({
   state: initState,
-  mutations: {},
-  actions: {}
+  mutations: {
+    // groupOrItem 변경
+    convertGroup(state) {
+      state.groupOrItem = 'group';
+    },
+    // groupOrItem 변경
+    convertItem(state) {
+      state.groupOrItem = 'item';
+    },
+  },
+  actions: {},
 });
