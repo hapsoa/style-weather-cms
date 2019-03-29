@@ -1,8 +1,29 @@
 <template>
   <v-container fluid>
     <v-layout row wrap>
-      <v-flex v-for="(clothesGroup, i) in clothesGroups" :key="i" xs6 sm4 md3 lg2 pb-4>
+      <v-flex
+        v-show="$store.state.groupOrItem === 'group'"
+        v-for="(clothesGroup, i) in clothesGroups"
+        :key="`group-${i}`"
+        xs6
+        sm4
+        md3
+        lg2
+        pb-4
+      >
         <v-img :src="clothesGroup.imageUrl" @click="goDetailView" width="200" height="200" contain></v-img>
+      </v-flex>
+      <v-flex
+        v-show="$store.state.groupOrItem === 'item'"
+        v-for="(cloth, i) in clothes"
+        :key="`item-${i}`"
+        xs6
+        sm4
+        md3
+        lg2
+        pb-4
+      >
+        <v-img :src="cloth.imageUrl" @click="goDetailView" width="200" height="200" contain></v-img>
       </v-flex>
     </v-layout>
   </v-container>

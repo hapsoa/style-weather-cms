@@ -106,6 +106,7 @@ export interface ClothData {
   thickness: string[];
   color: string | null;
   imageUrl: string | ArrayBuffer | null;
+  createdAt: number;
 }
 
 export default class Cloth implements ClothData {
@@ -134,6 +135,9 @@ export default class Cloth implements ClothData {
     console.log('loadMultipleByRecent() clothes', clothes);
     return clothes;
   }
+  public static initNextIndex() {
+    fbClothApi.db.initNextDocuments()
+  }
 
   public id: string = '';
   public majorClass: MajorClass | null = null;
@@ -149,6 +153,7 @@ export default class Cloth implements ClothData {
   public imageName: string = '';
   public imageUrl: string | ArrayBuffer | null = null;
   public imageFile: File | null = null;
+  public createdAt: number = 0;
 
   // 모든 데이터가 다 있는지 체크하는 기능
   public canSave: boolean = false;
@@ -169,6 +174,7 @@ export default class Cloth implements ClothData {
       this.thickness = clothData.thickness;
       this.color = clothData.color;
       this.imageUrl = clothData.imageUrl;
+      this.createdAt = clothData.createdAt;
     }
   }
 
@@ -195,6 +201,7 @@ export default class Cloth implements ClothData {
         thickness: this.thickness,
         color: this.color,
         imageUrl: this.imageUrl,
+        createdAt: this.createdAt,
       });
     } else {
       throw new Error('이미지 파일이 없는데 cloth.save() 시도하고 있다.');

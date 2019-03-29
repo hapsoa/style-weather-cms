@@ -52,6 +52,9 @@ export default class ClothesGroup implements ClothesGroupData {
     console.log('loadMultipleByRecent() clothesGroups', clothesGroups);
     return clothesGroups;
   }
+  public static initNextIndex() {
+    fbClothesGroupApi.db.initNextDocuments();
+  }
 
   public id: string = '';
   public name: string = '';
@@ -59,6 +62,7 @@ export default class ClothesGroup implements ClothesGroupData {
   public imageUrl: string = '';
   public createdAt: number = 0;
 
+  // save() 할 때 활용하기위해 Cloth instance들을 저장해두는 곳
   public clothes: ClothesHash = {
     outer: null,
     top: null,

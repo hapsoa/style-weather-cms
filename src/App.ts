@@ -5,7 +5,6 @@ import { User } from '@/api/class';
 
 @Component({})
 export default class App extends Vue {
-  private groupOrItem: string = 'group';
   private majorSelect: string | null = null;
 
   private majorClassItems: string[] = [
@@ -139,7 +138,7 @@ export default class App extends Vue {
   }
 
   get isGroupSelect() {
-    if (this.groupOrItem === 'group') {
+    if (this.$store.state.groupOrItem === 'group') {
       return true;
     } else {
       return false;

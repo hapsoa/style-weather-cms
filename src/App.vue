@@ -8,7 +8,7 @@
       <div class="margin-20"></div>
 
       <v-flex xs6 d-flex align-center v-if="$store.state.isMainPage">
-        <v-btn-toggle v-model="groupOrItem" mandatory class="transparent" ma-2>
+        <v-btn-toggle v-model="$store.state.groupOrItem" mandatory class="transparent" ma-2>
           <v-btn :value="'group'" flat>그룹</v-btn>
           <v-btn :value="'item'" flat>아이템</v-btn>
         </v-btn-toggle>

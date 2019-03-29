@@ -121,6 +121,9 @@ class ClothApi {
         }
       });
     },
+    initNextDocuments() {
+      nextDocuments = null;
+    },
   };
   // firebaseCloth.storage.read();
   public storage = {

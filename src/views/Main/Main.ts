@@ -19,15 +19,18 @@ export default class Main extends Vue {
   private created() {
     this.$store.state.isMainPage = true; // 툴바 옵션
 
+    ClothesGroup.initNextIndex();
     ClothesGroup.loadMultipleByRecent(10).then(clothesGroups => {
       _.forEach(clothesGroups, clothesGroup => {
         this.clothesGroups.push(clothesGroup);
       });
     });
+    Cloth.initNextIndex();
     Cloth.loadMultipleByRecent(10).then(clothes => {
       _.forEach(clothes, cloth => {
         this.clothes.push(cloth);
       });
-    })
+    });
+    console.log('MAIN CREATED');
   }
 }

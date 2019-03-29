@@ -89,7 +89,7 @@
             height="40"
           ></v-select>
 
-          <v-select
+          <!-- <v-select
             v-model="weatherSelect"
             :items="weatherItems"
             :rules="[v => !!v || 'Weather is required']"
@@ -125,7 +125,7 @@
             :rules="[v => !!v || 'Color is required']"
             label="색상"
             required
-          ></v-select>
+          ></v-select>-->
           <v-btn :disabled="!formValid" color="success" @click="validate">Validate</v-btn>
           <v-btn color="error" @click="reset">Reset Form</v-btn>
           <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
