@@ -25,6 +25,7 @@
               <v-img
                 v-if="cloth"
                 :src="cloth.imageUrl"
+                @click="goClothDetail(cloth.id)"
                 class="cloth-item"
                 width="130"
                 height="130"

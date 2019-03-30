@@ -6,22 +6,20 @@ import _ from 'lodash';
   components: {},
 })
 export default class ClothesGroupDetail extends Vue {
-  public desserts = [
-    {
-      name: '그룹 제목',
-      calories: '봄 코디임',
-    },
-    {
-      name: 'id',
-      calories: 'qjpowtijqnt209',
-    },
-  ];
-
   public clothesGroup: ClothesGroup | null = null;
   public clothesGroupTableData: Array<{
     name: string;
     content: any;
   }> = [];
+
+  public goClothDetail(clothId: string) {
+    this.$router.push({
+      name: 'cloth-detail',
+      params: {
+        id: clothId,
+      },
+    });
+  }
 
   private async created() {
     this.clothesGroup = await ClothesGroup.load(this.$route.params.id);

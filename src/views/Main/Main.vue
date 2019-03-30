@@ -29,7 +29,13 @@
         lg2
         pb-4
       >
-        <v-img :src="cloth.imageUrl" @click="goClothDetail" width="200" height="200" contain></v-img>
+        <v-img
+          :src="cloth.imageUrl"
+          @click="goClothDetail(cloth.id)"
+          width="200"
+          height="200"
+          contain
+        ></v-img>
       </v-flex>
     </v-layout>
   </v-container>
