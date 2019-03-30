@@ -11,7 +11,13 @@
         lg2
         pb-4
       >
-        <v-img :src="clothesGroup.imageUrl" @click="goDetailView" width="200" height="200" contain></v-img>
+        <v-img
+          :src="clothesGroup.imageUrl"
+          @click="goClothesGroupDetail(clothesGroup.id)"
+          width="200"
+          height="200"
+          contain
+        ></v-img>
       </v-flex>
       <v-flex
         v-show="$store.state.groupOrItem === 'item'"
@@ -23,7 +29,7 @@
         lg2
         pb-4
       >
-        <v-img :src="cloth.imageUrl" @click="goDetailView" width="200" height="200" contain></v-img>
+        <v-img :src="cloth.imageUrl" @click="goClothDetail" width="200" height="200" contain></v-img>
       </v-flex>
     </v-layout>
   </v-container>

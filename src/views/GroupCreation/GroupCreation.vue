@@ -1,8 +1,10 @@
 <template>
   <v-container fluid pa-0>
     <v-layout>
-      <v-flex xs6 pa-3 pl-5 id="clothes-zone">
-        <ClothesCanvas ref="clothesCanvas"></ClothesCanvas>
+      <v-flex xs6 pa-3 pl-5>
+        <div class="clothes-zone">
+          <ClothesCanvas ref="clothesCanvas"></ClothesCanvas>
+        </div>
       </v-flex>
 
       <v-flex xs6 pa-3>
@@ -144,10 +146,10 @@
 <script lang='ts' src='./GroupCreation.ts' />
 
 <style scoped lang='scss'>
-#clothes-zone {
-  width: 500px;
-  // border: 1px solid #aaa;
-}
+// .clothes-zone { _common.scss에 있음.
+//   width: 500px;
+//   border: 1px solid #aaa;
+// }
 
 .cloth-zone {
   width: 150px;

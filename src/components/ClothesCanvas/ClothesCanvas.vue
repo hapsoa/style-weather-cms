@@ -8,7 +8,7 @@
 
 <style scoped>
 canvas {
-  border: 1px solid #aaa;
+  /* border: 1px solid #aaa; */
   margin: auto;
 }
 </style>

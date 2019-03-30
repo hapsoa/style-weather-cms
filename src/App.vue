@@ -54,6 +54,8 @@
 <script lang='ts' src='./App.ts' />
 
 <style lang='scss'>
+@import "./style/common.scss";
+
 #full-screen-progress {
   height: 100vh;
 }

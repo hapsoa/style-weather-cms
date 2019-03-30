@@ -117,8 +117,9 @@ export default class Cloth implements ClothData {
     return newCloth;
   }
 
-  public static load() {
-    //
+  public static async load(id: string): Promise<Cloth> {
+    const clothData: ClothData = await fbClothApi.db.read(id);
+    return new Cloth(clothData);
   }
   public static async loadMultipleByRecent(
     numOfClothes: number,
@@ -136,7 +137,7 @@ export default class Cloth implements ClothData {
     return clothes;
   }
   public static initNextIndex() {
-    fbClothApi.db.initNextDocuments()
+    fbClothApi.db.initNextDocuments();
   }
 
   public id: string = '';
@@ -157,10 +158,6 @@ export default class Cloth implements ClothData {
 
   // 모든 데이터가 다 있는지 체크하는 기능
   public canSave: boolean = false;
-
-  // private constructor(majorClass: MajorClass) {
-  //   this.majorClass = majorClass;
-  // }
 
   private constructor(clothData?: ClothData) {
     if (!_.isNil(clothData)) {

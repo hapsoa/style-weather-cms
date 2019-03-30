@@ -34,8 +34,13 @@ export default class ClothesGroup implements ClothesGroupData {
     return newClothesGroup;
   }
 
-  public static load() {
-    //
+  public static async load(id: string): Promise<ClothesGroup> {
+    // id에 해당하는 clothesGroup의 정보를 읽어온다.
+    // 그리고 ClothesGroup instance로 만들어 return 한다.
+    const clothesGroupData: ClothesGroupData = await fbClothesGroupApi.db.read(
+      id,
+    );
+    return new ClothesGroup(clothesGroupData);
   }
   public static async loadMultipleByRecent(
     numOfGroups: number,

@@ -12,7 +12,16 @@ export default class Main extends Vue {
   private clothesGroups: ClothesGroup[] = [];
   private clothes: Cloth[] = [];
 
-  public goDetailView() {
+  public goClothesGroupDetail(clothesGroupId: string) {
+    
+    this.$router.push({
+      name: 'clothesgroup-detail',
+      params: {
+        id: clothesGroupId,
+      },
+    });
+  }
+  public goClothDetail() {
     console.log('goDetailView()');
   }
 
