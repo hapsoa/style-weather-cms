@@ -1,6 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import _ from 'lodash';
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
 import { Cloth, ClothesGroup } from '@/api/class';
 import {
   MajorClass,
@@ -27,7 +27,7 @@ export default class GroupCreation extends Vue {
   // @ts-ignore-nextline
   public $refs: Vue['$refs'] & {
     form: any;
-    image: any;
+    imageInput: any;
     clothesCanvas: ClothesCanvasTs;
   };
 
@@ -158,7 +158,7 @@ export default class GroupCreation extends Vue {
   }
 
   public pickFile() {
-    this.$refs.image.click();
+    this.$refs.imageInput.click();
   }
 
   public onFilePicked(e: any) {

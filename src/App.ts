@@ -94,12 +94,15 @@ export default class App extends Vue {
     }
   }
 
-  public createGroup() {
+  public createClothesGroup() {
     this.$router.push({
       name: 'group-creation',
-      // params: { clothesGroupId: uuidv4() }
     });
-    // this.$router.push({ name: 'group-creation' });
+  }
+  public createCloth() {
+    this.$router.push({
+      name: 'cloth-creation',
+    });
   }
 
   get minorSelect(): string[] {

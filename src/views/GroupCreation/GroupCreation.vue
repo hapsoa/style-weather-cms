@@ -46,7 +46,7 @@
           <input
             type="file"
             style="display: none"
-            ref="image"
+            ref="imageInput"
             accept="image/*"
             @change="onFilePicked"
           >

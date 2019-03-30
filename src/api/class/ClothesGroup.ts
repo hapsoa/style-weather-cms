@@ -10,6 +10,11 @@ export interface ClothesGroupData {
   clothIds: string[];
   imageUrl: string; // firebase storage url
   createdAt: number;
+  gender: string[];
+  weather: string;
+  temperature: string;
+  thickness: string[];
+  hashtags: string[];
 }
 
 export interface ClothesHash {
@@ -66,6 +71,11 @@ export default class ClothesGroup implements ClothesGroupData {
   public clothIds: string[] = [];
   public imageUrl: string = '';
   public createdAt: number = 0;
+  public gender: string[] = [];
+  public weather: string = '';
+  public temperature: string = '';
+  public thickness: string[] = [];
+  public hashtags: string[] = [];
 
   // save() 할 때 활용하기위해 Cloth instance들을 저장해두는 곳
   public clothes: ClothesHash = {
@@ -124,6 +134,11 @@ export default class ClothesGroup implements ClothesGroupData {
       clothIds: this.clothIds,
       imageUrl: this.imageUrl,
       createdAt: new Date().getTime(),
+      gender: this.gender,
+      weather: this.weather,
+      temperature: this.temperature,
+      thickness: this.thickness,
+      hashtags: this.hashtags,
     });
 
     // clothes 중 null이 아닌 cloth들을 모두 저장.

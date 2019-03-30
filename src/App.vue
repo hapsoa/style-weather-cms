@@ -30,7 +30,8 @@
         </v-toolbar-items>
 
         <div class="margin-20"></div>
-        <v-btn @click="createGroup" color="primary">그룹 생성</v-btn>
+        <v-btn v-show="isGroupSelect" @click="createClothesGroup" color="primary">그룹 생성</v-btn>
+        <v-btn v-show="!isGroupSelect" @click="createCloth" color="primary">아이템 생성</v-btn>
       </v-flex>
       <v-spacer></v-spacer>
       <v-btn flat @click="logout">로그아웃</v-btn>

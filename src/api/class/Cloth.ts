@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid/v4';
 import { fbClothApi } from '@/api/firebase';
+import { stringify } from 'querystring';
 
 export enum MajorClass {
   Top = 'top',
@@ -97,6 +98,7 @@ export enum HatMinorClass {
 
 export interface ClothData {
   id: string;
+  name: string;
   linkUrl: string;
   gender: string[];
   majorClass: MajorClass | null;
@@ -107,13 +109,16 @@ export interface ClothData {
   color: string | null;
   imageUrl: string | ArrayBuffer | null;
   createdAt: number;
+  hashtags: string[];
 }
 
 export default class Cloth implements ClothData {
-  public static create(majorClass: MajorClass): Cloth {
+  public static create(majorClass?: MajorClass): Cloth {
     const newCloth = new Cloth();
     newCloth.id = uuidv4();
-    newCloth.majorClass = majorClass;
+    if (!_.isNil(majorClass)) {
+      newCloth.majorClass = majorClass;
+    }
     return newCloth;
   }
 
@@ -150,11 +155,13 @@ export default class Cloth implements ClothData {
   public temperature: string | null = null;
   public thickness: string[] = [];
   public color: string | null = null;
+  public createdAt: number = 0;
+  public hashtags: string[] = [];
+  public name: string = '';
 
   public imageName: string = '';
   public imageUrl: string | ArrayBuffer | null = null;
   public imageFile: File | null = null;
-  public createdAt: number = 0;
 
   // 모든 데이터가 다 있는지 체크하는 기능
   public canSave: boolean = false;
@@ -172,13 +179,10 @@ export default class Cloth implements ClothData {
       this.color = clothData.color;
       this.imageUrl = clothData.imageUrl;
       this.createdAt = clothData.createdAt;
+      this.hashtags = clothData.hashtags;
+      this.name = clothData.name;
     }
   }
-
-  // db c r u d
-  // storage(해당 부위 이미지) c r u d
-
-  // load(ClothId) - 상세보기에서 불러오기
 
   public async save(): Promise<void> {
     if (!_.isNil(this.imageFile)) {
@@ -198,7 +202,9 @@ export default class Cloth implements ClothData {
         thickness: this.thickness,
         color: this.color,
         imageUrl: this.imageUrl,
-        createdAt: this.createdAt,
+        createdAt: new Date().getTime(),
+        hashtags: this.hashtags,
+        name: this.name,
       });
     } else {
       throw new Error('이미지 파일이 없는데 cloth.save() 시도하고 있다.');
