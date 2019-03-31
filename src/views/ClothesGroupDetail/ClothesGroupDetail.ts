@@ -1,4 +1,4 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { ClothesGroup, Cloth } from '@/api/class';
 import _ from 'lodash';
 import ClothList from '@/components/ClothList/ClothList.vue';
@@ -18,6 +18,23 @@ export default class ClothesGroupDetail extends Vue {
     name: string;
     content: any;
   }> = [];
+
+  @Watch('clothesGroup', { deep: true })
+  public clothesGroupChanged(value: number, oldValue: number) {
+    if (
+      !_.isNil(this.$refs.clothList) &&
+      _.isNil(this.$refs.clothList.clickClothListener)
+    ) {
+      this.$refs.clothList.setClickClothListener((clothId: string) => {
+        this.$router.push({
+          name: 'cloth-detail',
+          params: {
+            id: clothId,
+          },
+        });
+      });
+    }
+  }
 
   private async created() {
     this.clothesGroup = await ClothesGroup.load(this.$route.params.id);
@@ -49,15 +66,6 @@ export default class ClothesGroupDetail extends Vue {
     this.clothesGroupTableData.push({
       name: 'id',
       content: this.clothesGroup.id,
-    });
-
-    this.$refs.clothList.setClickClothListener((clothId: string) => {
-      this.$router.push({
-        name: 'cloth-detail',
-        params: {
-          id: clothId,
-        },
-      });
     });
   }
 }

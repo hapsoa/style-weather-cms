@@ -83,7 +83,7 @@
         </v-form>
 
         <LoadClothDialog ref="loadClothDialog"></LoadClothDialog>
-        <ClothList :clothesGroup="clothesGroup"></ClothList>
+        <ClothList :clothList="clothesGroup.clothes"></ClothList>
         <div style="height: 400px"></div>
         <v-layout row justify-end>
           <v-btn :disabled="!canSave" @click="saveClothesGroup">저장</v-btn>

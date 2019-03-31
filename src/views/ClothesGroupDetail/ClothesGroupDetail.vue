@@ -33,7 +33,7 @@
               ></v-img>
             </v-flex>
           </v-layout>-->
-          <ClothList ref="clothList" :clothesGroup="clothesGroup"></ClothList>
+          <ClothList ref="clothList" v-if="clothesGroup" :clothList="clothesGroup.clothes"></ClothList>
           <v-layout justify-end>
             <v-btn>수정</v-btn>
             <v-btn>삭제</v-btn>

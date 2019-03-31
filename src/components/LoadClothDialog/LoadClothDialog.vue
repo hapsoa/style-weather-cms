@@ -26,7 +26,9 @@
               <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="300"></v-img>
             </v-card>
           </v-flex>
-          <v-flex xs8>vcz</v-flex>
+          <v-flex xs8>
+            <!-- <ClothList></ClothList> -->
+          </v-flex>
         </v-layout>
       </v-card>
     </v-dialog>

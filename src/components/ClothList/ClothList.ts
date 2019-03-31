@@ -1,12 +1,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import _ from 'lodash';
-import { ClothesGroup } from '@/api/class';
+import { Cloth } from '@/api/class';
 
 @Component({})
 export default class ClothList extends Vue {
-  @Prop({ required: true }) public clothesGroup!: ClothesGroup | null;
+  // @Prop({ required: true }) public clothesGroup!: ClothesGroup | null;
+  @Prop({ required: true }) public clothList!: Cloth[] | null;
 
-  private clickClothListener: ((clothId: string) => void) | null = null;
+  public clickClothListener: ((clothId: string) => void) | null = null;
   public setClickClothListener(listener: (clothId: string) => void) {
     this.clickClothListener = listener;
   }

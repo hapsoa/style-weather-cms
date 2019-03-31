@@ -1,6 +1,6 @@
 <template>
-  <v-layout v-if="clothesGroup" class="cloth-list" row wrap mt-3 pa-3>
-    <v-flex v-for="(cloth, i) in clothesGroup.clothes" :key="i" ma-1>
+  <v-layout v-if="clothList" class="cloth-list" row wrap mt-3 pa-3>
+    <v-flex v-for="(cloth, i) in clothList" :key="i" ma-1>
       <v-img
         v-if="cloth"
         :src="cloth.imageUrl"
