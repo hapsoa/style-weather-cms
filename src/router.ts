@@ -30,6 +30,11 @@ export default new Router({
       component: () => import('./views/GroupCreation/GroupCreation.vue'),
     },
     {
+      path: '/clothesgroup-creation',
+      name: 'clothesgroup-creation',
+      component: () => import('./views/ClothesGroupCreation/ClothesGroupCreation.vue'),
+    },
+    {
       path: '/cloth-creation',
       name: 'cloth-creation',
       component: () => import('./views/ClothCreation/ClothCreation.vue'),

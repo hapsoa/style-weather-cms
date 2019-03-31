@@ -96,7 +96,7 @@ export default class App extends Vue {
 
   public createClothesGroup() {
     this.$router.push({
-      name: 'group-creation',
+      name: 'clothesgroup-creation',
     });
   }
   public createCloth() {

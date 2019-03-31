@@ -20,7 +20,7 @@
               <td class="text-xs-right">{{ props.item.content }}</td>
             </template>
           </v-data-table>
-          <v-layout v-if="clothesGroup" class="cloth-list" row wrap mt-3 pa-3>
+          <!-- <v-layout v-if="clothesGroup" class="cloth-list" row wrap mt-3 pa-3>
             <v-flex v-for="(cloth, i) in clothesGroup.clothes" :key="i" ma-1>
               <v-img
                 v-if="cloth"
@@ -32,7 +32,8 @@
                 contain
               ></v-img>
             </v-flex>
-          </v-layout>
+          </v-layout>-->
+          <ClothList ref="clothList" :clothesGroup="clothesGroup"></ClothList>
           <v-layout justify-end>
             <v-btn>수정</v-btn>
             <v-btn>삭제</v-btn>
@@ -54,10 +55,6 @@
   margin-top: 16px;
   overflow: scroll;
 }
-
-// .v-image {
-//   // margin: 5px;
-// }
 .cloth-item {
   cursor: pointer;
   border: 1px solid #aaa;

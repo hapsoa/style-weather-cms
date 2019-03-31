@@ -120,7 +120,6 @@ export default class ClothesGroup implements ClothesGroupData {
     return canSave;
   }
 
-  // save()
   public async save(outlineImage: Blob) {
     // 전체 스크린샷 이미지 저장
     await fbClothesGroupApi.storage.create(this.id, outlineImage);
