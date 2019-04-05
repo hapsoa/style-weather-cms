@@ -19,15 +19,26 @@
           <v-flex xs4>
             <v-card>
               <v-card-title>선택된 의상</v-card-title>
-              <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="300"></v-img>
+              <v-img
+                v-if="selectedCloth"
+                :lazy-src="selectedCloth.imageUrl"
+                :src="selectedCloth.imageUrl"
+                height="300"
+              ></v-img>
+              <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="300"></v-img>
             </v-card>
             <v-card>
               <v-card-title>현재 의상</v-card-title>
-              <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="300"></v-img>
+              <v-img v-if="currentCloth" :src="currentCloth.imageUrl" height="300"></v-img>
+              <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="300"></v-img>
             </v-card>
           </v-flex>
           <v-flex xs8>
-            <!-- <ClothList></ClothList> -->
+            <ClothList :clothList="clothList" ref="clothList"></ClothList>
+            <v-layout justify-end>
+              <v-btn @click="confirm" color="primary">확인</v-btn>
+              <v-btn @click="cancel">취소</v-btn>
+            </v-layout>
           </v-flex>
         </v-layout>
       </v-card>

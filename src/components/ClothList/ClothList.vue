@@ -1,17 +1,32 @@
 <template>
-  <v-layout v-if="clothList" class="cloth-list" row wrap mt-3 pa-3>
-    <v-flex v-for="(cloth, i) in clothList" :key="i" ma-1>
-      <v-img
-        v-if="cloth"
-        :src="cloth.imageUrl"
-        @click="clickCloth(cloth.id)"
-        class="cloth-item"
-        width="130"
-        height="130"
-        contain
-      ></v-img>
-    </v-flex>
-  </v-layout>
+  <v-container fluid pa-0>
+    <v-layout v-if="clothList" class="cloth-list" row wrap mt-3 pa-3>
+      <v-flex v-for="(cloth, i) in clothList" :key="i" ma-1>
+        <v-img
+          v-if="cloth"
+          :src="cloth.imageUrl"
+          @click="clickCloth(cloth)"
+          class="cloth-item"
+          width="130"
+          height="130"
+          contain
+        ></v-img>
+      </v-flex>
+    </v-layout>
+    <!-- <v-layout v-if="clothesHash" class="cloth-list" row wrap mt-3 pa-3>
+      <v-flex v-for="(cloth, i) in clothList" :key="i" ma-1>
+        <v-img
+          v-if="cloth"
+          :src="cloth.imageUrl"
+          @click="clickCloth(cloth)"
+          class="cloth-item"
+          width="130"
+          height="130"
+          contain
+        ></v-img>
+      </v-flex>
+    </v-layout>-->
+  </v-container>
 </template>
 
 <script src='./ClothList.ts' lang='ts' />

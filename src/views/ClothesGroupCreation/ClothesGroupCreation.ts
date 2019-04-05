@@ -17,6 +17,7 @@ import { ClothesHash } from '@/api/class/ClothesGroup';
 import ClothesCanvas from '@/components/ClothesCanvas/ClothesCanvas.vue';
 import ClothesCanvasTs from '@/components/ClothesCanvas/ClothesCanvas.ts';
 import ClothList from '@/components/ClothList/ClothList.vue';
+import ClothListTs from '@/components/ClothList/ClothList.ts';
 import LoadClothDialog from '@/components/LoadClothDialog/LoadClothDialog.vue';
 import LoadClothDialogTs from '@/components/LoadClothDialog/LoadClothDialog.ts';
 
@@ -33,6 +34,7 @@ export default class ClothesGroupCreation extends Vue {
     form: any;
     imageInput: any;
     clothesCanvas: ClothesCanvasTs;
+    clothList: ClothListTs;
     loadClothDialog: LoadClothDialogTs;
   };
 
@@ -197,6 +199,22 @@ export default class ClothesGroupCreation extends Vue {
       console.error(error);
       alert('저장 실패');
     }
+  }
+
+  public confirmLoadCloth(cloth: Cloth) {
+    // this.clothesGroup.clothes[cloth.majorClass as MajorClass] = cloth;
+    this.$set(
+      this.clothesGroup.clothes,
+      `${cloth.majorClass as MajorClass}`,
+      cloth,
+    );
+    this.$refs.clothList.forceUpdate();
+
+    console.log('this.clothesGroup.clothes', this.clothesGroup.clothes);
+    this.$refs.clothesCanvas.addImage(
+      cloth.imageUrl as string,
+      cloth.majorClass as MajorClass,
+    );
   }
 
   get minorClassItems(): string[] {

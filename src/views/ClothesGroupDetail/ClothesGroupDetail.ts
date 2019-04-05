@@ -25,11 +25,11 @@ export default class ClothesGroupDetail extends Vue {
       !_.isNil(this.$refs.clothList) &&
       _.isNil(this.$refs.clothList.clickClothListener)
     ) {
-      this.$refs.clothList.setClickClothListener((clothId: string) => {
+      this.$refs.clothList.setClickClothListener((cloth: Cloth) => {
         this.$router.push({
           name: 'cloth-detail',
           params: {
-            id: clothId,
+            id: cloth.id,
           },
         });
       });

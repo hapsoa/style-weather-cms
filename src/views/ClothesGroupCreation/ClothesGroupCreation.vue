@@ -82,8 +82,12 @@
           <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
         </v-form>
 
-        <LoadClothDialog ref="loadClothDialog"></LoadClothDialog>
-        <ClothList :clothList="clothesGroup.clothes"></ClothList>
+        <LoadClothDialog
+          ref="loadClothDialog"
+          :clothesGroup="clothesGroup"
+          @confirm="confirmLoadCloth"
+        ></LoadClothDialog>
+        <ClothList :clothList="clothesGroup.clothes" ref="clothList"></ClothList>
         <div style="height: 400px"></div>
         <v-layout row justify-end>
           <v-btn :disabled="!canSave" @click="saveClothesGroup">저장</v-btn>
