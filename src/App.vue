@@ -13,7 +13,7 @@
           <v-btn :value="'item'" flat>아이템</v-btn>
         </v-btn-toggle>
 
-        <v-toolbar-items v-show="isGroupSelect">
+        <v-toolbar-items v-show="!isGroupSelect">
           <div class="margin-20"></div>
           <v-flex xs6>
             <v-select

@@ -36,7 +36,7 @@
           <ClothList ref="clothList" v-if="clothesGroup" :clothList="clothesGroup.clothes"></ClothList>
           <v-layout justify-end>
             <v-btn>수정</v-btn>
-            <v-btn>삭제</v-btn>
+            <v-btn @click="deleteClothesGroup">삭제</v-btn>
             <v-btn>돌아가기</v-btn>
           </v-layout>
         </v-container>

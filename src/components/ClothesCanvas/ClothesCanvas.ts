@@ -15,12 +15,18 @@ export default class ClothesCanvas extends Vue {
       this.canvas.remove(this.clothImages[currentClothMajorClass]);
     }
 
-    fabric.Image.fromURL(url, img => {
-      this.canvas.add(img);
-      this.clothImages[currentClothMajorClass] = this.canvas.getObjects()[
-        this.canvas.getObjects().length - 1
-      ];
-    });
+    fabric.Image.fromURL(
+      url,
+      img => {
+        // img.crossOrigin = 'anonymous';
+        // img.setCrossOrigin('anonymous');
+        this.canvas.add(img);
+        this.clothImages[currentClothMajorClass] = this.canvas.getObjects()[
+          this.canvas.getObjects().length - 1
+        ];
+      },
+      { crossOrigin: 'anonymous' },
+    );
   }
 
   public getCanvasHTMLElement(): HTMLCanvasElement {

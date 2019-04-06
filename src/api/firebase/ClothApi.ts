@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import firebase from './initializingFirebase';
-import { ClothData } from '@/api/class/Cloth';
+import { ClothData, MajorClass } from '@/api/class/Cloth';
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const database = firebase.firestore();
@@ -123,6 +123,42 @@ class ClothApi {
     },
     initNextDocuments() {
       nextDocuments = null;
+    },
+    readByQuery(queryObject: {
+      searchInput: string;
+      majorClass: string | null;
+      minorClass: string | null;
+    }): Promise<ClothData[]> {
+      return new Promise((resolve, reject) => {
+        // if (queryObject.searchInput !== '') {
+        //   // const queryRef =
+        //   if (queryObject.majorClass !== 'all') {
+        //     if (queryObject.minorClass !== 'all') {
+        //     } else {
+        //     }
+        //   } else {
+        //   }
+        // } else {
+        // }
+        database
+          .collection('clothes')
+          // .where('majorClass', '==', queryObject.majorClass)
+          // .where('minorClass', '==', queryObject.minorClass)
+          .where('hashtags', 'array-contains', queryObject.searchInput)
+          .get()
+          .then(querySnapshot => {
+            const array: ClothData[] = [];
+            querySnapshot.forEach(doc => {
+              console.log(doc.id, ' => ', doc.data());
+              array.push(doc.data() as ClothData);
+            });
+            resolve(array);
+          })
+          .catch(error => {
+            console.log('Error getting documents: ', error);
+            reject();
+          });
+      });
     },
   };
   // firebaseCloth.storage.read();

@@ -10,9 +10,18 @@
             <v-icon>close</v-icon>
           </v-btn>
           <v-toolbar-title>Load Cloth</v-toolbar-title>
-          <v-spacer></v-spacer>
+          <!-- <v-spacer></v-spacer> -->
           <v-toolbar-items>
-            <v-btn dark flat @click="isOpen = false">Save</v-btn>
+            <v-select
+              v-model="majorSelect"
+              @change="changeMajorSelect"
+              :items="majorClassItems"
+              label="대분류 카테고리"
+              height="40"
+            ></v-select>
+            <v-select :items="minorClassItems" label="소분류 카테고리" height="40"></v-select>
+            <v-text-field v-model="searchInput" label="search"></v-text-field>
+            <v-btn dark flat @click="searchClothes">검색</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-layout row>
@@ -25,16 +34,16 @@
                 :src="selectedCloth.imageUrl"
                 height="300"
               ></v-img>
-              <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="300"></v-img>
+              <v-img v-else height="300">no image</v-img>
             </v-card>
             <v-card>
               <v-card-title>현재 의상</v-card-title>
               <v-img v-if="currentCloth" :src="currentCloth.imageUrl" height="300"></v-img>
-              <v-img v-else src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="300"></v-img>
+              <v-img v-else height="300">no image</v-img>
             </v-card>
           </v-flex>
           <v-flex xs8>
-            <ClothList :clothList="clothList" ref="clothList"></ClothList>
+            <ClothList :clothList="clothList" ref="clothList" :canSelectHighlight="true"></ClothList>
             <v-layout justify-end>
               <v-btn @click="confirm" color="primary">확인</v-btn>
               <v-btn @click="cancel">취소</v-btn>

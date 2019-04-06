@@ -12,10 +12,18 @@ export default class ClothList extends Vue {
     required: true,
   })
   public clothList!: Cloth[] | ClothesHash | null;
+  @Prop({
+    type: Boolean,
+    default: false,
+  })
+  public canSelectHighlight!: boolean;
+  @Prop({
+    type: Boolean,
+    default: false,
+  })
+  public canHoverHighlight!: boolean;
 
   public clickClothListener: ((cloth: Cloth) => void) | null = null;
-  // @Prop({ type: Object as () => ClothesHash, default: null })
-  // public clothesHash!: ClothesHash | null;
 
   @Watch('clothList', { deep: true })
   public clothListChanged(
@@ -31,9 +39,20 @@ export default class ClothList extends Vue {
   public setClickClothListener(listener: (cloth: Cloth) => void) {
     this.clickClothListener = listener;
   }
-  public clickCloth(cloth: Cloth) {
+  public clickCloth(clickedCloth: Cloth) {
     if (!_.isNil(this.clickClothListener)) {
-      this.clickClothListener(cloth);
+      this.clickClothListener(clickedCloth);
+    }
+    if (this.canSelectHighlight) {
+      this.highlightCloth(clickedCloth);
+    }
+  }
+  public highlightCloth(clickedCloth: Cloth) {
+    if (!_.isNil(this.clothList)) {
+      _.forEach(this.clothList, (cloth: Cloth) => {
+        this.$set(cloth, 'selected', false);
+      });
+      this.$set(clickedCloth, 'selected', true);
     }
   }
 }

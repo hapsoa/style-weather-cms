@@ -8,6 +8,11 @@ export interface ClothesGroupData {
   id: string;
   name: string;
   clothIds: string[];
+  // clothDatas: {
+  //   [MajorClass.Top]: {
+  //     id: string, positionX: number, positionY: number
+  //   }
+  // };
   imageUrl: string; // firebase storage url
   createdAt: number;
   gender: string[];
@@ -139,14 +144,30 @@ export default class ClothesGroup implements ClothesGroupData {
       thickness: this.thickness,
       hashtags: this.hashtags,
     });
-
     // clothes 중 null이 아닌 cloth들을 모두 저장.
-    const clothPromises: Array<Promise<void>> = [];
-    _.forEach(this.clothes, cloth => {
-      if (!_.isNil(cloth)) {
-        clothPromises.push(cloth.save());
-      }
+    // const clothPromises: Array<Promise<void>> = [];
+    // _.forEach(this.clothes, cloth => {
+    //   if (!_.isNil(cloth)) {
+    //     clothPromises.push(cloth.save());
+    //   }
+    // });
+    // await Promise.all(clothPromises);
+  }
+  public delete(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const promise: Array<Promise<void>> = [
+        fbClothesGroupApi.db.delete(this.id),
+        fbClothesGroupApi.storage.delete(this.id),
+      ];
+      Promise.all(promise)
+        .then(responses => {
+          console.log('clothesGroup deleted successful');
+          resolve();
+        })
+        .catch(error => {
+          console.error('clothesGroup delete() error');
+          reject();
+        });
     });
-    await Promise.all(clothPromises);
   }
 }

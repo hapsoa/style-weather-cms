@@ -19,6 +19,13 @@ export default class ClothesGroupDetail extends Vue {
     content: any;
   }> = [];
 
+  public async deleteClothesGroup() {
+    if (!_.isNil(this.clothesGroup)) {
+      await this.clothesGroup.delete();
+      this.$router.go(-1);
+    }
+  }
+
   @Watch('clothesGroup', { deep: true })
   public clothesGroupChanged(value: number, oldValue: number) {
     if (

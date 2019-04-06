@@ -144,6 +144,26 @@ export default class Cloth implements ClothData {
   public static initNextIndex() {
     fbClothApi.db.initNextDocuments();
   }
+  public static getByQuery(queryObject: {
+    searchInput: string;
+    majorClass: string | null;
+    minorClass: string | null;
+  }): Promise<Cloth[]> {
+    return new Promise((resolve, reject) => {
+      fbClothApi.db
+        .readByQuery(queryObject)
+        .then(response => {
+          const clothes: Cloth[] = _.map(
+            response,
+            clothData => new Cloth(clothData),
+          );
+          resolve(clothes);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
 
   public id: string = '';
   public majorClass: MajorClass | null = null;
@@ -209,5 +229,22 @@ export default class Cloth implements ClothData {
     } else {
       throw new Error('이미지 파일이 없는데 cloth.save() 시도하고 있다.');
     }
+  }
+  public delete(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const promise: Array<Promise<void>> = [
+        fbClothApi.db.delete(this.id),
+        fbClothApi.storage.delete(this.id),
+      ];
+      Promise.all(promise)
+        .then(responses => {
+          console.log('cloth deleted successful');
+          resolve();
+        })
+        .catch(error => {
+          console.error('cloth delete() error');
+          reject();
+        });
+    });
   }
 }

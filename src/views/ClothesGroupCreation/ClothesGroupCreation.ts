@@ -75,6 +75,7 @@ export default class ClothesGroupCreation extends Vue {
     MajorClass.Accessory,
     MajorClass.Etc,
   ];
+  private majorClassItems2: string[] = Object.keys(MajorClass);
 
   private topMinorClassItems!: string[];
   private dressMinorClassItems!: string[];
@@ -117,10 +118,12 @@ export default class ClothesGroupCreation extends Vue {
     if (this.$refs.form.validate()) {
       // this.snackbar = true;
       console.log('name', this.clothesGroup.name);
-      if (!_.isNil(this.currentCloth)) {
-        this.currentCloth.canSave = true;
-      }
-      this.canSave = this.clothesGroup.checkCanSave();
+      // if (!_.isNil(this.currentCloth)) {
+      //   this.currentCloth.canSave = true;
+      // }
+      this.canSave = true;
+    } else {
+      this.canSave = false;
     }
   }
   public reset() {
@@ -208,6 +211,7 @@ export default class ClothesGroupCreation extends Vue {
       `${cloth.majorClass as MajorClass}`,
       cloth,
     );
+    this.clothesGroup.clothIds.push(cloth.id);
     this.$refs.clothList.forceUpdate();
 
     console.log('this.clothesGroup.clothes', this.clothesGroup.clothes);

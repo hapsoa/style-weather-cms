@@ -2,6 +2,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Cloth } from '@/api/class';
 import { ClothData } from '@/api/class/Cloth';
 import _ from 'lodash';
+import { fbClothesGroupApi } from '@/api/firebase';
 
 @Component({
   components: {},
@@ -23,6 +24,15 @@ export default class ClothDetail extends Vue {
     name: string;
     content: any;
   }> = [];
+
+  public async deleteCloth() {
+    if (!_.isNil(this.cloth)) {
+      // 해당하는 cloth를 가진 clothesGroup이 없어야 삭제한다.
+      // const hasClothesGroupsHavingCloth: boolean = await fbClothesGroupApi.db.checkClothesGroupsHavingCloth();
+      this.cloth.delete();
+      this.$router.go(-1);
+    }
+  }
 
   private async created() {
     this.cloth = await Cloth.load(this.$route.params.id);

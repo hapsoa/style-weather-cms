@@ -123,7 +123,13 @@ class ClothesGroupApi {
     },
     initNextDocuments() {
       nextDocuments = null;
-    }
+    },
+    checkClothesGroupsHavingCloth(clothId: string) {
+      return new Promise((resolve, reject) => {
+        // database.collection('clothesGroup')
+        // .where('clothIds', 'have', clothId)
+      });
+    },
   };
   // firebaseCloth.storage.read();
   public storage = {
