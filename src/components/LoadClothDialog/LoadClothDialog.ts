@@ -1,4 +1,4 @@
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import _ from 'lodash';
 import ClothList from '@/components/ClothList/ClothList.vue';
 import ClothListTs from '@/components/ClothList/ClothList.ts';
@@ -22,12 +22,49 @@ import {
   },
 })
 export default class LoadClothDialog extends Vue {
+  public get minorClassItems(): string[] {
+    console.log('this.majorSelect', this.majorSelect);
+    switch (this.majorSelect) {
+      case MajorClass.Top: {
+        return this.topMinorClassItems;
+      }
+      case MajorClass.OnePiece: {
+        return this.onePieceMinorClassItems;
+      }
+      case MajorClass.Bottoms: {
+        return this.bottomsMinorClassItems;
+      }
+      case MajorClass.Outer: {
+        return this.outerMinorClassItems;
+      }
+      case MajorClass.Accessory: {
+        return this.accessoryMinorClassItems;
+      }
+      case MajorClass.Shoes: {
+        return this.shoesMinorClassItems;
+      }
+      case MajorClass.Bag: {
+        return this.bagMinorClassItems;
+      }
+      case MajorClass.Hat: {
+        return this.hatMinorClassItems;
+      }
+      case MajorClass.Glasses: {
+        return this.glassesMinorClassItems;
+      }
+      default: {
+        return [];
+      }
+    }
+  }
   public $refs!: {
     clothList: ClothListTs;
+    searchInput: Vue;
   };
 
   @Prop({ type: Object as () => ClothesGroup, required: true })
   public clothesGroup!: ClothesGroup;
+
   private isOpen: boolean = false;
   private clothList: Cloth[] = [];
   private selectedCloth: Cloth | null = null;
@@ -76,49 +113,32 @@ export default class LoadClothDialog extends Vue {
   );
   private minorSelect: string | null = null;
   private searchInput: string = '';
-  public async changeMajorSelect(majorSelect: string) {
-    this.majorSelect = majorSelect;
+  private searchInputChanged = _.debounce(this.searchInputListener, 1000);
 
-    const newArray = await Cloth.getByQuery({
+  public async majorSelectChanged(majorSelect: string) {
+    let queryMajorClass: string | null = null;
+    if (majorSelect !== 'All') {
+      queryMajorClass = majorSelect;
+    }
+    this.minorSelect = null;
+
+    this.clothList = await Cloth.getByQuery({
       searchInput: this.searchInput,
-      majorClass: this.majorSelect,
+      majorClass: queryMajorClass,
       minorClass: this.minorSelect,
     });
-    console.log('newArray1', newArray);
   }
-  public get minorClassItems(): string[] {
-    switch (this.majorSelect) {
-      case MajorClass.Top: {
-        return this.topMinorClassItems;
-      }
-      case MajorClass.OnePiece: {
-        return this.onePieceMinorClassItems;
-      }
-      case MajorClass.Bottoms: {
-        return this.bottomsMinorClassItems;
-      }
-      case MajorClass.Outer: {
-        return this.outerMinorClassItems;
-      }
-      case MajorClass.Accessory: {
-        return this.accessoryMinorClassItems;
-      }
-      case MajorClass.Shoes: {
-        return this.shoesMinorClassItems;
-      }
-      case MajorClass.Bag: {
-        return this.bagMinorClassItems;
-      }
-      case MajorClass.Hat: {
-        return this.hatMinorClassItems;
-      }
-      case MajorClass.Glasses: {
-        return this.glassesMinorClassItems;
-      }
-      default: {
-        return [];
-      }
+  public async minorSelectChanged(minorSelect: string | null) {
+    let queryMinorClass: string | null = null;
+    if (minorSelect !== 'All') {
+      queryMinorClass = minorSelect;
     }
+
+    this.clothList = await Cloth.getByQuery({
+      searchInput: this.searchInput,
+      majorClass: this.majorSelect,
+      minorClass: queryMinorClass,
+    });
   }
 
   public searchClothes() {
@@ -130,6 +150,20 @@ export default class LoadClothDialog extends Vue {
   }
   public cancel() {
     this.isOpen = false;
+  }
+  private async searchInputListener(searchInput: string) {
+    let queryMajorClass: string | null = null;
+    if (this.majorSelect !== 'All') {
+      queryMajorClass = this.majorSelect;
+    }
+    const arr = await Cloth.getByQuery({
+      searchInput,
+      majorClass: queryMajorClass,
+      minorClass: this.minorSelect,
+    });
+    this.clothList = arr;
+    this.$refs.clothList.forceUpdate();
+    console.log('this.clothList', this.clothList);
   }
 
   private async created() {
@@ -143,5 +177,6 @@ export default class LoadClothDialog extends Vue {
         cloth.majorClass as MajorClass
       ];
     });
+    console.log('$refs.searchInput', this.$refs.searchInput);
   }
 }

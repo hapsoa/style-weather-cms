@@ -30,7 +30,7 @@ export default class ClothList extends Vue {
     value: Cloth[] | ClothesHash | null,
     oldValue: Cloth[] | ClothesHash | null,
   ) {
-    console.log('clothlist watch changed');
+    // console.log('clothlist watch changed');
   }
   public forceUpdate() {
     this.$forceUpdate();

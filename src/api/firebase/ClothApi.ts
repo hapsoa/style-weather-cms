@@ -130,29 +130,67 @@ class ClothApi {
       minorClass: string | null;
     }): Promise<ClothData[]> {
       return new Promise((resolve, reject) => {
-        // if (queryObject.searchInput !== '') {
-        //   // const queryRef =
-        //   if (queryObject.majorClass !== 'all') {
-        //     if (queryObject.minorClass !== 'all') {
-        //     } else {
-        //     }
-        //   } else {
-        //   }
-        // } else {
-        // }
-        database
-          .collection('clothes')
-          // .where('majorClass', '==', queryObject.majorClass)
-          // .where('minorClass', '==', queryObject.minorClass)
-          .where('hashtags', 'array-contains', queryObject.searchInput)
+        let queryRef: firebase.firestore.Query;
+        if (queryObject.searchInput !== '') {
+          if (queryObject.majorClass !== null) {
+            if (queryObject.minorClass !== null) {
+              queryRef = database
+                .collection('clothes')
+                .where('majorClass', '==', queryObject.majorClass)
+                .where('minorClass', '==', queryObject.minorClass)
+                .where('hashtags', 'array-contains', queryObject.searchInput);
+            } else {
+              queryRef = database
+                .collection('clothes')
+                .where('majorClass', '==', queryObject.majorClass)
+                .where('hashtags', 'array-contains', queryObject.searchInput);
+            }
+          } else {
+            if (queryObject.minorClass !== null) {
+              queryRef = database
+                .collection('clothes')
+                .where('minorClass', '==', queryObject.minorClass)
+                .where('hashtags', 'array-contains', queryObject.searchInput);
+            } else {
+              console.log('yapa');
+              queryRef = database
+                .collection('clothes')
+                .where('hashtags', 'array-contains', queryObject.searchInput);
+            }
+          }
+        } else {
+          if (queryObject.majorClass !== null) {
+            if (queryObject.minorClass !== null) {
+              queryRef = database
+                .collection('clothes')
+                .where('majorClass', '==', queryObject.majorClass)
+                .where('minorClass', '==', queryObject.minorClass);
+            } else {
+              queryRef = database
+                .collection('clothes')
+                .where('majorClass', '==', queryObject.majorClass);
+            }
+          } else {
+            if (queryObject.minorClass !== null) {
+              queryRef = database
+                .collection('clothes')
+                .where('minorClass', '==', queryObject.minorClass);
+            } else {
+              queryRef = database.collection('clothes');
+            }
+          }
+        }
+
+        queryRef
           .get()
           .then(querySnapshot => {
-            const array: ClothData[] = [];
+            const clothDatas: ClothData[] = [];
             querySnapshot.forEach(doc => {
-              console.log(doc.id, ' => ', doc.data());
-              array.push(doc.data() as ClothData);
+              // console.log(doc.id, ' => ', doc.data());
+              clothDatas.push(doc.data() as ClothData);
             });
-            resolve(array);
+            console.log('clothDatas', clothDatas);
+            resolve(clothDatas);
           })
           .catch(error => {
             console.log('Error getting documents: ', error);

@@ -14,13 +14,24 @@
           <v-toolbar-items>
             <v-select
               v-model="majorSelect"
-              @change="changeMajorSelect"
               :items="majorClassItems"
+              @change="majorSelectChanged"
               label="대분류 카테고리"
               height="40"
             ></v-select>
-            <v-select :items="minorClassItems" label="소분류 카테고리" height="40"></v-select>
-            <v-text-field v-model="searchInput" label="search"></v-text-field>
+            <v-select
+              v-model="minorSelect"
+              :items="minorClassItems"
+              @change="minorSelectChanged"
+              label="소분류 카테고리"
+              height="40"
+            ></v-select>
+            <v-text-field
+              ref="searchInput"
+              v-model="searchInput"
+              @input="searchInputChanged"
+              label="Search"
+            ></v-text-field>
             <v-btn dark flat @click="searchClothes">검색</v-btn>
           </v-toolbar-items>
         </v-toolbar>
