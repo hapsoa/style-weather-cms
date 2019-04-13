@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex xs6 pa-3 pl-5>
         <div class="clothes-zone" style>
-          <v-img v-if="cloth" :src="cloth.imageUrl"></v-img>
+          <v-img v-if="cloth" :src="cloth.data.imageUrl"></v-img>
         </div>
       </v-flex>
 

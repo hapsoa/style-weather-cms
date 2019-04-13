@@ -122,7 +122,9 @@ export default class LoadClothDialog extends Vue {
     }
     this.minorSelect = null;
 
+    Cloth.initNextIndex();
     this.clothList = await Cloth.getByQuery({
+      numOfClothes: 3,
       searchInput: this.searchInput,
       majorClass: queryMajorClass,
       minorClass: this.minorSelect,
@@ -134,7 +136,9 @@ export default class LoadClothDialog extends Vue {
       queryMinorClass = minorSelect;
     }
 
+    Cloth.initNextIndex();
     this.clothList = await Cloth.getByQuery({
+      numOfClothes: 3,
       searchInput: this.searchInput,
       majorClass: this.majorSelect,
       minorClass: queryMinorClass,
@@ -156,7 +160,10 @@ export default class LoadClothDialog extends Vue {
     if (this.majorSelect !== 'All') {
       queryMajorClass = this.majorSelect;
     }
+
+    Cloth.initNextIndex();
     const arr = await Cloth.getByQuery({
+      numOfClothes: 3,
       searchInput,
       majorClass: queryMajorClass,
       minorClass: this.minorSelect,
@@ -165,17 +172,40 @@ export default class LoadClothDialog extends Vue {
     this.$refs.clothList.forceUpdate();
     console.log('this.clothList', this.clothList);
   }
+  private async getClothesByQuery(): Promise<Cloth[]> {
+    let queryMajorClass: string | null = null;
+    if (this.majorSelect !== 'All') {
+      queryMajorClass = this.majorSelect;
+    }
+    let queryMinorClass: string | null = null;
+    if (this.minorSelect !== 'All') {
+      queryMinorClass = this.minorSelect;
+    }
+
+    const newLoadedClothes = await Cloth.getByQuery({
+      numOfClothes: 3,
+      searchInput: this.searchInput,
+      majorClass: queryMajorClass,
+      minorClass: queryMinorClass,
+    });
+    return newLoadedClothes;
+  }
 
   private async created() {
     Cloth.initNextIndex();
-    this.clothList = await Cloth.loadMultipleByRecent(10);
+    // this.clothList = await Cloth.loadMultipleByRecent(10);
+    this.clothList = await this.getClothesByQuery();
   }
   private mounted() {
     this.$refs.clothList.setClickClothListener((cloth: Cloth) => {
       this.selectedCloth = cloth;
       this.currentCloth = this.clothesGroup.clothes[
-        cloth.majorClass as MajorClass
+        cloth.data.majorClass as MajorClass
       ];
+    });
+    this.$refs.clothList.setSeeMoreListener(async () => {
+      const newLoadedClothes = await this.getClothesByQuery();
+      this.clothList = _.concat(this.clothList, newLoadedClothes);
     });
     console.log('$refs.searchInput', this.$refs.searchInput);
   }

@@ -148,19 +148,19 @@ export default class ClothesGroupCreation extends Vue {
         fr.readAsDataURL(files[0]);
         fr.addEventListener('load', () => {
           if (!_.isNil(this.currentCloth)) {
-            (this.currentCloth as Cloth).imageUrl = fr.result;
+            (this.currentCloth as Cloth).data.imageUrl = fr.result;
             (this.currentCloth as Cloth).imageFile = files[0]; // this is an image file that can be sent to server...
             // console.log('imageFile', this.imageFile);
             this.$refs.clothesCanvas.addImage(
               fr.result as string,
-              this.currentCloth.majorClass as MajorClass,
+              this.currentCloth.data.majorClass as MajorClass,
             );
           }
         });
       } else {
         this.currentCloth.imageName = '';
         this.currentCloth.imageFile = null;
-        this.currentCloth.imageUrl = '';
+        this.currentCloth.data.imageUrl = '';
       }
     } else {
       throw new Error('currentCloth가 null이뜨네');
@@ -173,7 +173,7 @@ export default class ClothesGroupCreation extends Vue {
     this.currentCloth = this.clothesGroup.clothes[majorSelect];
   }
   public changeMinorSelect(minorSelect: string) {
-    (this.currentCloth as Cloth).minorClass = minorSelect;
+    (this.currentCloth as Cloth).data.minorClass = minorSelect;
   }
 
   public saveClothesGroup() {
@@ -208,22 +208,25 @@ export default class ClothesGroupCreation extends Vue {
     // this.clothesGroup.clothes[cloth.majorClass as MajorClass] = cloth;
     this.$set(
       this.clothesGroup.clothes,
-      `${cloth.majorClass as MajorClass}`,
+      `${cloth.data.majorClass as MajorClass}`,
       cloth,
     );
-    this.clothesGroup.clothIds.push(cloth.id);
+    this.clothesGroup.clothIds.push(cloth.data.id);
     this.$refs.clothList.forceUpdate();
 
     console.log('this.clothesGroup.clothes', this.clothesGroup.clothes);
     this.$refs.clothesCanvas.addImage(
-      cloth.imageUrl as string,
-      cloth.majorClass as MajorClass,
+      cloth.data.imageUrl as string,
+      cloth.data.majorClass as MajorClass,
     );
   }
 
   get minorClassItems(): string[] {
-    console.log('minorClassItems?', (this.currentCloth as Cloth).majorClass);
-    switch ((this.currentCloth as Cloth).majorClass) {
+    console.log(
+      'minorClassItems?',
+      (this.currentCloth as Cloth).data.majorClass,
+    );
+    switch ((this.currentCloth as Cloth).data.majorClass) {
       case MajorClass.Top: {
         return this.topMinorClassItems;
       }

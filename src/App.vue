@@ -7,31 +7,26 @@
       >Style Weather CMS</v-toolbar-title>
       <div class="margin-20"></div>
 
-      <v-flex xs6 d-flex align-center v-if="$store.state.isMainPage">
-        <v-btn-toggle v-model="$store.state.groupOrItem" mandatory class="transparent" ma-2>
-          <v-btn :value="'group'" flat>그룹</v-btn>
-          <v-btn :value="'item'" flat>아이템</v-btn>
-        </v-btn-toggle>
-
-        <v-toolbar-items v-show="!isGroupSelect">
+      <v-flex d-flex align-center v-if="$store.state.isMainPage">
+        <v-toolbar-items>
+          <v-btn-toggle v-model="$store.state.groupOrItem" mandatory class="transparent" ma-2>
+            <v-btn :value="'group'" flat>그룹</v-btn>
+            <v-btn :value="'item'" flat>아이템</v-btn>
+          </v-btn-toggle>
           <div class="margin-20"></div>
-          <v-flex xs6>
-            <v-select
-              @change="changeMajorSelect"
-              :items="majorClassItems"
-              label="대분류 카테고리"
-              height="40"
-            ></v-select>
-          </v-flex>
+          <v-btn v-show="isGroupSelect" @click="createClothesGroup" color="primary">그룹 생성</v-btn>
+          <v-btn v-show="!isGroupSelect" @click="createCloth" color="primary">아이템 생성</v-btn>
           <div class="margin-20"></div>
-          <v-flex xs6>
-            <v-select :items="minorSelect" label="소분류 카테고리" height="40"></v-select>
-          </v-flex>
+          <v-select
+            v-show="!isGroupSelect"
+            @change="changeMajorSelect"
+            :items="majorClassItems"
+            label="대분류 카테고리"
+            height="40"
+          ></v-select>
+          <div class="margin-20"></div>
+          <v-select v-show="!isGroupSelect" :items="minorSelect" label="소분류 카테고리" height="40"></v-select>
         </v-toolbar-items>
-
-        <div class="margin-20"></div>
-        <v-btn v-show="isGroupSelect" @click="createClothesGroup" color="primary">그룹 생성</v-btn>
-        <v-btn v-show="!isGroupSelect" @click="createCloth" color="primary">아이템 생성</v-btn>
       </v-flex>
       <v-spacer></v-spacer>
       <v-btn flat @click="logout">로그아웃</v-btn>

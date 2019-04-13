@@ -22,8 +22,14 @@ export default class ClothList extends Vue {
     default: false,
   })
   public canHoverHighlight!: boolean;
+  @Prop({
+    type: Boolean,
+    default: false,
+  })
+  public canSeeMore!: boolean;
 
   public clickClothListener: ((cloth: Cloth) => void) | null = null;
+  private seeMoreListener: (() => void) | null = null;
 
   @Watch('clothList', { deep: true })
   public clothListChanged(
@@ -53,6 +59,16 @@ export default class ClothList extends Vue {
         this.$set(cloth, 'selected', false);
       });
       this.$set(clickedCloth, 'selected', true);
+    }
+  }
+
+  public setSeeMoreListener(listener: () => void) {
+    this.seeMoreListener = listener;
+  }
+  public seeMore() {
+    console.log('seeMore');
+    if (!_.isNil(this.seeMoreListener)) {
+      this.seeMoreListener();
     }
   }
 }

@@ -53,7 +53,7 @@ export default class App extends Vue {
   private hatMinorClassItems: string[] = _.map(HatMinorClass, v => v);
   public get minorSelect(): string[] {
     console.log('majorSelect Changed');
-    this.cloth.majorClass = this.majorSelect;
+    this.cloth.data.majorClass = this.majorSelect;
     switch (this.majorSelect) {
       case MajorClass.Top: {
         return this.topMinorClassItems;
@@ -124,34 +124,34 @@ export default class App extends Vue {
       const fr = new FileReader();
       fr.readAsDataURL(files[0]);
       fr.addEventListener('load', () => {
-        this.cloth.imageUrl = fr.result;
+        this.cloth.data.imageUrl = fr.result;
         this.cloth.imageFile = files[0];
         // console.log('imageFile', this.imageFile);
       });
     } else {
       this.cloth.imageName = '';
       this.cloth.imageFile = null;
-      this.cloth.imageUrl = '';
+      this.cloth.data.imageUrl = '';
     }
   }
 
   public addHashtag() {
     // 배열에 저장한다.
     if (this.addingHashtag !== '') {
-      this.cloth.hashtags.push(this.addingHashtag);
+      this.cloth.data.hashtags.push(this.addingHashtag);
       this.addingHashtag = '';
     }
-    console.log('this.cloth.hashtags', this.cloth.hashtags);
+    console.log('this.cloth.hashtags', this.cloth.data.hashtags);
   }
   public deleteHashtag(index: number) {
-    this.cloth.hashtags.splice(index, 1);
+    this.cloth.data.hashtags.splice(index, 1);
   }
 
   public validate() {
     // form tag validate성공 시 this.formValid를 true. return값도 true
     if (this.$refs.form.validate()) {
       // this.snackbar = true;
-      console.log('name', this.cloth.name);
+      console.log('name', this.cloth.data.name);
 
       this.cloth.canSave = true;
     }
@@ -163,8 +163,14 @@ export default class App extends Vue {
     this.$refs.form.resetValidation();
   }
 
-  public saveCloth() {
+  public async saveCloth() {
     console.log('저장');
-    this.cloth.save();
+    try {
+      await this.cloth.save();
+      this.$router.push({ name: 'main' });
+    } catch (error) {
+      console.error('저장 실패', error);
+      alert('저장 실패');
+    }
   }
 }

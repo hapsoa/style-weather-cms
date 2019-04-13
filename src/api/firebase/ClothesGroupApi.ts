@@ -111,6 +111,13 @@ class ClothesGroupApi {
                 clothesGroupDatas.push(doc.data() as ClothesGroupData);
               });
               // TODO 문제있음. nextDocuments가 갱신되어야 함
+              const lastDocument =
+                documentSnapshots.docs[documentSnapshots.docs.length - 1];
+              nextDocuments = database
+                .collection('clothesGroup')
+                .orderBy('createdAt')
+                .startAfter(lastDocument)
+                .limit(numOfDocuments);
 
               resolve(clothesGroupDatas);
             })

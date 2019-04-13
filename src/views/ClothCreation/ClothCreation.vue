@@ -3,22 +3,27 @@
     <v-layout>
       <v-flex xs6 pa-3 pl-5>
         <div class="clothes-zone" style>
-          <v-img v-if="cloth.imageUrl" :src="cloth.imageUrl"></v-img>
+          <v-img v-if="cloth.data.imageUrl" :src="cloth.data.imageUrl"></v-img>
         </div>
       </v-flex>
 
       <v-flex xs6 pa-3>
         <v-form ref="form" v-model="formValid" lazy-validation>
           <v-text-field
-            v-model="cloth.name"
+            v-model="cloth.data.name"
             :counter="20"
             :rules="clothNameRules"
             label="의상 이름"
             required
           ></v-text-field>
-          <v-text-field v-model="cloth.linkUrl" :rules="linkUrlRules" label="link URL" required></v-text-field>
+          <v-text-field
+            v-model="cloth.data.linkUrl"
+            :rules="linkUrlRules"
+            label="link URL"
+            required
+          ></v-text-field>
           <v-select
-            v-model="cloth.gender"
+            v-model="cloth.data.gender"
             :items="genderItems"
             :rules="genderRules"
             attach
@@ -34,28 +39,28 @@
             height="40"
           ></v-select>
           <v-select
-            v-model="cloth.minorSelect"
+            v-model="cloth.data.minorClass"
             :items="minorSelect"
             label="소분류 카테고리"
             :rules="[v => !!v || 'MinorClass is required']"
             height="40"
           ></v-select>
           <v-select
-            v-model="cloth.weather"
+            v-model="cloth.data.weather"
             :items="weatherItems"
             :rules="[v => !!v || 'Weather is required']"
             label="날씨"
             required
           ></v-select>
           <v-select
-            v-model="cloth.temperature"
+            v-model="cloth.data.temperature"
             :items="temperatureItems"
             :rules="[v => !!v || 'Temperature is required']"
             label="온도"
             required
           ></v-select>
           <v-select
-            v-model="cloth.thickness"
+            v-model="cloth.data.thickness"
             :items="thicknessItems"
             :rules="thicknessRule"
             attach
@@ -64,7 +69,7 @@
             multiple
           ></v-select>
           <v-select
-            v-model="cloth.color"
+            v-model="cloth.data.color"
             :items="colorItems"
             :rules="[v => !!v || 'Color is required']"
             label="색상"
@@ -90,7 +95,12 @@
         </v-form>
         <v-layout class="hashtags-zone">
           <v-flex xs12 style="border: 1px solid #aaa; min-height: 40px;">
-            <v-chip v-for="(hashtag, i) in cloth.hashtags" :key="i" color="blue" text-color="white">
+            <v-chip
+              v-for="(hashtag, i) in cloth.data.hashtags"
+              :key="i"
+              color="blue"
+              text-color="white"
+            >
               {{hashtag}}
               <div class="v-chip__close">
                 <v-icon @click="deleteHashtag(i)" aria-hidden="true" small>close</v-icon>

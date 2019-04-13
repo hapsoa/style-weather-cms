@@ -112,12 +112,12 @@ export interface ClothData {
   hashtags: string[];
 }
 
-export default class Cloth implements ClothData {
+export default class Cloth {
   public static create(majorClass?: MajorClass): Cloth {
     const newCloth = new Cloth();
-    newCloth.id = uuidv4();
+    newCloth.data.id = uuidv4();
     if (!_.isNil(majorClass)) {
-      newCloth.majorClass = majorClass;
+      newCloth.data.majorClass = majorClass;
     }
     return newCloth;
   }
@@ -145,6 +145,7 @@ export default class Cloth implements ClothData {
     fbClothApi.db.initNextDocuments();
   }
   public static getByQuery(queryObject: {
+    numOfClothes: number;
     searchInput: string;
     majorClass: string | null;
     minorClass: string | null;
@@ -165,22 +166,37 @@ export default class Cloth implements ClothData {
     });
   }
 
-  public id: string = '';
-  public majorClass: MajorClass | null = null;
+  public data: ClothData = {
+    id: '',
+    name: '',
+    linkUrl: '',
+    gender: [],
+    majorClass: null,
+    minorClass: null,
+    weather: null,
+    temperature: null,
+    thickness: [],
+    color: null,
+    imageUrl: null,
+    createdAt: 0,
+    hashtags: [],
+  };
+  // public id: string = '';
+  // public majorClass: MajorClass | null = null;
 
-  public linkUrl: string = '';
-  public gender: string[] = [];
-  public minorClass: string | null = null;
-  public weather: string | null = null;
-  public temperature: string | null = null;
-  public thickness: string[] = [];
-  public color: string | null = null;
-  public createdAt: number = 0;
-  public hashtags: string[] = [];
-  public name: string = '';
+  // public linkUrl: string = '';
+  // public gender: string[] = [];
+  // public minorClass: string | null = null;
+  // public weather: string | null = null;
+  // public temperature: string | null = null;
+  // public thickness: string[] = [];
+  // public color: string | null = null;
+  // public createdAt: number = 0;
+  // public hashtags: string[] = [];
+  // public name: string = '';
+  // public imageUrl: string | ArrayBuffer | null = null;
 
   public imageName: string = '';
-  public imageUrl: string | ArrayBuffer | null = null;
   public imageFile: File | null = null;
 
   // 모든 데이터가 다 있는지 체크하는 기능
@@ -188,44 +204,31 @@ export default class Cloth implements ClothData {
 
   private constructor(clothData?: ClothData) {
     if (!_.isNil(clothData)) {
-      this.id = clothData.id;
-      this.linkUrl = clothData.linkUrl;
-      this.gender = clothData.gender;
-      this.majorClass = clothData.majorClass;
-      this.minorClass = clothData.minorClass;
-      this.weather = clothData.weather;
-      this.temperature = clothData.temperature;
-      this.thickness = clothData.thickness;
-      this.color = clothData.color;
-      this.imageUrl = clothData.imageUrl;
-      this.createdAt = clothData.createdAt;
-      this.hashtags = clothData.hashtags;
-      this.name = clothData.name;
+      // this.id = clothData.id;
+      // this.linkUrl = clothData.linkUrl;
+      // this.gender = clothData.gender;
+      // this.majorClass = clothData.majorClass;
+      // this.minorClass = clothData.minorClass;
+      // this.weather = clothData.weather;
+      // this.temperature = clothData.temperature;
+      // this.thickness = clothData.thickness;
+      // this.color = clothData.color;
+      // this.imageUrl = clothData.imageUrl;
+      // this.createdAt = clothData.createdAt;
+      // this.hashtags = clothData.hashtags;
+      // this.name = clothData.name;
+      this.data = clothData;
     }
   }
 
   public async save(): Promise<void> {
     if (!_.isNil(this.imageFile)) {
       // storage에 저장하고, url을 가져온다.
-      await fbClothApi.storage.create(this.id, this.imageFile);
-      this.imageUrl = await fbClothApi.storage.read(this.id);
+      await fbClothApi.storage.create(this.data.id, this.imageFile);
+      this.data.imageUrl = await fbClothApi.storage.read(this.data.id);
 
       // db에 저장한다.
-      await fbClothApi.db.create({
-        id: this.id,
-        linkUrl: this.linkUrl,
-        gender: this.gender,
-        majorClass: this.majorClass,
-        minorClass: this.minorClass,
-        weather: this.weather,
-        temperature: this.temperature,
-        thickness: this.thickness,
-        color: this.color,
-        imageUrl: this.imageUrl,
-        createdAt: new Date().getTime(),
-        hashtags: this.hashtags,
-        name: this.name,
-      });
+      await fbClothApi.db.create(this.data);
     } else {
       throw new Error('이미지 파일이 없는데 cloth.save() 시도하고 있다.');
     }
@@ -233,8 +236,8 @@ export default class Cloth implements ClothData {
   public delete(): Promise<void> {
     return new Promise((resolve, reject) => {
       const promise: Array<Promise<void>> = [
-        fbClothApi.db.delete(this.id),
-        fbClothApi.storage.delete(this.id),
+        fbClothApi.db.delete(this.data.id),
+        fbClothApi.storage.delete(this.data.id),
       ];
       Promise.all(promise)
         .then(responses => {

@@ -11,6 +11,7 @@
           </v-btn>
           <v-toolbar-title>Load Cloth</v-toolbar-title>
           <!-- <v-spacer></v-spacer> -->
+          <div style="width: 30px;"></div>
           <v-toolbar-items>
             <v-select
               v-model="majorSelect"
@@ -54,8 +55,13 @@
             </v-card>
           </v-flex>
           <v-flex xs8>
-            <ClothList :clothList="clothList" ref="clothList" :canSelectHighlight="true"></ClothList>
-            <v-layout justify-end>
+            <ClothList
+              :clothList="clothList"
+              ref="clothList"
+              :canSelectHighlight="true"
+              :canSeeMore="true"
+            ></ClothList>
+            <v-layout justify-end mt-5>
               <v-btn @click="confirm" color="primary">확인</v-btn>
               <v-btn @click="cancel">취소</v-btn>
             </v-layout>

@@ -131,7 +131,7 @@ export default class GroupCreation extends Vue {
       );
 
       this.currentCloth = this.clothesGroup.clothes[this.selectedMajorClass];
-      this.clothesGroup.clothIds.push((this.currentCloth as Cloth).id);
+      this.clothesGroup.clothIds.push((this.currentCloth as Cloth).data.id);
     } else {
       throw Error(
         'createCloth() 버튼이 있으면 안되는데, 눌러서 createCloth()가 됨',
@@ -173,19 +173,19 @@ export default class GroupCreation extends Vue {
         fr.readAsDataURL(files[0]);
         fr.addEventListener('load', () => {
           if (!_.isNil(this.currentCloth)) {
-            (this.currentCloth as Cloth).imageUrl = fr.result;
+            (this.currentCloth as Cloth).data.imageUrl = fr.result;
             (this.currentCloth as Cloth).imageFile = files[0]; // this is an image file that can be sent to server...
             // console.log('imageFile', this.imageFile);
             this.$refs.clothesCanvas.addImage(
               fr.result as string,
-              this.currentCloth.majorClass as MajorClass,
+              this.currentCloth.data.majorClass as MajorClass,
             );
           }
         });
       } else {
         this.currentCloth.imageName = '';
         this.currentCloth.imageFile = null;
-        this.currentCloth.imageUrl = '';
+        this.currentCloth.data.imageUrl = '';
       }
     } else {
       throw new Error('currentCloth가 null이뜨네');
@@ -198,7 +198,7 @@ export default class GroupCreation extends Vue {
     this.currentCloth = this.clothesGroup.clothes[majorSelect];
   }
   public changeMinorSelect(minorSelect: string) {
-    (this.currentCloth as Cloth).minorClass = minorSelect;
+    (this.currentCloth as Cloth).data.minorClass = minorSelect;
   }
 
   public saveClothesGroup() {
@@ -230,8 +230,11 @@ export default class GroupCreation extends Vue {
   }
 
   get minorClassItems(): string[] {
-    console.log('minorClassItems?', (this.currentCloth as Cloth).majorClass);
-    switch ((this.currentCloth as Cloth).majorClass) {
+    console.log(
+      'minorClassItems?',
+      (this.currentCloth as Cloth).data.majorClass,
+    );
+    switch ((this.currentCloth as Cloth).data.majorClass) {
       case MajorClass.Top: {
         return this.topMinorClassItems;
       }

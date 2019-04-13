@@ -8,19 +8,8 @@ import { fbClothesGroupApi } from '@/api/firebase';
   components: {},
 })
 export default class ClothDetail extends Vue {
-  public desserts = [
-    {
-      name: '그룹 제목',
-      calories: '봄 코디임',
-    },
-    {
-      name: 'id',
-      calories: 'qjpowtijqnt209',
-    },
-  ];
-
-  public cloth: Cloth | null = null;
-  public clothTableData: Array<{
+  private cloth: Cloth | null = null;
+  private clothTableData: Array<{
     name: string;
     content: any;
   }> = [];
@@ -39,15 +28,21 @@ export default class ClothDetail extends Vue {
 
     console.log('this.cloth', this.cloth);
 
-    const parsedCloth = JSON.parse(JSON.stringify(this.cloth));
-    _.forEach(parsedCloth, (value, key) => {
-      if (!_.isNil(value) && typeof value !== 'boolean') {
-        // console.log(key, value, typeof value);
-        this.clothTableData.push({
-          name: key,
-          content: value,
-        });
-      }
+    // const parsedCloth = JSON.parse(JSON.stringify(this.cloth));
+    // _.forEach(parsedCloth, (value, key) => {
+    //   if (!_.isNil(value) && typeof value !== 'boolean') {
+    //     // console.log(key, value, typeof value);
+    //     this.clothTableData.push({
+    //       name: key,
+    //       content: value,
+    //     });
+    //   }
+    // });
+    _.forEach(this.cloth.data, (value, key) => {
+      this.clothTableData.push({
+        name: key,
+        content: value,
+      });
     });
   }
 }

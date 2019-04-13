@@ -11,6 +11,64 @@ const clothRef = storageRef.child('cloth');
 let nextDocuments: firebase.firestore.Query | null = null;
 
 class ClothApi {
+  private static getQueryRef(queryObject: {
+    numOfClothes: number;
+    searchInput: string;
+    majorClass: string | null;
+    minorClass: string | null;
+  }): firebase.firestore.Query {
+    let queryRef: firebase.firestore.Query;
+    if (queryObject.searchInput !== '') {
+      if (queryObject.majorClass !== null) {
+        if (queryObject.minorClass !== null) {
+          queryRef = database
+            .collection('clothes')
+            .where('majorClass', '==', queryObject.majorClass)
+            .where('minorClass', '==', queryObject.minorClass)
+            .where('hashtags', 'array-contains', queryObject.searchInput);
+        } else {
+          queryRef = database
+            .collection('clothes')
+            .where('majorClass', '==', queryObject.majorClass)
+            .where('hashtags', 'array-contains', queryObject.searchInput);
+        }
+      } else {
+        if (queryObject.minorClass !== null) {
+          queryRef = database
+            .collection('clothes')
+            .where('minorClass', '==', queryObject.minorClass)
+            .where('hashtags', 'array-contains', queryObject.searchInput);
+        } else {
+          console.log('yapa');
+          queryRef = database
+            .collection('clothes')
+            .where('hashtags', 'array-contains', queryObject.searchInput);
+        }
+      }
+    } else {
+      if (queryObject.majorClass !== null) {
+        if (queryObject.minorClass !== null) {
+          queryRef = database
+            .collection('clothes')
+            .where('majorClass', '==', queryObject.majorClass)
+            .where('minorClass', '==', queryObject.minorClass);
+        } else {
+          queryRef = database
+            .collection('clothes')
+            .where('majorClass', '==', queryObject.majorClass);
+        }
+      } else {
+        if (queryObject.minorClass !== null) {
+          queryRef = database
+            .collection('clothes')
+            .where('minorClass', '==', queryObject.minorClass);
+        } else {
+          queryRef = database.collection('clothes');
+        }
+      }
+    }
+    return queryRef;
+  }
   public db = {
     // crud
     create(clothData: ClothData): Promise<void> {
@@ -110,12 +168,19 @@ class ClothApi {
               documentSnapshots.forEach(doc => {
                 clothDatas.push(doc.data() as ClothData);
               });
-              // TODO 문제있음. nextDocuments가 갱신되어야 함
+
+              const lastDocument =
+                documentSnapshots.docs[documentSnapshots.docs.length - 1];
+              nextDocuments = database
+                .collection('clothes')
+                .orderBy('createdAt')
+                .startAfter(lastDocument)
+                .limit(numOfDocuments);
 
               resolve(clothDatas);
             })
             .catch(error => {
-              console.error('readDocumentsByRecent()');
+              console.error('readDocumentsByRecent()', error);
               reject(error);
             });
         }
@@ -125,77 +190,68 @@ class ClothApi {
       nextDocuments = null;
     },
     readByQuery(queryObject: {
+      numOfClothes: number;
       searchInput: string;
       majorClass: string | null;
       minorClass: string | null;
     }): Promise<ClothData[]> {
       return new Promise((resolve, reject) => {
-        let queryRef: firebase.firestore.Query;
-        if (queryObject.searchInput !== '') {
-          if (queryObject.majorClass !== null) {
-            if (queryObject.minorClass !== null) {
-              queryRef = database
-                .collection('clothes')
-                .where('majorClass', '==', queryObject.majorClass)
-                .where('minorClass', '==', queryObject.minorClass)
-                .where('hashtags', 'array-contains', queryObject.searchInput);
-            } else {
-              queryRef = database
-                .collection('clothes')
-                .where('majorClass', '==', queryObject.majorClass)
-                .where('hashtags', 'array-contains', queryObject.searchInput);
-            }
-          } else {
-            if (queryObject.minorClass !== null) {
-              queryRef = database
-                .collection('clothes')
-                .where('minorClass', '==', queryObject.minorClass)
-                .where('hashtags', 'array-contains', queryObject.searchInput);
-            } else {
-              console.log('yapa');
-              queryRef = database
-                .collection('clothes')
-                .where('hashtags', 'array-contains', queryObject.searchInput);
-            }
-          }
-        } else {
-          if (queryObject.majorClass !== null) {
-            if (queryObject.minorClass !== null) {
-              queryRef = database
-                .collection('clothes')
-                .where('majorClass', '==', queryObject.majorClass)
-                .where('minorClass', '==', queryObject.minorClass);
-            } else {
-              queryRef = database
-                .collection('clothes')
-                .where('majorClass', '==', queryObject.majorClass);
-            }
-          } else {
-            if (queryObject.minorClass !== null) {
-              queryRef = database
-                .collection('clothes')
-                .where('minorClass', '==', queryObject.minorClass);
-            } else {
-              queryRef = database.collection('clothes');
-            }
-          }
-        }
+        let queryRef: firebase.firestore.Query = ClothApi.getQueryRef(
+          queryObject,
+        );
+        if (_.isNil(nextDocuments)) {
+          queryRef = queryRef
+            .orderBy('createdAt')
+            .limit(queryObject.numOfClothes);
 
-        queryRef
-          .get()
-          .then(querySnapshot => {
-            const clothDatas: ClothData[] = [];
-            querySnapshot.forEach(doc => {
-              // console.log(doc.id, ' => ', doc.data());
-              clothDatas.push(doc.data() as ClothData);
+          queryRef
+            .get()
+            .then(querySnapshot => {
+              if (querySnapshot.docs.length !== 0) {
+                const lastDocument =
+                  querySnapshot.docs[querySnapshot.docs.length - 1];
+
+                nextDocuments = ClothApi.getQueryRef(queryObject)
+                  .orderBy('createdAt')
+                  .startAfter(lastDocument)
+                  .limit(queryObject.numOfClothes);
+              }
+
+              const clothDatas: ClothData[] = [];
+              querySnapshot.forEach(doc => {
+                // console.log(doc.id, ' => ', doc.data());
+                clothDatas.push(doc.data() as ClothData);
+              });
+              console.log('clothDatas', clothDatas);
+              resolve(clothDatas);
+            })
+            .catch(error => {
+              console.error('Error getting documents: ', error);
+              reject();
             });
-            console.log('clothDatas', clothDatas);
-            resolve(clothDatas);
-          })
-          .catch(error => {
-            console.log('Error getting documents: ', error);
-            reject();
-          });
+        } else {
+          nextDocuments
+            .get()
+            .then(documentSnapshots => {
+              const clothDatas: ClothData[] = [];
+              documentSnapshots.forEach(doc => {
+                clothDatas.push(doc.data() as ClothData);
+              });
+
+              const lastDocument =
+                documentSnapshots.docs[documentSnapshots.docs.length - 1];
+              nextDocuments = ClothApi.getQueryRef(queryObject)
+                .orderBy('createdAt')
+                .startAfter(lastDocument)
+                .limit(queryObject.numOfClothes);
+
+              resolve(clothDatas);
+            })
+            .catch(error => {
+              console.error('readDocumentsByRecent()', error);
+              reject(error);
+            });
+        }
       });
     },
   };
@@ -259,3 +315,53 @@ class ClothApi {
 }
 
 export default new ClothApi();
+
+// if (queryObject.searchInput !== '') {
+//   if (queryObject.majorClass !== null) {
+//     if (queryObject.minorClass !== null) {
+//       queryRef = database
+//         .collection('clothes')
+//         .where('majorClass', '==', queryObject.majorClass)
+//         .where('minorClass', '==', queryObject.minorClass)
+//         .where('hashtags', 'array-contains', queryObject.searchInput);
+//     } else {
+//       queryRef = database
+//         .collection('clothes')
+//         .where('majorClass', '==', queryObject.majorClass)
+//         .where('hashtags', 'array-contains', queryObject.searchInput);
+//     }
+//   } else {
+//     if (queryObject.minorClass !== null) {
+//       queryRef = database
+//         .collection('clothes')
+//         .where('minorClass', '==', queryObject.minorClass)
+//         .where('hashtags', 'array-contains', queryObject.searchInput);
+//     } else {
+//       console.log('yapa');
+//       queryRef = database
+//         .collection('clothes')
+//         .where('hashtags', 'array-contains', queryObject.searchInput);
+//     }
+//   }
+// } else {
+//   if (queryObject.majorClass !== null) {
+//     if (queryObject.minorClass !== null) {
+//       queryRef = database
+//         .collection('clothes')
+//         .where('majorClass', '==', queryObject.majorClass)
+//         .where('minorClass', '==', queryObject.minorClass);
+//     } else {
+//       queryRef = database
+//         .collection('clothes')
+//         .where('majorClass', '==', queryObject.majorClass);
+//     }
+//   } else {
+//     if (queryObject.minorClass !== null) {
+//       queryRef = database
+//         .collection('clothes')
+//         .where('minorClass', '==', queryObject.minorClass);
+//     } else {
+//       queryRef = database.collection('clothes');
+//     }
+//   }
+// }

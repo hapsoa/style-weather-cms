@@ -36,7 +36,7 @@ export default class ClothesGroupDetail extends Vue {
         this.$router.push({
           name: 'cloth-detail',
           params: {
-            id: cloth.id,
+            id: cloth.data.id,
           },
         });
       });
@@ -55,8 +55,8 @@ export default class ClothesGroupDetail extends Vue {
     Promise.all(promises)
       .then(clothes => {
         _.forEach(clothes, cloth => {
-          if (!_.isNil(cloth.majorClass) && !_.isNil(this.clothesGroup)) {
-            this.clothesGroup.clothes[cloth.majorClass] = cloth;
+          if (!_.isNil(cloth.data.majorClass) && !_.isNil(this.clothesGroup)) {
+            this.clothesGroup.clothes[cloth.data.majorClass] = cloth;
           } else {
             throw new Error('오.. cloth 불러오다가 에러가..');
           }
