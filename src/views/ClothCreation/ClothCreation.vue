@@ -16,6 +16,60 @@
             label="의상 이름"
             required
           ></v-text-field>
+          <v-text-field v-model="cloth.linkUrl" :rules="linkUrlRules" label="link URL" required></v-text-field>
+          <v-select
+            v-model="cloth.gender"
+            :items="genderItems"
+            :rules="genderRules"
+            attach
+            chips
+            label="gender"
+            multiple
+          ></v-select>
+          <v-select
+            v-model="majorSelect"
+            :items="majorClassItems"
+            label="대분류 카테고리"
+            :rules="[v => !!v || 'MajorClass is required']"
+            height="40"
+          ></v-select>
+          <v-select
+            v-model="cloth.minorSelect"
+            :items="minorSelect"
+            label="소분류 카테고리"
+            :rules="[v => !!v || 'MinorClass is required']"
+            height="40"
+          ></v-select>
+          <v-select
+            v-model="cloth.weather"
+            :items="weatherItems"
+            :rules="[v => !!v || 'Weather is required']"
+            label="날씨"
+            required
+          ></v-select>
+          <v-select
+            v-model="cloth.temperature"
+            :items="temperatureItems"
+            :rules="[v => !!v || 'Temperature is required']"
+            label="온도"
+            required
+          ></v-select>
+          <v-select
+            v-model="cloth.thickness"
+            :items="thicknessItems"
+            :rules="thicknessRule"
+            attach
+            chips
+            label="thickness"
+            multiple
+          ></v-select>
+          <v-select
+            v-model="cloth.color"
+            :items="colorItems"
+            :rules="[v => !!v || 'Color is required']"
+            label="색상"
+            required
+          ></v-select>
 
           <v-text-field
             label="Select Image"
@@ -44,7 +98,13 @@
             </v-chip>
           </v-flex>
         </v-layout>
-        <input @keyup.enter="addHashtag" v-model="addingHashtag" class="hashtag-input" type="text">
+        <input
+          @keyup.enter="addHashtag"
+          v-model="addingHashtag"
+          class="hashtag-input"
+          type="text"
+          placeholder="hashtags"
+        >
         <v-layout>
           <v-btn :disabled="!formValid" color="success" @click="validate">Validate</v-btn>
           <v-btn color="error" @click="reset">Reset Form</v-btn>

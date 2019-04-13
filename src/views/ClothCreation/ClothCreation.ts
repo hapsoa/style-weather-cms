@@ -1,11 +1,22 @@
 import _ from 'lodash';
 import { Component, Vue } from 'vue-property-decorator';
 import { Cloth } from '@/api/class';
+import {
+  MajorClass,
+  TopMinorClass,
+  OnePieceMinorClass,
+  BottomsMinorClass,
+  OuterMinorClass,
+  AccessoryMinorClass,
+  ShoesMinorClass,
+  BagMinorClass,
+  GlassesMinorClass,
+  HatMinorClass,
+} from '@/api/class/Cloth';
 
 @Component({})
 export default class App extends Vue {
-  // @ts-ignore-nextline
-  public $refs: Vue['$refs'] & {
+  public $refs!: {
     imageInput: any;
     form: any;
   };
@@ -19,10 +30,84 @@ export default class App extends Vue {
     (v: string) =>
       (v && v.length <= 20) || 'Name must be less than 20 characters',
   ];
+  private linkUrlRules = [(v: string) => true];
+  private genderItems: string[] = ['man', 'woman', 'unisex'];
+  private genderRules = [
+    (v: string[]) => {
+      return v.length !== 0 || 'Gender is required.';
+    },
+  ];
+  private majorSelect: MajorClass | null = null;
+  private majorClassItems: string[] = _.map(MajorClass, v => v);
+  private topMinorClassItems: string[] = _.map(TopMinorClass, v => v);
+  private onePieceMinorClassItems: string[] = _.map(OnePieceMinorClass, v => v);
+  private bottomsMinorClassItems: string[] = _.map(BottomsMinorClass, v => v);
+  private outerMinorClassItems: string[] = _.map(OuterMinorClass, v => v);
+  private accessoryMinorClassItems: string[] = _.map(
+    AccessoryMinorClass,
+    v => v,
+  );
+  private shoesMinorClassItems: string[] = _.map(ShoesMinorClass, v => v);
+  private bagMinorClassItems: string[] = _.map(BagMinorClass, v => v);
+  private glassesMinorClassItems: string[] = _.map(GlassesMinorClass, v => v);
+  private hatMinorClassItems: string[] = _.map(HatMinorClass, v => v);
+  public get minorSelect(): string[] {
+    console.log('majorSelect Changed');
+    this.cloth.majorClass = this.majorSelect;
+    switch (this.majorSelect) {
+      case MajorClass.Top: {
+        return this.topMinorClassItems;
+      }
+      case MajorClass.OnePiece: {
+        return this.onePieceMinorClassItems;
+      }
+      case MajorClass.Bottoms: {
+        return this.bottomsMinorClassItems;
+      }
+      case MajorClass.Outer: {
+        return this.outerMinorClassItems;
+      }
+      case MajorClass.Accessory: {
+        return this.accessoryMinorClassItems;
+      }
+      case MajorClass.Shoes: {
+        return this.shoesMinorClassItems;
+      }
+      case MajorClass.Bag: {
+        return this.bagMinorClassItems;
+      }
+      case MajorClass.Hat: {
+        return this.hatMinorClassItems;
+      }
+      case MajorClass.Glasses: {
+        return this.glassesMinorClassItems;
+      }
+      default: {
+        return [];
+      }
+    }
+  }
+  private weatherItems: string[] = ['snow', 'rain', 'fineDust', 'hot'];
+  private temperatureItems: string[] = [
+    '4도 이하',
+    '5 ~ 9도',
+    '12 ~ 16도',
+    '17 ~ 19도',
+    '20 ~ 22도',
+    '23 ~ 27도',
+    '28도 이상',
+  ];
+  private thicknessItems: string[] = ['thick', 'moderate', 'thin'];
+  private thicknessRule = [
+    (v: string[]) => {
+      return !_.isEmpty(v) || 'Gender is required';
+    },
+  ];
+  private colorItems: string[] = ['achromatic', 'chromatic'];
   private imageRules = [(v: string) => !!v || 'Image is required'];
 
   private canSave: boolean = false;
-  private chip2: boolean = true;
+  // private chip2: boolean = true;
   private addingHashtag: string = '';
 
   public pickFile() {
