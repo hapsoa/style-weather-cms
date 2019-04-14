@@ -42,15 +42,15 @@
               <v-card-title>선택된 의상</v-card-title>
               <v-img
                 v-if="selectedCloth"
-                :lazy-src="selectedCloth.imageUrl"
-                :src="selectedCloth.imageUrl"
+                :lazy-src="selectedCloth.data.imageUrl"
+                :src="selectedCloth.data.imageUrl"
                 height="300"
               ></v-img>
               <v-img v-else height="300">no image</v-img>
             </v-card>
             <v-card>
               <v-card-title>현재 의상</v-card-title>
-              <v-img v-if="currentCloth" :src="currentCloth.imageUrl" height="300"></v-img>
+              <v-img v-if="currentCloth" :src="currentCloth.data.imageUrl" height="300"></v-img>
               <v-img v-else height="300">no image</v-img>
             </v-card>
           </v-flex>

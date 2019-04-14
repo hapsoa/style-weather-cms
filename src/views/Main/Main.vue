@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-layout row wrap justify-center>
+    <v-layout row wrap>
       <div
         v-show="$store.state.groupOrItem === 'group'"
         v-for="(clothesGroup, i) in clothesGroups"

@@ -19,27 +19,24 @@
           </v-layout>
         </v-img>
       </v-flex>-->
-      <div
-        v-for="(cloth, i) in clothList"
-        :key="i"
-        style="width: 130px; height: 130px; margin: 5px;"
-      >
-        <v-img
-          v-if="cloth"
-          :src="cloth.data.imageUrl"
-          @click="clickCloth(cloth)"
-          class="cloth-item"
-          :class="{selected: canSelectHighlight && cloth.selected}"
-          width="100%"
-          height="100%"
-          contain
-        >
-          <v-layout v-if="canHoverHighlight" justify-end>
-            <v-btn class="margin-0" flat icon color="#aaa">
-              <v-icon>cancel</v-icon>
-            </v-btn>
-          </v-layout>
-        </v-img>
+      <div v-for="(cloth, i) in clothList" :key="i">
+        <div v-if="cloth" style="width: 130px; height: 130px; margin: 5px;">
+          <v-img
+            :src="cloth.data.imageUrl"
+            @click="clickCloth(cloth)"
+            class="cloth-item"
+            :class="{selected: canSelectHighlight && cloth.selected}"
+            width="100%"
+            height="100%"
+            contain
+          >
+            <v-layout v-if="canHoverHighlight" justify-end>
+              <v-btn class="margin-0" flat icon color="#aaa">
+                <v-icon>cancel</v-icon>
+              </v-btn>
+            </v-layout>
+          </v-img>
+        </div>
       </div>
     </v-layout>
     <v-layout>

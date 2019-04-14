@@ -31,6 +31,18 @@ export default class ClothList extends Vue {
   public clickClothListener: ((cloth: Cloth) => void) | null = null;
   private seeMoreListener: (() => void) | null = null;
 
+  get realClothList() {
+    if (!_.isNil(this.clothList)) {
+      console.log(
+        'qqqq',
+        _.filter(this.clothList, (cloth: Cloth) => !_.isNil(cloth)),
+      );
+      return _.filter(this.clothList, (cloth: Cloth) => !_.isNil(cloth));
+    } else {
+      return [];
+    }
+  }
+
   @Watch('clothList', { deep: true })
   public clothListChanged(
     value: Cloth[] | ClothesHash | null,
