@@ -240,6 +240,8 @@ class ClothApi {
 
               const lastDocument =
                 documentSnapshots.docs[documentSnapshots.docs.length - 1];
+              console.log('lastDocument', lastDocument);
+              console.log('documentSnapshots.docs', documentSnapshots.docs);
               nextDocuments = ClothApi.getQueryRef(queryObject)
                 .orderBy('createdAt')
                 .startAfter(lastDocument)
@@ -248,7 +250,7 @@ class ClothApi {
               resolve(clothDatas);
             })
             .catch(error => {
-              console.error('readDocumentsByRecent()', error);
+              console.error('readByQuery()', error);
               reject(error);
             });
         }

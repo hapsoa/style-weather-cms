@@ -19,7 +19,7 @@
 
       <div
         v-show="$store.state.groupOrItem === 'item'"
-        v-for="(cloth, i) in clothes"
+        v-for="(cloth, i) in $store.state.clothes"
         :key="`item-${i}`"
         class="image-element"
       >

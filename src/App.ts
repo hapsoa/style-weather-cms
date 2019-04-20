@@ -105,7 +105,7 @@ export default class App extends Vue {
       isInit: true,
       searchInput: '',
       majorClass: queryMajorClass,
-      minorClass: this.minorSelect,
+      minorClass: this.$store.state.minorSelect,
     });
   }
   public async minorSelectChanged(minorSelect: string | null) {
@@ -117,7 +117,7 @@ export default class App extends Vue {
     this.$store.dispatch('getClothByQuery', {
       isInit: true,
       searchInput: '',
-      majorClass: this.majorSelect,
+      majorClass: this.$store.state.majorSelect,
       minorClass: queryMinorClass,
     });
   }

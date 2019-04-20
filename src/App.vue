@@ -19,7 +19,7 @@
           <div class="margin-20"></div>
           <v-select
             v-show="!isGroupSelect"
-            v-model="majorSelect"
+            v-model="$store.state.majorSelect"
             :items="majorClassItems"
             @change="majorSelectChanged"
             label="대분류 카테고리"
@@ -28,7 +28,7 @@
           <div class="margin-20"></div>
           <v-select
             v-show="!isGroupSelect"
-            v-model="minorSelect"
+            v-model="$store.state.minorSelect"
             :items="minorClassItems"
             @change="minorSelectChanged"
             label="소분류 카테고리"

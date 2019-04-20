@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import _ from 'lodash';
 
 import { User, ClothesGroup, Cloth } from '@/api/class';
-import { MajorClass } from './api/class/Cloth';
 
 Vue.use(Vuex);
 
@@ -13,14 +12,18 @@ const initState: {
   isFullProgress: boolean; // full-screen loading On/Off
   selectedClothesGroup: ClothesGroup | null;
   groupOrItem: string;
-  clothList: Cloth[];
+  clothes: Cloth[];
+  majorSelect: string;
+  minorSelect: string | null;
 } = {
   isLogin: false,
   isMainPage: false,
   isFullProgress: true,
   selectedClothesGroup: null,
   groupOrItem: 'group',
-  clothList: [],
+  clothes: [],
+  majorSelect: 'All',
+  minorSelect: null,
 };
 
 export default new Vuex.Store({
@@ -41,29 +44,38 @@ export default new Vuex.Store({
       payload: {
         isInit: boolean;
         searchInput: string;
-        majorClass: MajorClass;
-        minorClass: string;
+        majorClass: string | null;
+        minorClass: string | null;
       },
     ) {
+      let queryMajorClass: string | null = null;
+      if (payload.majorClass !== 'All') {
+        queryMajorClass = payload.majorClass;
+      }
+      let queryMinorClass: string | null = null;
+      if (payload.majorClass !== 'All') {
+        queryMinorClass = payload.majorClass;
+      }
       if (payload.isInit) {
         Cloth.initNextIndex();
-        store.state.clothList = await Cloth.getByQuery({
+        store.state.clothes = await Cloth.getByQuery({
           numOfClothes: 3,
           searchInput: payload.searchInput,
-          majorClass: payload.majorClass,
-          minorClass: payload.minorClass,
+          majorClass: queryMajorClass,
+          minorClass: queryMinorClass,
         });
       } else {
-        const newLoadedClothes = await Cloth.getByQuery({
-          numOfClothes: 3,
-          searchInput: payload.searchInput,
-          majorClass: payload.majorClass,
-          minorClass: payload.minorClass,
-        });
-        store.state.clothList = _.concat(
-          store.state.clothList,
-          newLoadedClothes,
-        );
+        try {
+          const newLoadedClothes = await Cloth.getByQuery({
+            numOfClothes: 3,
+            searchInput: payload.searchInput,
+            majorClass: queryMajorClass,
+            minorClass: queryMinorClass,
+          });
+          store.state.clothes = _.concat(store.state.clothes, newLoadedClothes);
+        } catch (error) {
+          alert('마지막 입니다');
+        }
       }
     },
   },

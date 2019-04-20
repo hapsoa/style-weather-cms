@@ -42,14 +42,16 @@ export default class Main extends Vue {
         alert('마지막 입니다');
       }
     } else {
-      try {
-        const newLoadedClothesGroup: Cloth[] = await Cloth.loadMultipleByRecent(
-          3,
-        );
-        this.clothes = _.concat(this.clothes, newLoadedClothesGroup);
-      } catch (error) {
-        alert('마지막 입니다');
-      }
+      // const newLoadedClothesGroup: Cloth[] = await Cloth.loadMultipleByRecent(
+      //   3,
+      // );
+      // this.clothes = _.concat(this.clothes, newLoadedClothesGroup);
+      this.$store.dispatch('getClothByQuery', {
+        isInit: false,
+        searchInput: '',
+        majorClass: this.$store.state.majorSelect,
+        minorClass: this.$store.state.minorSelect,
+      });
     }
   }
 
@@ -62,13 +64,19 @@ export default class Main extends Vue {
         this.clothesGroups.push(clothesGroup);
       });
     });
-    Cloth.initNextIndex();
-    Cloth.loadMultipleByRecent(5).then(clothes => {
-      _.forEach(clothes, cloth => {
-        this.clothes.push(cloth);
-      });
+    // Cloth.initNextIndex();
+    // Cloth.loadMultipleByRecent(5).then(clothes => {
+    //   _.forEach(clothes, cloth => {
+    //     this.clothes.push(cloth);
+    //   });
+    // });
+    this.$store.dispatch('getClothByQuery', {
+      isInit: true,
+      searchInput: '',
+      majorClass: null,
+      minorClass: null,
     });
-    console.log('MAIN CREATED');
+    // console.log('MAIN CREATED');
   }
   private destroyed() {
     this.$store.state.isMainPage = false;
