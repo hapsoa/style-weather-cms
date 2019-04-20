@@ -17,25 +17,8 @@ import {
 
 @Component({})
 export default class App extends Vue {
-  private majorSelect: string | null = null;
-  private majorClassItems: string[] = _.map(MajorClass, v => v);
-  private topMinorClassItems: string[] = _.map(TopMinorClass, v => v);
-  private onePieceMinorClassItems: string[] = _.map(OnePieceMinorClass, v => v);
-  private bottomsMinorClassItems: string[] = _.map(BottomsMinorClass, v => v);
-  private outerMinorClassItems: string[] = _.map(OuterMinorClass, v => v);
-  private accessoryMinorClassItems: string[] = _.map(
-    AccessoryMinorClass,
-    v => v,
-  );
-  private shoesMinorClassItems: string[] = _.map(ShoesMinorClass, v => v);
-  private bagMinorClassItems: string[] = _.map(BagMinorClass, v => v);
-  private glassesMinorClassItems: string[] = _.map(GlassesMinorClass, v => v);
-  private hatMinorClassItems: string[] = _.map(HatMinorClass, v => v);
-  public changeMajorSelect(majorSelect: string) {
-    this.majorSelect = majorSelect;
-  }
-  public get minorSelect(): string[] {
-    console.log('majorSelect Changed');
+  public get minorClassItems(): string[] {
+    console.log('this.majorSelect', this.majorSelect);
     switch (this.majorSelect) {
       case MajorClass.Top: {
         return this.topMinorClassItems;
@@ -68,6 +51,75 @@ export default class App extends Vue {
         return [];
       }
     }
+  }
+  private majorSelect: string | null = 'All';
+  private majorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(MajorClass, v => v),
+  );
+  private topMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(TopMinorClass, v => v),
+  );
+  private onePieceMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(OnePieceMinorClass, v => v),
+  );
+  private bottomsMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(BottomsMinorClass, v => v),
+  );
+  private outerMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(OuterMinorClass, v => v),
+  );
+  private accessoryMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(AccessoryMinorClass, v => v),
+  );
+  private shoesMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(ShoesMinorClass, v => v),
+  );
+  private bagMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(BagMinorClass, v => v),
+  );
+  private glassesMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(GlassesMinorClass, v => v),
+  );
+  private hatMinorClassItems: string[] = _.concat(
+    ['All'],
+    _.map(HatMinorClass, v => v),
+  );
+  private minorSelect: string | null = null;
+  public async majorSelectChanged(majorSelect: string) {
+    let queryMajorClass: string | null = null;
+    if (majorSelect !== 'All') {
+      queryMajorClass = majorSelect;
+    }
+    this.minorSelect = null;
+
+    this.$store.dispatch('getClothByQuery', {
+      isInit: true,
+      searchInput: '',
+      majorClass: queryMajorClass,
+      minorClass: this.minorSelect,
+    });
+  }
+  public async minorSelectChanged(minorSelect: string | null) {
+    let queryMinorClass: string | null = null;
+    if (minorSelect !== 'All') {
+      queryMinorClass = minorSelect;
+    }
+
+    this.$store.dispatch('getClothByQuery', {
+      isInit: true,
+      searchInput: '',
+      majorClass: this.majorSelect,
+      minorClass: queryMinorClass,
+    });
   }
 
   public async logout() {

@@ -19,13 +19,21 @@
           <div class="margin-20"></div>
           <v-select
             v-show="!isGroupSelect"
-            @change="changeMajorSelect"
+            v-model="majorSelect"
             :items="majorClassItems"
+            @change="majorSelectChanged"
             label="대분류 카테고리"
             height="40"
           ></v-select>
           <div class="margin-20"></div>
-          <v-select v-show="!isGroupSelect" :items="minorSelect" label="소분류 카테고리" height="40"></v-select>
+          <v-select
+            v-show="!isGroupSelect"
+            v-model="minorSelect"
+            :items="minorClassItems"
+            @change="minorSelectChanged"
+            label="소분류 카테고리"
+            height="40"
+          ></v-select>
         </v-toolbar-items>
       </v-flex>
       <v-spacer></v-spacer>
