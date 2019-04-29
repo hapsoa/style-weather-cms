@@ -29,6 +29,44 @@ import LoadClothDialogTs from '@/components/LoadClothDialog/LoadClothDialog.ts';
   },
 })
 export default class ClothesGroupCreation extends Vue {
+  get minorClassItems(): string[] {
+    console.log(
+      'minorClassItems?',
+      (this.currentCloth as Cloth).data.majorClass,
+    );
+    switch ((this.currentCloth as Cloth).data.majorClass) {
+      case MajorClass.Top: {
+        return this.topMinorClassItems;
+      }
+      case MajorClass.OnePiece: {
+        return this.dressMinorClassItems;
+      }
+      case MajorClass.Bottoms: {
+        return this.bottomsMinorClassItems;
+      }
+      case MajorClass.Outer: {
+        return this.outerMinorClassItems;
+      }
+      case MajorClass.Accessory: {
+        return this.accessoryMinorClassItems;
+      }
+      case MajorClass.Shoes: {
+        return this.shoesMinorClassItems;
+      }
+      case MajorClass.Bag: {
+        return this.bagMinorClassItems;
+      }
+      case MajorClass.Hat: {
+        return this.hatMinorClassItems;
+      }
+      case MajorClass.Glasses: {
+        return this.glassesMinorClassItems;
+      }
+      default: {
+        return [];
+      }
+    }
+  }
   // @ts-ignore-nextline
   public $refs: Vue['$refs'] & {
     form: any;
@@ -55,10 +93,10 @@ export default class ClothesGroupCreation extends Vue {
   // private imageFile: File | null = null;
   private imageRules = [(v: string) => !!v || 'Image is required'];
 
-  private genderSelected: string[] = [];
-  private genderRule = [
+  private genderItems: string[] = ['man', 'woman', 'unisex'];
+  private genderRules = [
     (v: string[]) => {
-      return !_.isEmpty(v) || 'Gender is required';
+      return v.length !== 0 || 'Gender is required.';
     },
   ];
 
@@ -87,7 +125,7 @@ export default class ClothesGroupCreation extends Vue {
   private glassesMinorClassItems!: string[];
   private hatMinorClassItems!: string[];
   private weatherSelect: string | null = null;
-  private weatherItems: string[] = ['눈', '비', '미세먼지', '폭염'];
+  private weatherItems: string[] = ['snow', 'rain', 'fineDust', 'hot'];
   private temperatureSelect: string | null = null;
   private temperatureItems: string[] = [
     '4도 이하',
@@ -99,19 +137,27 @@ export default class ClothesGroupCreation extends Vue {
     '28도 이상',
   ];
 
-  private thicknessSelected: string[] = [];
+  private thicknessItems: string[] = ['thick', 'moderate', 'thin'];
   private thicknessRule = [
     (v: string[]) => {
       return !_.isEmpty(v) || 'Gender is required';
     },
   ];
-  private colorSelect: string | null = null;
-  private colorItems: string[] = ['무채', '유채'];
+
+  private addingHashtag: string = '';
 
   private canSave: boolean = false;
 
   private clothesGroup!: ClothesGroup;
   private currentCloth: Cloth | null = null;
+  public addHashtag() {
+    // 배열에 저장한다.
+    if (this.addingHashtag !== '') {
+      this.clothesGroup.hashtags.push(this.addingHashtag);
+      this.addingHashtag = '';
+    }
+    console.log('this.cloth.hashtags', this.clothesGroup.hashtags);
+  }
 
   public validate() {
     // form tag validate성공 시 this.formValid를 true. return값도 true
@@ -219,45 +265,6 @@ export default class ClothesGroupCreation extends Vue {
       cloth.data.imageUrl as string,
       cloth.data.majorClass as MajorClass,
     );
-  }
-
-  get minorClassItems(): string[] {
-    console.log(
-      'minorClassItems?',
-      (this.currentCloth as Cloth).data.majorClass,
-    );
-    switch ((this.currentCloth as Cloth).data.majorClass) {
-      case MajorClass.Top: {
-        return this.topMinorClassItems;
-      }
-      case MajorClass.OnePiece: {
-        return this.dressMinorClassItems;
-      }
-      case MajorClass.Bottoms: {
-        return this.bottomsMinorClassItems;
-      }
-      case MajorClass.Outer: {
-        return this.outerMinorClassItems;
-      }
-      case MajorClass.Accessory: {
-        return this.accessoryMinorClassItems;
-      }
-      case MajorClass.Shoes: {
-        return this.shoesMinorClassItems;
-      }
-      case MajorClass.Bag: {
-        return this.bagMinorClassItems;
-      }
-      case MajorClass.Hat: {
-        return this.hatMinorClassItems;
-      }
-      case MajorClass.Glasses: {
-        return this.glassesMinorClassItems;
-      }
-      default: {
-        return [];
-      }
-    }
   }
 
   private created() {

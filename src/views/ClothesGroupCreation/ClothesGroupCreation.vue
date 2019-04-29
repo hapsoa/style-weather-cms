@@ -17,66 +17,61 @@
             required
           ></v-text-field>
 
-          <v-flex v-if="currentCloth" d-flex class="checkboxes" px-3>
-            <v-checkbox
-              v-model="currentCloth.gender"
-              label="성별"
-              value="성별"
-              :rules="genderRule"
-              disabled
-              off-icon="accessibility"
-            ></v-checkbox>
-            <v-checkbox v-model="currentCloth.gender" label="남성" value="남성"></v-checkbox>
-            <v-checkbox v-model="currentCloth.gender" label="여성" value="여성"></v-checkbox>
-            <v-checkbox v-model="currentCloth.gender" label="공용" value="공용"></v-checkbox>
-            <v-flex></v-flex>
-          </v-flex>
-
-          <!-- <v-select 대표예시
-            v-model="select"
-            :items="items"
-            :rules="[v => !!v || 'Item is required']"
-            label="Item"
-            required
-          ></v-select>-->
-
-          <!-- <v-select
-            v-model="weatherSelect"
+          <v-select
+            v-model="clothesGroup.weather"
             :items="weatherItems"
             :rules="[v => !!v || 'Weather is required']"
             label="날씨"
             required
           ></v-select>
           <v-select
-            v-model="temperatureSelect"
+            v-model="clothesGroup.gender"
+            :items="genderItems"
+            :rules="genderRules"
+            attach
+            chips
+            label="gender"
+            multiple
+          ></v-select>
+          <v-select
+            v-model="clothesGroup.temperature"
             :items="temperatureItems"
             :rules="[v => !!v || 'Temperature is required']"
             label="온도"
             required
           ></v-select>
-
-          <v-flex d-flex class="checkboxes" px-3>
-            <v-checkbox
-              v-model="thicknessSelected"
-              label="두께감"
-              value="두께감"
-              :rules="thicknessRule"
-              disabled
-              off-icon="accessibility"
-            ></v-checkbox>
-            <v-checkbox v-model="thicknessSelected" label="두꺼움" value="두꺼움"></v-checkbox>
-            <v-checkbox v-model="thicknessSelected" label="적당함" value="적당함"></v-checkbox>
-            <v-checkbox v-model="thicknessSelected" label="얇음" value="얇음"></v-checkbox>
-            <v-flex></v-flex>
-          </v-flex>
-
           <v-select
-            v-model="colorSelect"
-            :items="colorItems"
-            :rules="[v => !!v || 'Color is required']"
-            label="색상"
-            required
-          ></v-select>-->
+            v-model="clothesGroup.thickness"
+            :items="thicknessItems"
+            :rules="thicknessRule"
+            attach
+            chips
+            label="thickness"
+            multiple
+          ></v-select>
+          <v-layout class="hashtags-zone">
+            <v-flex xs12 style="border: 1px solid #aaa; min-height: 40px;">
+              <v-chip
+                v-for="(hashtag, i) in clothesGroup.hashtags"
+                :key="i"
+                color="blue"
+                text-color="white"
+              >
+                {{hashtag}}
+                <div class="v-chip__close">
+                  <v-icon @click="deleteHashtag(i)" aria-hidden="true" small>close</v-icon>
+                </div>
+              </v-chip>
+            </v-flex>
+          </v-layout>
+          <input
+            @keyup.enter="addHashtag"
+            v-model="addingHashtag"
+            class="hashtag-input"
+            type="text"
+            placeholder="hashtags"
+          >
+
           <v-btn :disabled="!formValid" color="success" @click="validate">Validate</v-btn>
           <v-btn color="error" @click="reset">Reset Form</v-btn>
           <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
@@ -122,5 +117,18 @@
 .selected-image {
   width: calc(150px - 6px);
   height: calc(150px - 6px);
+}
+
+.hashtags-zone {
+  width: 100%;
+  max-height: 300px;
+}
+input.hashtag-input {
+  width: 100%;
+  outline: none;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  padding: 5px;
 }
 </style>
