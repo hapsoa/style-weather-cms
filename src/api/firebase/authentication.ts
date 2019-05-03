@@ -90,6 +90,7 @@ class Authentication {
     'hapsoa@gmail.com': true,
     'gahlok24@gmail.com': true,
     'heidiyun.goo@gmail.com': true,
+    'e0zoo94@gmail.com': true,
   };
 
   private userData: UserData | null = null;
