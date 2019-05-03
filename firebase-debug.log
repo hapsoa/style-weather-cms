@@ -1,0 +1,23 @@
+[debug] [2019-05-03T05:17:09.676Z] ----------------------------------------------------------------------
+[debug] [2019-05-03T05:17:09.678Z] Command:       /usr/local/Cellar/node/11.3.0_1/bin/node /usr/local/bin/firebase deploy
+[debug] [2019-05-03T05:17:09.679Z] CLI Version:   6.8.0
+[debug] [2019-05-03T05:17:09.679Z] Platform:      darwin
+[debug] [2019-05-03T05:17:09.679Z] Node Version:  v11.3.0
+[debug] [2019-05-03T05:17:09.680Z] Time:          Fri May 03 2019 14:17:09 GMT+0900 (대한민국 표준시)
+[debug] [2019-05-03T05:17:09.680Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-05-03T05:17:09.693Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-05-03T05:17:09.693Z] > authorizing via signed-in user
+[debug] [2019-05-03T05:17:09.693Z] [iam] checking project style-weather for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2019-05-03T05:17:09.696Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/style-weather:testIamPermissions  
+
+[debug] [2019-05-03T05:17:10.102Z] <<< HTTP RESPONSE 200
+[debug] [2019-05-03T05:17:10.104Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/style-weather  
+ 
+[debug] [2019-05-03T05:17:11.157Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'style-weather'...
+[info] 
+[info] i  deploying storage, firestore, hosting
+[debug] [2019-05-03T05:17:11.161Z] >>> HTTP REQUEST GET https://appengine.googleapis.com/v1/apps/style-weather  
+ 
