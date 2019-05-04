@@ -179,39 +179,39 @@ export default class ClothesGroupCreation extends Vue {
     this.$refs.form.resetValidation();
   }
 
-  public pickFile() {
-    this.$refs.imageInput.click();
-  }
-  public onFilePicked(e: any) {
-    const files = e.target.files;
-    if (!_.isNil(this.currentCloth)) {
-      if (files[0] !== undefined) {
-        this.currentCloth.imageName = files[0].name;
-        if (this.currentCloth.imageName.lastIndexOf('.') <= 0) {
-          return;
-        }
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener('load', () => {
-          if (!_.isNil(this.currentCloth)) {
-            (this.currentCloth as Cloth).data.imageUrl = fr.result;
-            (this.currentCloth as Cloth).imageFile = files[0]; // this is an image file that can be sent to server...
-            // console.log('imageFile', this.imageFile);
-            this.$refs.clothesCanvas.addImage(
-              fr.result as string,
-              this.currentCloth.data.majorClass as MajorClass,
-            );
-          }
-        });
-      } else {
-        this.currentCloth.imageName = '';
-        this.currentCloth.imageFile = null;
-        this.currentCloth.data.imageUrl = '';
-      }
-    } else {
-      throw new Error('currentCloth가 null이뜨네');
-    }
-  }
+  // public pickFile() {
+  //   this.$refs.imageInput.click();
+  // }
+  // public onFilePicked(e: any) {
+  //   const files = e.target.files;
+  //   if (!_.isNil(this.currentCloth)) {
+  //     if (files[0] !== undefined) {
+  //       this.currentCloth.imageName = files[0].name;
+  //       if (this.currentCloth.imageName.lastIndexOf('.') <= 0) {
+  //         return;
+  //       }
+  //       const fr = new FileReader();
+  //       fr.readAsDataURL(files[0]);
+  //       fr.addEventListener('load', () => {
+  //         if (!_.isNil(this.currentCloth)) {
+  //           (this.currentCloth as Cloth).data.imageUrl = fr.result;
+  //           (this.currentCloth as Cloth).imageFile = files[0]; // this is an image file that can be sent to server...
+  //           // console.log('imageFile', this.imageFile);
+  //           this.$refs.clothesCanvas.addImage(
+  //             fr.result as string,
+  //             this.currentCloth.data.majorClass as MajorClass,
+  //           );
+  //         }
+  //       });
+  //     } else {
+  //       this.currentCloth.imageName = '';
+  //       this.currentCloth.imageFile = null;
+  //       this.currentCloth.data.imageUrl = '';
+  //     }
+  //   } else {
+  //     throw new Error('currentCloth가 null이뜨네');
+  //   }
+  // }
 
   public changeMajorSelect(majorSelect: MajorClass) {
     // 해당 clothesGroup['top']을 선택하도록 한다.
@@ -258,6 +258,11 @@ export default class ClothesGroupCreation extends Vue {
       cloth,
     );
     this.clothesGroup.clothIds.push(cloth.data.id);
+    this.clothesGroup.hashtags = _.concat(
+      this.clothesGroup.hashtags,
+      cloth.data.hashtags,
+    );
+    this.$forceUpdate();
     this.$refs.clothList.forceUpdate();
 
     console.log('this.clothesGroup.clothes', this.clothesGroup.clothes);
