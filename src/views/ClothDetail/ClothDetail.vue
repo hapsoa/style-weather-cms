@@ -16,7 +16,7 @@
             </template>
           </v-data-table>
           <v-layout justify-end>
-            <v-btn>수정</v-btn>
+            <v-btn @click="$router.push({name:'cloth-edition', params: {id: cloth.data.id}})">수정</v-btn>
             <v-btn @click="deleteCloth">삭제</v-btn>
             <v-btn>돌아가기</v-btn>
           </v-layout>

@@ -221,7 +221,7 @@ export default class Cloth {
     }
   }
 
-  public async save(): Promise<void> {
+  public async saveToCreate(): Promise<void> {
     if (!_.isNil(this.imageFile)) {
       // storage에 저장하고, url을 가져온다.
       await fbClothApi.storage.create(this.data.id, this.imageFile);
@@ -232,6 +232,9 @@ export default class Cloth {
     } else {
       throw new Error('이미지 파일이 없는데 cloth.save() 시도하고 있다.');
     }
+  }
+  public async saveToUpdate() {
+    //
   }
   public delete(): Promise<void> {
     return new Promise((resolve, reject) => {

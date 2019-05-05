@@ -15,7 +15,7 @@ import {
 } from '@/api/class/Cloth';
 
 @Component({})
-export default class App extends Vue {
+export default class ClothCreation extends Vue {
   public $refs!: {
     imageInput: any;
     form: any;
@@ -166,11 +166,26 @@ export default class App extends Vue {
   public async saveCloth() {
     console.log('저장');
     try {
-      await this.cloth.save();
+      if (!_.isNil(this.$route.params.id)) {
+        await this.cloth.saveToUpdate();
+      } else {
+        await this.cloth.saveToCreate();
+      }
       this.$router.push({ name: 'main' });
     } catch (error) {
       console.error('저장 실패', error);
       alert('저장 실패');
+    }
+  }
+
+  private async created() {
+    // props에 cloth가 삽입되었다면 edition이고
+    // cloth가 삽입되지 않았다면 creation이다.
+    if (!_.isNil(this.$route.params.id)) {
+      this.cloth = await Cloth.load(this.$route.params.id);
+      this.majorSelect = this.cloth.data.majorClass;
+    } else {
+      this.cloth = Cloth.create();
     }
   }
 }

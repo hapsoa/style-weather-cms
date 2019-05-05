@@ -10,7 +10,7 @@ const initState: {
   isLogin: boolean; // login On/Off
   isMainPage: boolean; // 상단 toolbar 옵션창들 On/Off
   isFullProgress: boolean; // full-screen loading On/Off
-  selectedClothesGroup: ClothesGroup | null;
+  // selectedClothesGroup: ClothesGroup | null;
   groupOrItem: string;
   clothes: Cloth[];
   majorSelect: string;
@@ -19,7 +19,7 @@ const initState: {
   isLogin: false,
   isMainPage: false,
   isFullProgress: true,
-  selectedClothesGroup: null,
+  // selectedClothesGroup: null,
   groupOrItem: 'group',
   clothes: [],
   majorSelect: 'All',
