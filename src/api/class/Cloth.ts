@@ -234,7 +234,13 @@ export default class Cloth {
     }
   }
   public async saveToUpdate() {
-    //
+    // 이미지가 바뀌었다면
+    if (!_.isNil(this.imageFile)) {
+      //
+    } else {
+      // 이미지는 바뀌지 않았다면, metadata만 update 시킨다.
+      // await fbClothApi.s
+    }
   }
   public delete(): Promise<void> {
     return new Promise((resolve, reject) => {
