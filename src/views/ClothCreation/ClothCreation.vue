@@ -16,6 +16,24 @@
             label="의상 이름"
             required
           ></v-text-field>
+
+          <v-text-field
+            label="Select Image"
+            @click="pickFile"
+            v-model="cloth.imageName"
+            prepend-icon="attach_file"
+            required
+            :rules="imageRules"
+            readonly
+          ></v-text-field>
+          <input
+            type="file"
+            style="display: none"
+            ref="imageInput"
+            accept="image/*"
+            @change="onFilePicked"
+          >
+
           <v-text-field
             v-model="cloth.data.linkUrl"
             :rules="linkUrlRules"
@@ -75,23 +93,6 @@
             label="색상"
             required
           ></v-select>
-
-          <v-text-field
-            label="Select Image"
-            @click="pickFile"
-            v-model="cloth.imageName"
-            prepend-icon="attach_file"
-            required
-            :rules="imageRules"
-            readonly
-          ></v-text-field>
-          <input
-            type="file"
-            style="display: none"
-            ref="imageInput"
-            accept="image/*"
-            @change="onFilePicked"
-          >
         </v-form>
         <v-layout class="hashtags-zone">
           <v-flex xs12 style="border: 1px solid #aaa; min-height: 40px;">

@@ -237,17 +237,49 @@ export default class ClothesGroupCreation extends Vue {
       this.$refs.clothesCanvas.discardActiveObject();
       this.$refs.clothesCanvas.canSave = true;
 
-      setTimeout(() => {
-        this.$refs.clothesCanvas.getCanvasHTMLElement().toBlob(async blob => {
-          await this.clothesGroup.save(blob as Blob);
-        });
+      const canvasDataUrl: string = this.$refs.clothesCanvas.canvas.toDataURL({
+        multiplier: 4,
+      });
+      const canvasBlob: Blob = this.dataURItoBlob(canvasDataUrl);
+      setTimeout(async () => {
+        await this.clothesGroup.save(canvasBlob as Blob);
+        this.$router.push({ name: 'main' });
       }, 100);
-
-      //  this.$router.push({name: 'main'});
+      // setTimeout(() => {
+      //   this.$refs.clothesCanvas.getCanvasHTMLElement().toBlob(async blob => {
+      //     await this.clothesGroup.save(blob as Blob);
+      //   });
+      // }, 100);
     } catch (error) {
       console.error(error);
       alert('저장 실패');
     }
+  }
+  public dataURItoBlob(dataURI: string) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    const byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    const mimeString = dataURI
+      .split(',')[0]
+      .split(':')[1]
+      .split(';')[0];
+
+    // write the bytes of the string to an ArrayBuffer
+    const ab = new ArrayBuffer(byteString.length);
+
+    // create a view into the buffer
+    const ia = new Uint8Array(ab);
+
+    // set the bytes of the buffer to the correct values
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    const blob = new Blob([ab], { type: mimeString });
+    return blob;
   }
 
   public confirmLoadCloth(cloth: Cloth) {

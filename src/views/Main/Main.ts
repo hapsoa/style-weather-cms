@@ -32,7 +32,7 @@ export default class Main extends Vue {
     if (this.$store.state.groupOrItem === 'group') {
       try {
         const newLoadedClothesGroup: ClothesGroup[] = await ClothesGroup.loadMultipleByRecent(
-          3,
+          10,
         );
         this.clothesGroups = _.concat(
           this.clothesGroups,
@@ -59,7 +59,7 @@ export default class Main extends Vue {
     this.$store.state.isMainPage = true; // 툴바 옵션
 
     ClothesGroup.initNextIndex();
-    ClothesGroup.loadMultipleByRecent(3).then(clothesGroups => {
+    ClothesGroup.loadMultipleByRecent(10).then(clothesGroups => {
       _.forEach(clothesGroups, clothesGroup => {
         this.clothesGroups.push(clothesGroup);
       });
