@@ -223,6 +223,7 @@ export default class ClothesGroupCreation extends Vue {
   }
 
   public saveClothesGroup() {
+    this.$store.state.isFullProgress = true;
     try {
       // const canvas: HTMLCanvasElement = await html2canvas(
       //   document.getElementById('clothes-zone-container') as HTMLElement,
@@ -244,6 +245,7 @@ export default class ClothesGroupCreation extends Vue {
       setTimeout(async () => {
         await this.clothesGroup.save(canvasBlob as Blob);
         this.$router.push({ name: 'main' });
+        this.$store.state.isFullProgress = false;
       }, 100);
       // setTimeout(() => {
       //   this.$refs.clothesCanvas.getCanvasHTMLElement().toBlob(async blob => {
@@ -251,6 +253,7 @@ export default class ClothesGroupCreation extends Vue {
       //   });
       // }, 100);
     } catch (error) {
+      this.$store.state.isFullProgress = false;
       console.error(error);
       alert('저장 실패');
     }

@@ -165,6 +165,7 @@ export default class ClothCreation extends Vue {
 
   public async saveCloth() {
     console.log('저장');
+    this.$store.state.isFullProgress = true;
     try {
       if (!_.isNil(this.$route.params.id)) {
         await this.cloth.saveToUpdate();
@@ -172,7 +173,9 @@ export default class ClothCreation extends Vue {
         await this.cloth.saveToCreate();
       }
       this.$router.push({ name: 'main' });
+      this.$store.state.isFullProgress = false;
     } catch (error) {
+      this.$store.state.isFullProgress = false;
       console.error('저장 실패', error);
       alert('저장 실패');
     }
