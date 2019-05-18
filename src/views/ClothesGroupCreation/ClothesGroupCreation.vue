@@ -83,7 +83,7 @@
           @confirm="confirmLoadCloth"
         ></LoadClothDialog>
         <ClothList :clothList="clothesGroup.clothes" ref="clothList" :canHoverHighlight="true"></ClothList>
-        <div style="height: 400px"></div>
+        <!-- <div style="height: 400px"></div> -->
         <v-layout row justify-end>
           <v-btn :disabled="!canSave" @click="saveClothesGroup">저장</v-btn>
           <v-btn>초기화</v-btn>
