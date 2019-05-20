@@ -44,10 +44,8 @@
             v-model="cloth.data.gender"
             :items="genderItems"
             :rules="genderRules"
-            attach
-            chips
             label="gender"
-            multiple
+            required
           ></v-select>
           <v-select
             v-model="majorSelect"
@@ -66,25 +64,29 @@
           <v-select
             v-model="cloth.data.weather"
             :items="weatherItems"
-            :rules="[v => !!v || 'Weather is required']"
+            :rules="weatherRules"
             label="날씨"
             required
+            attach
+            chips
+            multiple
           ></v-select>
           <v-select
             v-model="cloth.data.temperature"
             :items="temperatureItems"
-            :rules="[v => !!v || 'Temperature is required']"
+            :rules="[v => v.length !== 0 || 'Temperature is required']"
             label="온도"
             required
+            attach
+            chips
+            multiple
           ></v-select>
           <v-select
             v-model="cloth.data.thickness"
             :items="thicknessItems"
             :rules="thicknessRule"
-            attach
-            chips
             label="thickness"
-            multiple
+            required
           ></v-select>
           <v-select
             v-model="cloth.data.color"

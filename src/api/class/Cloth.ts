@@ -100,12 +100,12 @@ export interface ClothData {
   id: string;
   name: string;
   linkUrl: string;
-  gender: string[];
+  gender: string | null;
   majorClass: MajorClass | null;
   minorClass: string | null;
-  weather: string | null;
-  temperature: string | null;
-  thickness: string[];
+  weather: string[];
+  temperature: string[];
+  thickness: string | null;
   color: string | null;
   imageUrl: string | ArrayBuffer | null;
   createdAt: number;
@@ -170,12 +170,12 @@ export default class Cloth {
     id: '',
     name: '',
     linkUrl: '',
-    gender: [],
+    gender: null,
     majorClass: null,
     minorClass: null,
-    weather: null,
-    temperature: null,
-    thickness: [],
+    weather: [],
+    temperature: [],
+    thickness: null,
     color: null,
     imageUrl: null,
     createdAt: 0,

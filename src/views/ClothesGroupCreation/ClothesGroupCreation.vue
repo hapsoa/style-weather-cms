@@ -23,31 +23,33 @@
             :rules="[v => !!v || 'Weather is required']"
             label="날씨"
             required
+            attach
+            chips
+            multiple
           ></v-select>
           <v-select
             v-model="clothesGroup.gender"
             :items="genderItems"
             :rules="genderRules"
-            attach
-            chips
             label="gender"
-            multiple
+            required
           ></v-select>
           <v-select
             v-model="clothesGroup.temperature"
             :items="temperatureItems"
-            :rules="[v => !!v || 'Temperature is required']"
+            :rules="temperatureRules"
             label="온도"
             required
+            attach
+            chips
+            multiple
           ></v-select>
           <v-select
             v-model="clothesGroup.thickness"
             :items="thicknessItems"
             :rules="thicknessRule"
-            attach
-            chips
             label="thickness"
-            multiple
+            required
           ></v-select>
           <v-layout class="hashtags-zone">
             <v-flex xs12 style="border: 1px solid #aaa; min-height: 40px;">

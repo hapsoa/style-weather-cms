@@ -32,11 +32,7 @@ export default class ClothCreation extends Vue {
   ];
   private linkUrlRules = [(v: string) => true];
   private genderItems: string[] = ['man', 'woman', 'unisex'];
-  private genderRules = [
-    (v: string[]) => {
-      return v.length !== 0 || 'Gender is required.';
-    },
-  ];
+  private genderRules = [(v: string) => !!v || 'Gender is required'];
   private majorSelect: MajorClass | null = null;
   private majorClassItems: string[] = _.map(MajorClass, v => v);
   private topMinorClassItems: string[] = _.map(TopMinorClass, v => v);
@@ -87,22 +83,42 @@ export default class ClothCreation extends Vue {
       }
     }
   }
-  private weatherItems: string[] = ['snow', 'rain', 'fineDust', 'hot'];
-  private temperatureItems: string[] = [
-    '4도 이하',
-    '5 ~ 9도',
-    '12 ~ 16도',
-    '17 ~ 19도',
-    '20 ~ 22도',
-    '23 ~ 27도',
-    '28도 이상',
+  private weatherItems: string[] = [
+    'clear',
+    'cloudy',
+    'rain',
+    'windy',
+    'snow',
+    'fineDust',
+    'heatWave',
   ];
-  private thicknessItems: string[] = ['thick', 'moderate', 'thin'];
-  private thicknessRule = [
+  private weatherRules = [
     (v: string[]) => {
-      return !_.isEmpty(v) || 'Gender is required';
+      return !_.isEmpty(v) || 'Weather is required';
     },
   ];
+  // private temperatureItems: string[] = [
+  //   '4도 이하',
+  //   '5 ~ 9도',
+  //   '12 ~ 16도',
+  //   '17 ~ 19도',
+  //   '20 ~ 22도',
+  //   '23 ~ 27도',
+  //   '28도 이상',
+  // ];
+  private temperatureItems: string[] = [
+    '4도 이하', // [0, 1, 2, 3, 4]
+    '5 ~ 9도', // [5, 6, 7, 8, 9]
+    '12 ~ 16도', // [12, 13, 14, 15, 16]
+    '17 ~ 19도', // [17, 18, 19]
+    '20 ~ 22도', // 5
+    '23 ~ 27도', // 6
+    '28도 이상', // 7
+  ];
+  private realValue = [0, 1, 2, 3]; //
+
+  private thicknessItems: string[] = ['thick', 'moderate', 'thin'];
+  private thicknessRule = [(v: string) => !!v || 'Thickness is required'];
   private colorItems: string[] = ['achromatic', 'chromatic'];
   private imageRules = [(v: string) => !!v || 'Image is required'];
 

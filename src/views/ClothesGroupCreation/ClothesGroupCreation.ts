@@ -94,11 +94,7 @@ export default class ClothesGroupCreation extends Vue {
   private imageRules = [(v: string) => !!v || 'Image is required'];
 
   private genderItems: string[] = ['man', 'woman', 'unisex'];
-  private genderRules = [
-    (v: string[]) => {
-      return v.length !== 0 || 'Gender is required.';
-    },
-  ];
+  private genderRules = [(v: string) => !!v || 'Gender is required'];
 
   private selectedMajorClass: MajorClass | null = null;
   private majorClassItems: string[] = [
@@ -125,7 +121,20 @@ export default class ClothesGroupCreation extends Vue {
   private glassesMinorClassItems!: string[];
   private hatMinorClassItems!: string[];
   private weatherSelect: string | null = null;
-  private weatherItems: string[] = ['snow', 'rain', 'fineDust', 'hot'];
+  private weatherItems: string[] = [
+    'clear',
+    'cloudy',
+    'rain',
+    'windy',
+    'snow',
+    'fineDust',
+    'heatWave',
+  ];
+  private weatherRules = [
+    (v: string[]) => {
+      return !_.isEmpty(v) || 'Weather is required';
+    },
+  ];
   private temperatureSelect: string | null = null;
   private temperatureItems: string[] = [
     '4도 이하',
@@ -136,13 +145,14 @@ export default class ClothesGroupCreation extends Vue {
     '23 ~ 27도',
     '28도 이상',
   ];
-
-  private thicknessItems: string[] = ['thick', 'moderate', 'thin'];
-  private thicknessRule = [
+  private temperatureRules = [
     (v: string[]) => {
-      return !_.isEmpty(v) || 'Gender is required';
+      return !_.isEmpty(v) || 'Temperature is required';
     },
   ];
+
+  private thicknessItems: string[] = ['thick', 'moderate', 'thin'];
+  private thicknessRule = [(v: string) => !!v || 'Thickness is required'];
 
   private addingHashtag: string = '';
 
