@@ -104,12 +104,13 @@ export interface ClothData {
   majorClass: MajorClass | null;
   minorClass: string | null;
   weather: string[];
-  temperature: string[];
+  temperature: number[] | string[];
   thickness: string | null;
   color: string | null;
   imageUrl: string | ArrayBuffer | null;
   createdAt: number;
   hashtags: string[];
+  price: number | string | null;
 }
 
 export default class Cloth {
@@ -180,6 +181,7 @@ export default class Cloth {
     imageUrl: null,
     createdAt: 0,
     hashtags: [],
+    price: null,
   };
   // public id: string = '';
   // public majorClass: MajorClass | null = null;
@@ -227,6 +229,13 @@ export default class Cloth {
       await fbClothApi.storage.create(this.data.id, this.imageFile);
       this.data.imageUrl = await fbClothApi.storage.read(this.data.id);
 
+      // price string to number
+      this.data.price = _.toNumber(this.data.price);
+
+      // temperature refining
+      this.data.temperature = this.convertTemperaturesToNumber(this.data
+        .temperature as string[]);
+
       // db에 저장한다.
       await fbClothApi.db.create(this.data);
     } else {
@@ -258,5 +267,44 @@ export default class Cloth {
           reject();
         });
     });
+  }
+
+  // '4도 이하',
+  //   '5 ~ 9도',
+  //   '12 ~ 16도',
+  //   '17 ~ 19도',
+  //   '20 ~ 22도',
+  //   '23 ~ 27도',
+  //   '28도 이상',
+  private convertTemperaturesToNumber(temperatureStrings: string[]): number[] {
+    const temperatureNumbers: number[] = [];
+    _.forEach(temperatureStrings, tString => {
+      let tNumber: number = 0;
+      switch (tString) {
+        case '4도 이하':
+          tNumber = 4;
+          break;
+        case '5 ~ 9도':
+          tNumber = 9;
+          break;
+        case '12 ~ 16도':
+          tNumber = 16;
+          break;
+        case '17 ~ 19도':
+          tNumber = 19;
+          break;
+        case '20 ~ 22도':
+          tNumber = 22;
+          break;
+        case '23 ~ 27도':
+          tNumber = 27;
+          break;
+        case '28도 이상':
+          tNumber = 28;
+          break;
+      }
+      temperatureNumbers.push(tNumber);
+    });
+    return temperatureNumbers;
   }
 }

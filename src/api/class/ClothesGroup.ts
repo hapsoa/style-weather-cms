@@ -15,10 +15,10 @@ export interface ClothesGroupData {
   // };
   imageUrl: string; // firebase storage url
   createdAt: number;
-  gender: string[];
-  weather: string;
-  temperature: string;
-  thickness: string[];
+  gender: string;
+  weather: string[];
+  temperature: number[] | string[];
+  thickness: string;
   hashtags: string[];
 }
 
@@ -76,10 +76,10 @@ export default class ClothesGroup implements ClothesGroupData {
   public clothIds: string[] = [];
   public imageUrl: string = '';
   public createdAt: number = 0;
-  public gender: string[] = [];
-  public weather: string = '';
-  public temperature: string = '';
-  public thickness: string[] = [];
+  public gender: string = '';
+  public weather: string[] = [];
+  public temperature: number[] | string[] = [];
+  public thickness: string = '';
   public hashtags: string[] = [];
 
   // save() 할 때 활용하기위해 Cloth instance들을 저장해두는 곳
@@ -131,6 +131,10 @@ export default class ClothesGroup implements ClothesGroupData {
     // 전체 스크린샷 가져오기
     this.imageUrl = await fbClothesGroupApi.storage.read(this.id);
 
+    // temperature refining
+    this.temperature = this.convertTemperaturesToNumber(this
+      .temperature as string[]);
+
     // db 저장
     await fbClothesGroupApi.db.create({
       id: this.id,
@@ -169,5 +173,36 @@ export default class ClothesGroup implements ClothesGroupData {
           reject();
         });
     });
+  }
+  private convertTemperaturesToNumber(temperatureStrings: string[]): number[] {
+    const temperatureNumbers: number[] = [];
+    _.forEach(temperatureStrings, tString => {
+      let tNumber: number = 0;
+      switch (tString) {
+        case '4도 이하':
+          tNumber = 4;
+          break;
+        case '5 ~ 9도':
+          tNumber = 9;
+          break;
+        case '12 ~ 16도':
+          tNumber = 16;
+          break;
+        case '17 ~ 19도':
+          tNumber = 19;
+          break;
+        case '20 ~ 22도':
+          tNumber = 22;
+          break;
+        case '23 ~ 27도':
+          tNumber = 27;
+          break;
+        case '28도 이상':
+          tNumber = 28;
+          break;
+      }
+      temperatureNumbers.push(tNumber);
+    });
+    return temperatureNumbers;
   }
 }

@@ -11,7 +11,7 @@
         <v-form ref="form" v-model="formValid" lazy-validation>
           <v-text-field
             v-model="cloth.data.name"
-            :counter="20"
+            :counter="50"
             :rules="clothNameRules"
             label="의상 이름"
             required
@@ -34,19 +34,6 @@
             @change="onFilePicked"
           >
 
-          <v-text-field
-            v-model="cloth.data.linkUrl"
-            :rules="linkUrlRules"
-            label="link URL"
-            required
-          ></v-text-field>
-          <v-select
-            v-model="cloth.data.gender"
-            :items="genderItems"
-            :rules="genderRules"
-            label="gender"
-            required
-          ></v-select>
           <v-select
             v-model="majorSelect"
             :items="majorClassItems"
@@ -60,6 +47,21 @@
             label="소분류 카테고리"
             :rules="[v => !!v || 'MinorClass is required']"
             height="40"
+          ></v-select>
+          <v-text-field
+            v-model="cloth.data.linkUrl"
+            :rules="linkUrlRules"
+            label="link URL"
+            required
+          ></v-text-field>
+          <!-- 가격 -->
+          <v-text-field v-model="cloth.data.price" :rules="priceRules" label="price" required></v-text-field>
+          <v-select
+            v-model="cloth.data.gender"
+            :items="genderItems"
+            :rules="genderRules"
+            label="gender"
+            required
           ></v-select>
           <v-select
             v-model="cloth.data.weather"

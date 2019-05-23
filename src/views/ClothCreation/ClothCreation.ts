@@ -28,7 +28,13 @@ export default class ClothCreation extends Vue {
   private clothNameRules = [
     (v: string) => !!v || 'Name is required',
     (v: string) =>
-      (v && v.length <= 20) || 'Name must be less than 20 characters',
+      (v && v.length <= 50) || 'Name must be less than 50 characters',
+  ];
+  private priceRules = [
+    (v: string) => {
+      console.log('num', !isNaN(_.toNumber(v)));
+      return !isNaN(_.toNumber(v)) || 'Price(only number) is required';
+    },
   ];
   private linkUrlRules = [(v: string) => true];
   private genderItems: string[] = ['man', 'woman', 'unisex'];

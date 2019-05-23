@@ -64,6 +64,7 @@ export default class LoadClothDialog extends Vue {
 
   @Prop({ type: Object as () => ClothesGroup, required: true })
   public clothesGroup!: ClothesGroup;
+  private numOfLoad: number = 10;
 
   private isOpen: boolean = false;
   private clothList: Cloth[] = [];
@@ -124,7 +125,7 @@ export default class LoadClothDialog extends Vue {
 
     Cloth.initNextIndex();
     this.clothList = await Cloth.getByQuery({
-      numOfClothes: 3,
+      numOfClothes: this.numOfLoad,
       searchInput: this.searchInput,
       majorClass: queryMajorClass,
       minorClass: this.minorSelect,
@@ -138,7 +139,7 @@ export default class LoadClothDialog extends Vue {
 
     Cloth.initNextIndex();
     this.clothList = await Cloth.getByQuery({
-      numOfClothes: 3,
+      numOfClothes: this.numOfLoad,
       searchInput: this.searchInput,
       majorClass: this.majorSelect,
       minorClass: queryMinorClass,
@@ -163,7 +164,7 @@ export default class LoadClothDialog extends Vue {
 
     Cloth.initNextIndex();
     const arr = await Cloth.getByQuery({
-      numOfClothes: 3,
+      numOfClothes: this.numOfLoad,
       searchInput,
       majorClass: queryMajorClass,
       minorClass: this.minorSelect,
@@ -183,7 +184,7 @@ export default class LoadClothDialog extends Vue {
     }
 
     const newLoadedClothes = await Cloth.getByQuery({
-      numOfClothes: 3,
+      numOfClothes: this.numOfLoad,
       searchInput: this.searchInput,
       majorClass: queryMajorClass,
       minorClass: queryMinorClass,

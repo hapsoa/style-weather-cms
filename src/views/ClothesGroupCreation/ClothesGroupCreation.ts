@@ -81,7 +81,7 @@ export default class ClothesGroupCreation extends Vue {
   private groupNameRules = [
     (v: string) => !!v || 'Name is required',
     (v: string) =>
-      (v && v.length <= 20) || 'Name must be less than 20 characters',
+      (v && v.length <= 50) || 'Name must be less than 50 characters',
   ];
   private linkUrlRules = [
     (v: string) => !!v || 'Link is required',

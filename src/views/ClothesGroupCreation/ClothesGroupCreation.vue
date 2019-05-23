@@ -11,7 +11,7 @@
         <v-form ref="form" v-model="formValid" lazy-validation>
           <v-text-field
             v-model="clothesGroup.name"
-            :counter="20"
+            :counter="50"
             :rules="groupNameRules"
             label="그룹 제목"
             required
