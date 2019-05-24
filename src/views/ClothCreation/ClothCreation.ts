@@ -32,13 +32,17 @@ export default class ClothCreation extends Vue {
   ];
   private priceRules = [
     (v: string) => {
-      console.log('num', !isNaN(_.toNumber(v)));
+      // console.log('num', !isNaN(_.toNumber(v)));
       return !isNaN(_.toNumber(v)) || 'Price(only number) is required';
     },
   ];
   private linkUrlRules = [(v: string) => true];
-  private genderItems: string[] = ['man', 'woman', 'unisex'];
-  private genderRules = [(v: string) => !!v || 'Gender is required'];
+  private genderItems: string[] = ['man', 'woman'];
+  private genderRules = [
+    (v: string[]) => {
+      return !_.isEmpty(v) || 'Gender is required';
+    },
+  ];
   private majorSelect: MajorClass | null = null;
   private majorClassItems: string[] = _.map(MajorClass, v => v);
   private topMinorClassItems: string[] = _.map(TopMinorClass, v => v);
@@ -148,7 +152,6 @@ export default class ClothCreation extends Vue {
       fr.addEventListener('load', () => {
         this.cloth.data.imageUrl = fr.result;
         this.cloth.imageFile = files[0];
-        // console.log('imageFile', this.imageFile);
       });
     } else {
       this.cloth.imageName = '';
@@ -156,6 +159,56 @@ export default class ClothCreation extends Vue {
       this.cloth.data.imageUrl = '';
     }
   }
+
+  // 이미지 픽셀 resize해서 저장
+  // public onFilePicked(e: any) {
+  //   // @ts-ignore
+  //   const files = e.target.files;
+  //   if (files[0] !== undefined) {
+  //     this.cloth.imageName = files[0].name;
+  //     if (this.cloth.imageName.lastIndexOf('.') <= 0) {
+  //       return;
+  //     }
+
+  //     const width = 770;
+  //     const height = 500;
+  //     const fileName = files[0].name;
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(files[0]);
+  //     reader.onload = event => {
+  //       const img = new Image();
+  //       img.src = reader.result as string;
+  //       img.onload = () => {
+  //         const elem = document.createElement('canvas');
+  //         elem.width = width;
+  //         elem.height = height;
+  //         const ctx: CanvasRenderingContext2D = elem.getContext(
+  //           '2d',
+  //         ) as CanvasRenderingContext2D;
+  //         // img.width and img.height will contain the original dimensions
+  //         ctx.drawImage(img, 0, 0, width, height);
+  //         ctx.canvas.toBlob(
+  //           blob => {
+  //             const file: File = new File([blob as Blob], fileName, {
+  //               type: 'image/jpeg',
+  //               lastModified: Date.now(),
+  //             });
+  //             this.cloth.imageFile = file;
+  //           },
+  //           'image/jpeg',
+  //           1,
+  //         );
+  //       };
+  //       reader.onerror = error => console.log(error);
+
+  //       this.cloth.data.imageUrl = reader.result;
+  //     };
+  //   } else {
+  //     this.cloth.imageName = '';
+  //     this.cloth.imageFile = null;
+  //     this.cloth.data.imageUrl = '';
+  //   }
+  // }
 
   public addHashtag() {
     // 배열에 저장한다.

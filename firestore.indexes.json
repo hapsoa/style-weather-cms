@@ -1,4 +1,37 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "clothes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "majorClass",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "clothes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "majorClass",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "minorClass",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

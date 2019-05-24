@@ -15,7 +15,7 @@ export interface ClothesGroupData {
   // };
   imageUrl: string; // firebase storage url
   createdAt: number;
-  gender: string;
+  gender: string[];
   weather: string[];
   temperature: number[] | string[];
   thickness: string;
@@ -76,7 +76,7 @@ export default class ClothesGroup implements ClothesGroupData {
   public clothIds: string[] = [];
   public imageUrl: string = '';
   public createdAt: number = 0;
-  public gender: string = '';
+  public gender: string[] = [];
   public weather: string[] = [];
   public temperature: number[] | string[] = [];
   public thickness: string = '';

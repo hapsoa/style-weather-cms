@@ -93,8 +93,12 @@ export default class ClothesGroupCreation extends Vue {
   // private imageFile: File | null = null;
   private imageRules = [(v: string) => !!v || 'Image is required'];
 
-  private genderItems: string[] = ['man', 'woman', 'unisex'];
-  private genderRules = [(v: string) => !!v || 'Gender is required'];
+  private genderItems: string[] = ['man', 'woman'];
+  private genderRules = [
+    (v: string[]) => {
+      return !_.isEmpty(v) || 'Gender is required';
+    },
+  ];
 
   private selectedMajorClass: MajorClass | null = null;
   private majorClassItems: string[] = [
@@ -215,7 +219,7 @@ export default class ClothesGroupCreation extends Vue {
       this.$refs.clothesCanvas.canSave = true;
 
       const canvasDataUrl: string = this.$refs.clothesCanvas.canvas.toDataURL({
-        multiplier: 4,
+        multiplier: 2,
       });
       const canvasBlob: Blob = this.dataURItoBlob(canvasDataUrl);
       setTimeout(async () => {

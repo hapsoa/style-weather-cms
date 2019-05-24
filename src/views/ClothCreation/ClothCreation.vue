@@ -62,6 +62,9 @@
             :rules="genderRules"
             label="gender"
             required
+            attach
+            chips
+            multiple
           ></v-select>
           <v-select
             v-model="cloth.data.weather"
