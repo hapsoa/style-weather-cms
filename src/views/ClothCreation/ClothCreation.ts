@@ -139,78 +139,84 @@ export default class ClothCreation extends Vue {
   public pickFile() {
     this.$refs.imageInput.click();
   }
-  public onFilePicked(e: any) {
-    const files: File[] = e.target.files;
-
-    if (files[0] !== undefined) {
-      this.cloth.imageName = files[0].name;
-      if (this.cloth.imageName.lastIndexOf('.') <= 0) {
-        return;
-      }
-      const fr = new FileReader();
-      fr.readAsDataURL(files[0]);
-      fr.addEventListener('load', () => {
-        this.cloth.data.imageUrl = fr.result;
-        this.cloth.imageFile = files[0];
-      });
-    } else {
-      this.cloth.imageName = '';
-      this.cloth.imageFile = null;
-      this.cloth.data.imageUrl = '';
-    }
-  }
-
-  // 이미지 픽셀 resize해서 저장
   // public onFilePicked(e: any) {
-  //   // @ts-ignore
-  //   const files = e.target.files;
+  //   const files: File[] = e.target.files;
+
   //   if (files[0] !== undefined) {
   //     this.cloth.imageName = files[0].name;
   //     if (this.cloth.imageName.lastIndexOf('.') <= 0) {
   //       return;
   //     }
-
-  //     const fileName = files[0].name;
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(files[0]);
-  //     reader.onload = event => {
-  //       const img = new Image();
-  //       const width = 300;
-  //       const scaleFactor = width / img.width;
-  //       const height = img.height * scaleFactor;
-
-  //       img.src = reader.result as string;
-  //       img.onload = () => {
-  //         const elem = document.createElement('canvas');
-  //         elem.width = width;
-  //         elem.height = height;
-  //         const ctx: CanvasRenderingContext2D = elem.getContext(
-  //           '2d',
-  //         ) as CanvasRenderingContext2D;
-  //         // img.width and img.height will contain the original dimensions
-  //         ctx.drawImage(img, 0, 0, width, height);
-  //         ctx.canvas.toBlob(
-  //           blob => {
-  //             const file: File = new File([blob as Blob], fileName, {
-  //               type: 'image/jpeg',
-  //               lastModified: Date.now(),
-  //             });
-  //             this.cloth.imageFile = file;
-  //           },
-  //           'image/jpeg',
-  //           0.5,
-  //         );
-  //       };
-  //       reader.onerror = error => console.log(error);
-
-  //       this.cloth.data.imageUrl = reader.result;
-  //     };
+  //     const fr = new FileReader();
+  //     fr.readAsDataURL(files[0]);
+  //     fr.addEventListener('load', () => {
+  //       this.cloth.data.imageUrl = fr.result;
+  //       this.cloth.imageFile = files[0];
+  //     });
   //   } else {
   //     this.cloth.imageName = '';
   //     this.cloth.imageFile = null;
   //     this.cloth.data.imageUrl = '';
   //   }
   // }
+
+  // 이미지 픽셀 resize해서 저장
+  public onFilePicked(e: any) {
+    // @ts-ignore
+    const files = e.target.files;
+    if (files[0] !== undefined) {
+      this.cloth.imageName = files[0].name;
+      if (this.cloth.imageName.lastIndexOf('.') <= 0) {
+        return;
+      }
+
+      const fileName = files[0].name;
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = event => {
+        const img = new Image();
+        img.src = reader.result as string;
+
+        img.onload = () => {
+          const elem = document.createElement('canvas');
+
+          const width: number = 300;
+          const scaleFactor: number = width / img.width;
+          const height = img.height * scaleFactor;
+          // console.log('width', width, 'height', height);
+          // console.log('img.height', img.height);
+          // console.log('scaleFactor', scaleFactor);
+          // console.log('img.width', img.width);
+
+          elem.width = width;
+          elem.height = height;
+          const ctx: CanvasRenderingContext2D = elem.getContext(
+            '2d',
+          ) as CanvasRenderingContext2D;
+          // img.width and img.height will contain the original dimensions
+          ctx.drawImage(img, 0, 0, width, height);
+          ctx.canvas.toBlob(
+            blob => {
+              const file: File = new File([blob as Blob], fileName, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              this.cloth.imageFile = file;
+            },
+            'image/jpeg',
+            0.5,
+          );
+        };
+        reader.onerror = error => console.log(error);
+
+        this.cloth.data.imageUrl = reader.result;
+      };
+    } else {
+      this.cloth.imageName = '';
+      this.cloth.imageFile = null;
+      this.cloth.data.imageUrl = '';
+    }
+  }
 
   public addHashtag() {
     // 배열에 저장한다.
