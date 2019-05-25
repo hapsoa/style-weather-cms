@@ -140,7 +140,7 @@ export default class ClothCreation extends Vue {
     this.$refs.imageInput.click();
   }
   public onFilePicked(e: any) {
-    const files = e.target.files;
+    const files: File[] = e.target.files;
 
     if (files[0] !== undefined) {
       this.cloth.imageName = files[0].name;
@@ -170,13 +170,15 @@ export default class ClothCreation extends Vue {
   //       return;
   //     }
 
-  //     const width = 770;
-  //     const height = 500;
   //     const fileName = files[0].name;
   //     const reader = new FileReader();
   //     reader.readAsDataURL(files[0]);
   //     reader.onload = event => {
   //       const img = new Image();
+  //       const width = 300;
+  //       const scaleFactor = width / img.width;
+  //       const height = img.height * scaleFactor;
+
   //       img.src = reader.result as string;
   //       img.onload = () => {
   //         const elem = document.createElement('canvas');
@@ -196,7 +198,7 @@ export default class ClothCreation extends Vue {
   //             this.cloth.imageFile = file;
   //           },
   //           'image/jpeg',
-  //           1,
+  //           0.5,
   //         );
   //       };
   //       reader.onerror = error => console.log(error);
