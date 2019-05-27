@@ -11,6 +11,8 @@ export default class Main extends Vue {
   private clothesGroups: ClothesGroup[] = [];
   private clothes: Cloth[] = [];
 
+  private numOfSeeMore: number = 28;
+
   public goClothesGroupDetail(clothesGroupId: string) {
     this.$router.push({
       name: 'clothesgroup-detail',
@@ -32,7 +34,7 @@ export default class Main extends Vue {
     if (this.$store.state.groupOrItem === 'group') {
       try {
         const newLoadedClothesGroup: ClothesGroup[] = await ClothesGroup.loadMultipleByRecent(
-          10,
+          this.numOfSeeMore,
         );
         this.clothesGroups = _.concat(
           this.clothesGroups,
@@ -58,12 +60,14 @@ export default class Main extends Vue {
   private created() {
     this.$store.state.isMainPage = true; // 툴바 옵션
 
+    // if (this.$store.state.groupOrItem === 'group') {
     ClothesGroup.initNextIndex();
-    ClothesGroup.loadMultipleByRecent(10).then(clothesGroups => {
+    ClothesGroup.loadMultipleByRecent(this.numOfSeeMore).then(clothesGroups => {
       _.forEach(clothesGroups, clothesGroup => {
         this.clothesGroups.push(clothesGroup);
       });
     });
+    // } else {
     // Cloth.initNextIndex();
     // Cloth.loadMultipleByRecent(5).then(clothes => {
     //   _.forEach(clothes, cloth => {
@@ -76,6 +80,8 @@ export default class Main extends Vue {
       majorClass: null,
       minorClass: null,
     });
+    // }
+
     // console.log('MAIN CREATED');
   }
   private destroyed() {

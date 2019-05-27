@@ -189,6 +189,15 @@ class ClothApi {
     initNextDocuments() {
       nextDocuments = null;
     },
+    /**
+     * query를 이용해 clothData들을 가져오기
+     * @param queryObject
+     * numOfClothes: 불러올 clothData 수
+     * searchInput: 검색창 input
+     * majorClass: null이면 모두 가져온다
+     * majorClass: null이면 모두 가져온다
+     * gender: null이면 모두 가져온다.
+     */
     readByQuery(queryObject: {
       numOfClothes: number;
       searchInput: string;
@@ -201,7 +210,7 @@ class ClothApi {
         );
         if (_.isNil(nextDocuments)) {
           queryRef = queryRef
-            .orderBy('createdAt')
+            .orderBy('createdAt', 'desc')
             .limit(queryObject.numOfClothes);
 
           queryRef
@@ -222,6 +231,7 @@ class ClothApi {
                 // console.log(doc.id, ' => ', doc.data());
                 clothDatas.push(doc.data() as ClothData);
               });
+              _.sortBy(clothDatas, clothData => -clothData.createdAt);
               console.log('clothDatas', clothDatas);
               resolve(clothDatas);
             })
@@ -237,6 +247,7 @@ class ClothApi {
               documentSnapshots.forEach(doc => {
                 clothDatas.push(doc.data() as ClothData);
               });
+              _.sortBy(clothDatas, clothData => -clothData.createdAt);
 
               const lastDocument =
                 documentSnapshots.docs[documentSnapshots.docs.length - 1];

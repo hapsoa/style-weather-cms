@@ -37,11 +37,12 @@ export default class ClothCreation extends Vue {
     },
   ];
   private linkUrlRules = [(v: string) => true];
-  private genderItems: string[] = ['man', 'woman'];
+  private genderItems: string[] = ['man', 'woman', 'unisex'];
   private genderRules = [
-    (v: string[]) => {
-      return !_.isEmpty(v) || 'Gender is required';
-    },
+    (v: string) => !!v || 'Gender is required',
+    // (v: string[]) => {
+    //   return !_.isEmpty(v) || 'Gender is required';
+    // },
   ];
   private majorSelect: MajorClass | null = null;
   private majorClassItems: string[] = _.map(MajorClass, v => v);
@@ -164,6 +165,7 @@ export default class ClothCreation extends Vue {
   public onFilePicked(e: any) {
     // @ts-ignore
     const files = e.target.files;
+    // console.log('file type', files[0].type);
     if (files[0] !== undefined) {
       this.cloth.imageName = files[0].name;
       if (this.cloth.imageName.lastIndexOf('.') <= 0) {
@@ -198,13 +200,13 @@ export default class ClothCreation extends Vue {
           ctx.canvas.toBlob(
             blob => {
               const file: File = new File([blob as Blob], fileName, {
-                type: 'image/jpeg',
+                type: files[0].type,
                 lastModified: Date.now(),
               });
               this.cloth.imageFile = file;
             },
-            'image/jpeg',
-            0.5,
+            files[0].type,
+            0.9,
           );
         };
         reader.onerror = error => console.log(error);
@@ -218,11 +220,15 @@ export default class ClothCreation extends Vue {
     }
   }
 
-  public addHashtag() {
+  public addHashtag(keyboardEvent: KeyboardEvent) {
     // 배열에 저장한다.
-    if (this.addingHashtag !== '') {
-      this.cloth.data.hashtags.push(this.addingHashtag);
-      this.addingHashtag = '';
+    if (keyboardEvent.code === 'Enter' || keyboardEvent.code === 'Space') {
+      this.addingHashtag = this.addingHashtag.trim();
+
+      if (this.addingHashtag !== '') {
+        this.cloth.data.hashtags.push(this.addingHashtag);
+        this.addingHashtag = '';
+      }
     }
     console.log('this.cloth.hashtags', this.cloth.data.hashtags);
   }

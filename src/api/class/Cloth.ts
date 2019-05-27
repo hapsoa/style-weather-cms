@@ -100,7 +100,7 @@ export interface ClothData {
   id: string;
   name: string;
   linkUrl: string;
-  gender: string[];
+  gender: string;
   majorClass: MajorClass | null;
   minorClass: string | null;
   weather: string[];
@@ -171,7 +171,7 @@ export default class Cloth {
     id: '',
     name: '',
     linkUrl: '',
-    gender: [],
+    gender: '',
     majorClass: null,
     minorClass: null,
     weather: [],
@@ -228,6 +228,9 @@ export default class Cloth {
       // storage에 저장하고, url을 가져온다.
       await fbClothApi.storage.create(this.data.id, this.imageFile);
       this.data.imageUrl = await fbClothApi.storage.read(this.data.id);
+
+      // createdAt
+      this.data.createdAt = new Date().getTime();
 
       // price string to number
       this.data.price = _.toNumber(this.data.price);

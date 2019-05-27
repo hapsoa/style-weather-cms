@@ -93,11 +93,12 @@ export default class ClothesGroupCreation extends Vue {
   // private imageFile: File | null = null;
   private imageRules = [(v: string) => !!v || 'Image is required'];
 
-  private genderItems: string[] = ['man', 'woman'];
+  private genderItems: string[] = ['man', 'woman', 'unisex'];
   private genderRules = [
-    (v: string[]) => {
-      return !_.isEmpty(v) || 'Gender is required';
-    },
+    (v: string) => !!v || 'Gender is required',
+    // (v: string[]) => {
+    //   return !_.isEmpty(v) || 'Gender is required';
+    // },
   ];
 
   private selectedMajorClass: MajorClass | null = null;
@@ -267,11 +268,30 @@ export default class ClothesGroupCreation extends Vue {
 
   public confirmLoadCloth(cloth: Cloth) {
     // this.clothesGroup.clothes[cloth.majorClass as MajorClass] = cloth;
+
+    // 기존의 majorClass가 겹치는 의상을 제거한다.
+    // clothesId에서 제거한다.
+    const removingCloth: Cloth | null = this.clothesGroup.clothes[
+      cloth.data.majorClass as MajorClass
+    ];
+    if (!_.isNil(removingCloth)) {
+      const removingClothId: string = removingCloth.data.id;
+      _.remove(this.clothesGroup.clothIds, clothId => removingClothId);
+
+      // 기존의 hashTag도 제거한다.
+      this.clothesGroup.hashtags = _.difference(
+        this.clothesGroup.hashtags,
+        removingCloth.data.hashtags,
+      );
+    }
+
+    // 새로운 의상을 clothesGroup에 추가한다.
     this.$set(
       this.clothesGroup.clothes,
       `${cloth.data.majorClass as MajorClass}`,
       cloth,
     );
+
     this.clothesGroup.clothIds.push(cloth.data.id);
     this.clothesGroup.hashtags = _.concat(
       this.clothesGroup.hashtags,
@@ -285,6 +305,18 @@ export default class ClothesGroupCreation extends Vue {
       cloth.data.imageUrl as string,
       cloth.data.majorClass as MajorClass,
     );
+  }
+
+  public deleteCloth(deletingCloth: Cloth) {
+    // 왼쪽 화면에서 제거하고,
+    this.$refs.clothesCanvas.deleteImage(deletingCloth.data
+      .majorClass as MajorClass);
+    // 해시태그를 제거한다.
+    this.clothesGroup.hashtags = _.difference(
+      this.clothesGroup.hashtags,
+      deletingCloth.data.hashtags,
+    );
+    this.$forceUpdate();
   }
 
   private created() {

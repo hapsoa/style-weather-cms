@@ -1,8 +1,8 @@
 <template>
   <v-container fluid pa-0>
     <v-layout>
-      <v-flex xs6 pa-3 pl-5>
-        <div class="clothes-zone">
+      <v-flex xs6 pa-3 justify-center>
+        <div class="clothes-zone" style="margin: 0 auto">
           <ClothesCanvas ref="clothesCanvas"></ClothesCanvas>
         </div>
       </v-flex>
@@ -33,9 +33,6 @@
             :rules="genderRules"
             label="gender"
             required
-            attach
-            chips
-            multiple
           ></v-select>
           <v-select
             v-model="clothesGroup.temperature"
@@ -87,7 +84,12 @@
           :clothesGroup="clothesGroup"
           @confirm="confirmLoadCloth"
         ></LoadClothDialog>
-        <ClothList :clothList="clothesGroup.clothes" ref="clothList" :canHoverHighlight="true"></ClothList>
+        <ClothList
+          :clothList="clothesGroup.clothes"
+          ref="clothList"
+          :canHoverHighlight="true"
+          @deleteCloth="deleteCloth"
+        ></ClothList>
         <!-- <div style="height: 400px"></div> -->
         <v-layout row justify-end>
           <v-btn :disabled="!canSave" @click="saveClothesGroup">저장</v-btn>
@@ -102,6 +104,9 @@
 <script lang='ts' src='./ClothesGroupCreation.ts' />
 
 <style scoped lang='scss'>
+.clothes-canvas-zone {
+}
+
 .cloth-zone {
   width: 150px;
   height: 150px;

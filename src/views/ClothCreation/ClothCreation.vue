@@ -1,8 +1,8 @@
 <template>
   <v-container fluid pa-0>
     <v-layout>
-      <v-flex xs6 pa-3 pl-5>
-        <div class="clothes-zone" style>
+      <v-flex xs6 pa-3>
+        <div class="clothes-zone" style="margin: 0 auto;">
           <v-img v-if="cloth.data.imageUrl" :src="cloth.data.imageUrl"></v-img>
         </div>
       </v-flex>
@@ -62,9 +62,6 @@
             :rules="genderRules"
             label="gender"
             required
-            attach
-            chips
-            multiple
           ></v-select>
           <v-select
             v-model="cloth.data.weather"
@@ -118,6 +115,7 @@
         </v-layout>
         <input
           @keyup.enter="addHashtag"
+          @keyup.space="addHashtag"
           v-model="addingHashtag"
           class="hashtag-input"
           type="text"

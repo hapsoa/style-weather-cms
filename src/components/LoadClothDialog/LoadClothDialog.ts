@@ -64,7 +64,7 @@ export default class LoadClothDialog extends Vue {
 
   @Prop({ type: Object as () => ClothesGroup, required: true })
   public clothesGroup!: ClothesGroup;
-  private numOfLoad: number = 10;
+  private numOfLoad: number = 28;
 
   private isOpen: boolean = false;
   private clothList: Cloth[] = [];

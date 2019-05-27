@@ -45,12 +45,19 @@
                 :lazy-src="selectedCloth.data.imageUrl"
                 :src="selectedCloth.data.imageUrl"
                 height="300"
+                contain
               ></v-img>
               <v-img v-else height="300">no image</v-img>
             </v-card>
             <v-card>
               <v-card-title>현재 의상</v-card-title>
-              <v-img v-if="currentCloth" :src="currentCloth.data.imageUrl" height="300"></v-img>
+              <v-img
+                v-if="currentCloth"
+                :lazy-src="currentCloth.data.imageUrl"
+                :src="currentCloth.data.imageUrl"
+                height="300"
+                contain
+              ></v-img>
               <v-img v-else height="300">no image</v-img>
             </v-card>
           </v-flex>

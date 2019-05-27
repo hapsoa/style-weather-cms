@@ -29,6 +29,12 @@ export default class ClothesCanvas extends Vue {
     );
   }
 
+  public deleteImage(clothMajorClass: MajorClass) {
+    if (!_.isNil(this.clothImages[clothMajorClass])) {
+      this.canvas.remove(this.clothImages[clothMajorClass]);
+    }
+  }
+
   public getCanvasHTMLElement(): HTMLCanvasElement {
     return document.getElementById('canvas') as HTMLCanvasElement;
   }

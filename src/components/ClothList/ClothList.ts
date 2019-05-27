@@ -6,6 +6,17 @@ import { MajorClass } from '@/api/class/Cloth';
 
 @Component({})
 export default class ClothList extends Vue {
+  get realClothList() {
+    if (!_.isNil(this.clothList)) {
+      console.log(
+        'qqqq',
+        _.filter(this.clothList, (cloth: Cloth) => !_.isNil(cloth)),
+      );
+      return _.filter(this.clothList, (cloth: Cloth) => !_.isNil(cloth));
+    } else {
+      return [];
+    }
+  }
   // @Prop({ required: true }) public clothesGroup!: ClothesGroup | null;
   @Prop({
     type: [Object as () => ClothesHash | null, Array as () => Cloth[] | null],
@@ -30,18 +41,6 @@ export default class ClothList extends Vue {
 
   public clickClothListener: ((cloth: Cloth) => void) | null = null;
   private seeMoreListener: (() => void) | null = null;
-
-  get realClothList() {
-    if (!_.isNil(this.clothList)) {
-      console.log(
-        'qqqq',
-        _.filter(this.clothList, (cloth: Cloth) => !_.isNil(cloth)),
-      );
-      return _.filter(this.clothList, (cloth: Cloth) => !_.isNil(cloth));
-    } else {
-      return [];
-    }
-  }
 
   @Watch('clothList', { deep: true })
   public clothListChanged(
@@ -74,6 +73,21 @@ export default class ClothList extends Vue {
     }
   }
 
+  public deleteCloth(clickedCloth: Cloth) {
+    console.log('deleteCloth', clickedCloth);
+    // list에서 제거하고,
+
+    // clothList에서 제거
+    (this.clothList as ClothesHash)[
+      clickedCloth.data.majorClass as MajorClass
+    ] = null;
+    this.$forceUpdate();
+    console.log(this.clothList);
+
+    // 이벤트 상위 컴포넌트에 전달
+    this.$emit('deleteCloth', clickedCloth);
+  }
+
   public setSeeMoreListener(listener: () => void) {
     this.seeMoreListener = listener;
   }
@@ -82,5 +96,16 @@ export default class ClothList extends Vue {
     if (!_.isNil(this.seeMoreListener)) {
       this.seeMoreListener();
     }
+  }
+
+  private showGender(cloth: Cloth): string {
+    if (cloth.data.gender === 'unisex') {
+      return '공';
+    } else if (cloth.data.gender === 'man') {
+      return '남';
+    } else if (cloth.data.gender === 'woman') {
+      return '여';
+    }
+    return '';
   }
 }

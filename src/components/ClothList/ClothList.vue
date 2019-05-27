@@ -30,9 +30,10 @@
             height="100%"
             contain
           >
-            <v-layout v-if="canHoverHighlight" justify-end>
-              <v-btn class="margin-0" flat icon color="#aaa">
-                <v-icon>cancel</v-icon>
+            <v-layout justify-space-between>
+              <div style="padding: 4px;">{{showGender(cloth)}}</div>
+              <v-btn v-if="canHoverHighlight" class="margin-0" flat icon color="#aaa">
+                <v-icon @click="deleteCloth(cloth)">cancel</v-icon>
               </v-btn>
             </v-layout>
           </v-img>

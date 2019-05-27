@@ -92,9 +92,12 @@ class ClothesGroupApi {
 
               const clothesGroupDatas: ClothesGroupData[] = [];
               documentSnapshots.forEach(doc => {
-                // console.log(doc.id, ' => ', doc.data());
                 clothesGroupDatas.push(doc.data() as ClothesGroupData);
               });
+              _.sortBy(
+                clothesGroupDatas,
+                clothesGroupData => -clothesGroupData.createdAt,
+              );
 
               resolve(clothesGroupDatas);
             })
@@ -110,6 +113,11 @@ class ClothesGroupApi {
               documentSnapshots.forEach(doc => {
                 clothesGroupDatas.push(doc.data() as ClothesGroupData);
               });
+              _.sortBy(
+                clothesGroupDatas,
+                clothesGroupData => -clothesGroupData.createdAt,
+              );
+
               // TODO 문제있음. nextDocuments가 갱신되어야 함
               const lastDocument =
                 documentSnapshots.docs[documentSnapshots.docs.length - 1];

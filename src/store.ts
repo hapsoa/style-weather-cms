@@ -59,7 +59,7 @@ export default new Vuex.Store({
       if (payload.isInit) {
         Cloth.initNextIndex();
         store.state.clothes = await Cloth.getByQuery({
-          numOfClothes: 10,
+          numOfClothes: 28,
           searchInput: payload.searchInput,
           majorClass: queryMajorClass,
           minorClass: queryMinorClass,
@@ -67,7 +67,7 @@ export default new Vuex.Store({
       } else {
         try {
           const newLoadedClothes = await Cloth.getByQuery({
-            numOfClothes: 10,
+            numOfClothes: 28,
             searchInput: payload.searchInput,
             majorClass: queryMajorClass,
             minorClass: queryMinorClass,
