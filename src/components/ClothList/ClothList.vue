@@ -31,7 +31,10 @@
             contain
           >
             <v-layout justify-space-between>
-              <div style="padding: 4px;">{{showGender(cloth)}}</div>
+              <div
+                style="padding: 4px;"
+                :class="{man: showGender(cloth) === '남', woman: showGender(cloth) === '여'}"
+              >{{showGender(cloth)}}</div>
               <v-btn v-if="canHoverHighlight" class="margin-0" flat icon color="#aaa">
                 <v-icon @click="deleteCloth(cloth)">cancel</v-icon>
               </v-btn>
@@ -73,5 +76,11 @@
 }
 .margin-0 {
   margin: 0;
+}
+.man {
+  color: skyblue;
+}
+.woman {
+  color: palevioletred;
 }
 </style>

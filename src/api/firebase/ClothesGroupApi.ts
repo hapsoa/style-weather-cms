@@ -73,7 +73,7 @@ class ClothesGroupApi {
         if (_.isNil(nextDocuments)) {
           database
             .collection('clothesGroup')
-            .orderBy('createdAt')
+            .orderBy('createdAt', 'desc')
             .limit(numOfDocuments)
             .get()
             .then(documentSnapshots => {
@@ -85,7 +85,7 @@ class ClothesGroupApi {
 
                 nextDocuments = database
                   .collection('clothesGroup')
-                  .orderBy('createdAt')
+                  .orderBy('createdAt', 'desc')
                   .startAfter(lastDocument)
                   .limit(numOfDocuments);
               }
@@ -123,7 +123,7 @@ class ClothesGroupApi {
                 documentSnapshots.docs[documentSnapshots.docs.length - 1];
               nextDocuments = database
                 .collection('clothesGroup')
-                .orderBy('createdAt')
+                .orderBy('createdAt', 'desc')
                 .startAfter(lastDocument)
                 .limit(numOfDocuments);
 

@@ -131,7 +131,7 @@ class ClothApi {
         if (_.isNil(nextDocuments)) {
           database
             .collection('clothes')
-            .orderBy('createdAt')
+            .orderBy('createdAt', 'desc')
             .limit(numOfDocuments)
             .get()
             .then(documentSnapshots => {
@@ -143,7 +143,7 @@ class ClothApi {
 
                 nextDocuments = database
                   .collection('clothes')
-                  .orderBy('createdAt')
+                  .orderBy('createdAt', 'desc')
                   .startAfter(lastDocument)
                   .limit(numOfDocuments);
               }
@@ -173,7 +173,7 @@ class ClothApi {
                 documentSnapshots.docs[documentSnapshots.docs.length - 1];
               nextDocuments = database
                 .collection('clothes')
-                .orderBy('createdAt')
+                .orderBy('createdAt', 'desc')
                 .startAfter(lastDocument)
                 .limit(numOfDocuments);
 
@@ -221,7 +221,7 @@ class ClothApi {
                   querySnapshot.docs[querySnapshot.docs.length - 1];
 
                 nextDocuments = ClothApi.getQueryRef(queryObject)
-                  .orderBy('createdAt')
+                  .orderBy('createdAt', 'desc')
                   .startAfter(lastDocument)
                   .limit(queryObject.numOfClothes);
               }
@@ -254,7 +254,7 @@ class ClothApi {
               console.log('lastDocument', lastDocument);
               console.log('documentSnapshots.docs', documentSnapshots.docs);
               nextDocuments = ClothApi.getQueryRef(queryObject)
-                .orderBy('createdAt')
+                .orderBy('createdAt', 'desc')
                 .startAfter(lastDocument)
                 .limit(queryObject.numOfClothes);
 

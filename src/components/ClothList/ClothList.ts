@@ -99,13 +99,15 @@ export default class ClothList extends Vue {
   }
 
   private showGender(cloth: Cloth): string {
-    if (cloth.data.gender === 'unisex') {
-      return '공';
-    } else if (cloth.data.gender === 'man') {
-      return '남';
-    } else if (cloth.data.gender === 'woman') {
-      return '여';
+    switch (cloth.data.gender) {
+      case 'unisex':
+        return '공';
+      case 'man':
+        return '남';
+      case 'woman':
+        return '여';
+      default:
+        return '';
     }
-    return '';
   }
 }
