@@ -39,7 +39,16 @@ export default class User implements UserData {
   // 로그인이 되면 user instance가 만들어 지는데,
   // setAuthChanged가 불릴 때 만들어 지는게 좋지 않나.
   public static async googleLogin() {
-    await firebaseAuth.googleLogin();
+    return new Promise((resolve, reject) => {
+      firebaseAuth
+        .googleLogin()
+        .then(response => {
+          resolve();
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
   private static userInstance: User | null = null;
 

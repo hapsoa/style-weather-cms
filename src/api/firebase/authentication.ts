@@ -102,7 +102,7 @@ class Authentication {
   public constructor() {
     firebase.auth().onAuthStateChanged(user => {
       console.log('current user : ', user);
-      if (user) {
+      if (!_.isNil(user) && _.has(this.accessibleUsers, user.email as string)) {
         // User is signed in.
         // this.router.push('/');
         if (!_.isNil(this.authOnListener)) {
@@ -165,6 +165,7 @@ class Authentication {
       const credential = error.credential;
       // ...
       console.error('google login error', errorMessage);
+      throw new Error(errorMessage);
     }
   }
 

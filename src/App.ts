@@ -156,12 +156,14 @@ export default class App extends Vue {
     User.setAuthOffListener();
 
     User.authOnListeners.push(() => {
+      console.log('authOnListner()');
       this.$store.state.isLogin = true;
       this.$store.state.isFullProgress = false;
     });
     User.authOffListeners.push(() => {
       // /login 페이지로 보낸다.
       this.$store.state.isLogin = false;
+      console.log('authOffListner()', this.$store.state.isLogin);
       this.$store.state.isFullProgress = false;
       this.$router.push({ name: 'login' });
     });
