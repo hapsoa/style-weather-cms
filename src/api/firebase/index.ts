@@ -1,5 +1,5 @@
 import firebase from './initializingFirebase';
-import firebaseAuth from './Authentication';
+import firebaseAuth from './authentication';
 import fbClothApi from './ClothApi';
 import fbClothesGroupApi from './ClothesGroupApi';
 

@@ -54,7 +54,7 @@ class Authentication {
           .collection('users')
           .doc(uid)
           .update({
-            updatedAt: new Date().getTime(),
+            updatedAt: new Date().getTime()
           })
           .then(response => {
             console.log('Document(userData) successfully updated!');
@@ -82,7 +82,7 @@ class Authentication {
             reject(error);
           });
       });
-    },
+    }
   };
   private accessibleUsers: {
     [index: string]: boolean;
@@ -90,7 +90,7 @@ class Authentication {
     'hapsoa@gmail.com': true,
     'gahlok24@gmail.com': true,
     'heidiyun.goo@gmail.com': true,
-    'e0zoo94@gmail.com': true,
+    'e0zoo94@gmail.com': true
   };
 
   private userData: UserData | null = null;
@@ -147,7 +147,7 @@ class Authentication {
             uid: result.user.uid,
             email: result.user.email,
             createdAt: currentTime,
-            updatedAt: currentTime,
+            updatedAt: currentTime
           };
           // 새로 회원가입을 한다.
           await this.db.create(newUserData);
