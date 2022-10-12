@@ -12,7 +12,7 @@
     "@types/html2canvas": "0.0.35",
     "@types/lodash": "^4.14.122",
     "bricks.js": "^1.8.0",
-    "fabric": "^2.7.0",
+    "fabric": "^5.2.4",
     "firebase": "^5.8.5",
     "html2canvas": "^1.0.0-alpha.12",
     "lodash": "^4.17.21",
